@@ -1,0 +1,22 @@
+# HCLIB Overview
+
+HCLIB is a library version of the Habanero-C language. This distribution 
+contains an implementation of HCLIB built on top of the 
+Open Community Runtime (OCR).
+
+# HCLIB Installation
+
+See the `INSTALL` file for detailled installation instructions.
+
+# Writing programs using HCLIB
+
+HCLIB defines a C-based interface in the `hclib.h` header file. 
+Just use the include directive in your program to import the interface:
+
+    #include "hclib.h"
+
+# Linking with HCLIB
+
+If you set the `HCLIB_ROOT` and `LD_LIBRARY_PATH` environment variable as described in the `INSTALL` file, the command line should look like the following:
+
+    gcc -g -locr -lhclib -I${HCLIB_ROOT}/include your_program.c
