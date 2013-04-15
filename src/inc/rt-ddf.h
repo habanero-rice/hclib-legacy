@@ -29,39 +29,41 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 */
 
-#ifndef RUNTIME_HCLIB_H_
-#define RUNTIME_HCLIB_H_
+#ifndef RT_DDF_H_
+#define RT_DDF_H_
 
 #include "rt-hclib-def.h"
 
 /**
- * @file This file contains the HCLIB runtime implementation
+ * This file contains the runtime-level DDF interface
  */
 
-/*
- * Finish check in/out protocol for asyncs
+// forward declaration
+struct ddf_st;
+
+/**
+ * DDT data-structure to associate DDTs and DDFs.
+ * This is exposed so that the runtime know the size of the struct.
  */
-void async_check_in_finish(async_task_t * async_task);
-void async_check_out_finish(async_task_t * async_task);
+typedef struct ddt_st {
+    // NULL-terminated list of DDFs the DDT is registered on
+    struct ddf_st ** waitingFrontier;
+    // This allows us to chain all DDTs waiting on a same DDF
+    // Whenever a DDT wants to register on a DDF, and that DDF is
+    // not ready, we chain the current DDT and the DDF's headDDTWaitList
+    // and try to cas on the DDF's headDDTWaitList, with the current DDT.
+    struct ddt_st * nextDDTWaitingOnSameDDF;
+} ddt_t;
 
-
-/*
- * Current async accessors
+/**
+ * Initialize a DDT
  */
-void set_current_async(async_task_t * async);
-async_task_t * get_current_async();
-finish_t * get_current_finish();
+void ddt_init(ddt_t * ddt, struct ddf_st ** ddf_list);
 
-
-/*
- * Allocators
+/**
+ * Runtime interface to iterate over the frontier of a DDT.
+ * If all DDFs are ready, returns 1, otherwise returns 0
  */
-async_task_t * allocate_async_task(async_t * async_def);
+int iterate_ddt_frontier(ddt_t * ddt);
 
-
-/*
- * Scheduling
- */
-void schedule_async(async_task_t * async_task);
-
-#endif /* RUNTIME_HCLIB_H_ */
+#endif /* RT_DDF_H_ */

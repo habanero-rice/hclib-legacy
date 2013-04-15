@@ -27,7 +27,7 @@ THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-*/
+ */
 
 #ifndef HCLIB_H_
 #define HCLIB_H_
@@ -35,6 +35,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 /**
  * @file Interface to HCLIB
  */
+
+#include "ddf.h"
 
 void hclib_init(int * argc, char ** argv);
 
@@ -54,7 +56,7 @@ typedef struct {
     asyncFct_t fct_ptr;
     int argc;
     void ** argv;
-    void * ddf_list;    // Null terminated list
+    struct ddf_st ** ddf_list; // Null terminated list
     void * phaser_list; // Null terminated list
 } async_t;
 
@@ -65,7 +67,7 @@ typedef struct {
  * @param[in] argv: the actual arguments
  */
 void async(async_t * async_def, asyncFct_t fct_ptr, int argc, void ** argv,
-                void * ddf_list, void * phaser_list);
+           struct ddf_st ** ddf_list, void * phaser_list);
 
 /**
  * @brief starts a new finish scope

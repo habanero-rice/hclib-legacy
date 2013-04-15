@@ -37,7 +37,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  * from the runtime implementation to the HCLIB.
  */
 
-#include "hclib-def.h"
+#include "rt-hclib-def.h"
 
 /**
  * @brief Call back for the runtime implementation to execute an async

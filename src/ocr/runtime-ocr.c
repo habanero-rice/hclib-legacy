@@ -37,6 +37,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "ocr-runtime-itf.h"
 
 #include "runtime-callback.h"
+#include "rt-ddf.h"
 
 // Store async task in ELS @ offset 0
 #define ELS_OFFSET 0
@@ -58,6 +59,28 @@ void runtime_finalize() {
     ocrCleanup();
 }
 
+typedef struct {
+    async_task_t task;
+    ocrGuid_t guid;
+} ocr_async_task_t;
+
+typedef struct {
+    ocr_async_task_t task; // the actual task
+    ddt_t ddt; // ddt meta-information from hclib
+} ocr_ddt_t;
+
+
+static ocrGuid_t guidify_async(async_task_t * async_task) {
+    ocr_async_task_t * ocr_async_task_wrapper = (ocr_async_task_t *) async_task;
+    return (ocrGuid_t) ocr_async_task_wrapper->guid;
+}
+
+static async_task_t * deguidify_async(ocrGuid_t guid) {
+    async_task_t * task;
+    globalGuidProvider->getVal(globalGuidProvider, guid, (u64*)task, NULL);
+    return task;
+}
+
 /*
  * @brief Retrieve the async task currently executed from the ELS
  */
@@ -69,7 +92,7 @@ async_task_t * get_current_async() {
     }
     //If currentEDT is NULL_GUID
     ocrGuid_t guid = ocrElsGet(ELS_OFFSET);
-    return deguidify(guid);
+    return deguidify_async(guid);
 }
 
 void set_current_async(async_task_t * async_task) {
@@ -77,7 +100,7 @@ void set_current_async(async_task_t * async_task) {
     if (edtGuid == NULL_GUID) {
         root_async_task = async_task;
     } else {
-        ocrGuid_t guid = guidify(async_task);
+        ocrGuid_t guid = guidify_async(async_task);
         ocrElsSet(ELS_OFFSET, guid);
     }
 }
@@ -90,7 +113,7 @@ u8 asyncEdt(u32 paramc, u64 * params, void* paramv[], u32 depc, ocrEdtDep_t depv
     async_task_t * async_task = (async_task_t *) paramv;
 
     // Store a pointer to the async task in the ELS
-    ocrGuid_t guid = guidify(async_task);
+    ocrGuid_t guid = guidify_async(async_task);
     ocrElsSet(ELS_OFFSET, guid);
 
     // Call back in the hclib runtime
@@ -98,19 +121,45 @@ u8 asyncEdt(u32 paramc, u64 * params, void* paramv[], u32 depc, ocrEdtDep_t depv
 
     return 0;
 }
+/**
+ * @brief The HCLIB view of an async task
+ * @param def contains data filled in by the user (args, await list, etc.)
+ */
 
-void schedule_async(async_task_t * async_task) {
-    ocrGuid_t guid;
+async_task_t * rt_ddt_to_async_task(ddt_t * ddt) {
+    return (async_task_t *) ((void *)ddt-(void*)sizeof(ocr_async_task_t));
+}
+
+ddt_t * rt_async_task_to_ddt(async_task_t * async_task) {
+    return &(((ocr_ddt_t*) async_task)->ddt);
+}
+
+async_task_t * rt_allocate_ddt(struct ddf_st ** ddf_list) {
+    ocr_ddt_t * dd_task = (ocr_ddt_t *) calloc(1, sizeof(ocr_ddt_t));
+    ddt_init((ddt_t *)&(dd_task->ddt), ddf_list);
+    assert(dd_task && "calloc failed");
+    return (async_task_t *) dd_task;
+}
+
+async_task_t * rt_allocate_async_task() {
+    async_task_t * async_task = (async_task_t *) calloc(1, sizeof(ocr_async_task_t));
+    assert(async_task && "calloc failed");
+    return async_task;
+}
+
+void rt_schedule_async(async_task_t * async_task) {
+    ocr_async_task_t * ocr_async_task_wrapper = (ocr_async_task_t *) async_task;
     //Note: Forcefully pass async_task as a (void **) to avoid an extra-malloc.
     //      To avoid any confusion in the ocr runtime, we state we're not passing
     //      any extra argument because 'paramv' will be copied anyway.
     //      This should work but will surely end-up broken in distributed ocr.
     int retCode;
-    retCode = ocrEdtCreate(&guid, &asyncEdt, 0 /*paramc*/, NULL /*params*/, (void**) async_task,
+    retCode = ocrEdtCreate(&(ocr_async_task_wrapper->guid), &asyncEdt,
+            0 /*paramc*/, NULL /*params*/, (void**) async_task,
             0 /*properties*/, 0 /*depc*/, NULL /*depv*/);
     assert(!retCode);
 
-    retCode = ocrEdtSchedule(guid);
+    retCode = ocrEdtSchedule((ocrGuid_t)ocr_async_task_wrapper->guid);
     assert(!retCode);
 }
 

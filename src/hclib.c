@@ -33,12 +33,12 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <assert.h>
 
 #include "hclib.h"
-#include "hclib-def.h"
+#include "rt-hclib-def.h"
 #include "runtime-support.h"
 #include "runtime-hclib.h"
 
 /**
- * @file This file contains only the implementation of user-level defined HCLIB functions.
+ * @file This file should only contain implementations of user-level defined HCLIB functions.
  */
 
 static int runtime_on = 0;
@@ -54,7 +54,7 @@ void hclib_init(int * argc, char ** argv) {
     runtime_on = 1;
 
     // Create the root activity: abstraction to make code more uniform
-    root_async_task = allocate_async_task();
+    root_async_task = allocate_async_task(NULL);
     set_current_async(root_async_task);
 
     // Create and check in the implicit finish scope.
@@ -107,7 +107,6 @@ void end_finish() {
     //Note: Important to store the current async in a local as the
     //      help-protocol may execute a new async and change the
     //      worker's currently executed async.
-
     async_task_t * async = get_current_async();
     finish_t * current_finish = async->current_finish;
     while(current_finish->counter > 1) {
@@ -122,7 +121,7 @@ void end_finish() {
 }
 
 void async(async_t * async_def, asyncFct_t fct_ptr, int argc, void ** argv,
-        void * ddf_list, void * phaser_list) {
+        struct ddf_st ** ddf_list, void * phaser_list) {
     //TODO: api is quite verbose here, the async_def pointer allows
     // users to pass down an address of a stack variable.
 #if CHECKED_EXECUTION
@@ -136,12 +135,11 @@ void async(async_t * async_def, asyncFct_t fct_ptr, int argc, void ** argv,
     async_def->ddf_list = ddf_list;
     async_def->phaser_list = phaser_list;
 
-    // Build the new async task
-    async_task_t * async_task = allocate_async_task();
+    // Build the new async task and associate with the definition
+    async_task_t * async_task = allocate_async_task(async_def);
 
     // Set the async finish scope to be the currently executing async's one.
     async_task->current_finish = get_current_async()->current_finish;
-    async_task->def = async_def;
 
     // The newly created async must check in the current finish scope
     async_check_in_finish(async_task);

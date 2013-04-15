@@ -10,7 +10,7 @@ AUX_DIST = \
 	$(ac_aux_dir)/depcomp
 
 library_includedir=$(includedir)
-library_include_HEADERS = inc/hclib.h
+library_include_HEADERS = inc/hclib.h inc/ddf.h
 
 MAINTAINERCLEANFILES = Makefile.in \
 	aclocal.m4 \

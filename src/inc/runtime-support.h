@@ -33,12 +33,16 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #define RUNTIME_IMPL_H_
 
 #include "hclib.h"
-#include "hclib-def.h"
+#include "rt-hclib-def.h"
 
 /**
  * @file This file contains the interface for HCLIB to
  * invoke the underlying runtime implementation.
  */
+
+//
+// Runtime life-cycle management
+//
 
 /**
  * @brief start the underlying runtime
@@ -55,9 +59,54 @@ void runtime_finalize();
  */
 async_task_t * get_current_async();
 
+
+
+//
+// Task conversion
+//
+
+/**
+ * @brief Converts an async_task_t into a ddt_t
+ * Warning: 'async_task' must be a data-driven task in the first place.
+ */
+struct ddt_st;
+
+/**
+ * @brief Convert a ddt into an async_task
+ */
+async_task_t * rt_ddt_to_async_task(struct ddt_st * ddt);
+
+/**
+ * @brief Convert an async task into a ddt
+ */
+struct ddt_st * rt_async_task_to_ddt(async_task_t * async_task);
+
+
+//
+// Task allocation
+//
+
+/**
+ * @brief allocates an async task.
+ * Rule 1: The runtime must return a valid pointer to an async_task_t.
+ * Rule 2: The runtime may allocate a larger data-structure for its
+ * own book-keeping as long as the Rule 1 is enforced.
+ */
+async_task_t * rt_allocate_async_task();
+
+/**
+ * @brief allocates a data-driven task and register a ddf_list
+ */
+async_task_t * rt_allocate_ddt(struct ddf_st ** ddf_list);
+
+
+//
+// Scheduling
+//
+
 /**
  * @brief delegate an async to the runtime for scheduling
  */
-void schedule_async(async_task_t * async);
+void rt_schedule_async(async_task_t * async);
 
 #endif /* RUNTIME_IMPL_H_ */

@@ -30,7 +30,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
 /**
- * @file This file contains the HCLIB runtime implementation
+ * @file This file contains the HCLIB runtime implementation.
  */
 
 #include <stdlib.h>
@@ -38,6 +38,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include "hc_sysdep.h"
 #include "runtime-support.h"
+#include "rt-ddf.h"
 
 /**
  * @brief Async task checking in a finish
@@ -56,12 +57,22 @@ void async_check_out_finish(async_task_t * async_task) {
 }
 
 /**
- * @brief Async task allocator.
+ * @brief Async task allocator. Depending on the nature of the async
+ * the runtime may allocate a different data-structure to represent the
+ * async. It is the responsibility of the underlying implementation to
+ * return a pointer to a valid async_task_t handle.
  */
-async_task_t * allocate_async_task() {
-    // Initializes and zeroes
-    async_task_t * async_task = (async_task_t *) calloc(1, sizeof(async_task_t));
-    assert(async_task && "calloc failed");
+async_task_t * allocate_async_task(async_t * async_def) {
+    async_task_t * async_task;
+    if ((async_def != NULL) && async_def->ddf_list != NULL) {
+        // When the async has ddfs, we allocate a ddt instead
+        // of a regular async. The ddt has extra data-structures.
+        async_task = rt_allocate_ddt(async_def->ddf_list);
+    } else {
+        // Initializes and zeroes
+        async_task = rt_allocate_async_task();
+    }
+    async_task->def = async_def;
     return async_task;
 }
 
@@ -72,4 +83,20 @@ finish_t * get_current_finish() {
     // This is legal because there's a fake async
     // to represent the main activity.
     return get_current_async()->current_finish;
+}
+
+
+static int is_eligible_to_schedule(async_task_t * async_task) {
+    if (async_task->def->ddf_list != NULL) {
+        ddt_t * ddt = (ddt_t *) rt_async_task_to_ddt(async_task);
+        return iterate_ddt_frontier(ddt);
+    } else {
+        return 1;
+    }
+}
+
+void schedule_async(async_task_t * async_task) {
+    if (is_eligible_to_schedule(async_task)) {
+        rt_schedule_async(async_task);
+    }
 }
