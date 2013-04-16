@@ -37,7 +37,7 @@ int main(int argc, char ** argv) {
     struct ddf_st ** ddf_list = (struct ddf_st **) malloc(sizeof(struct ddf_st *) * (2*(n+1)));
     for (index = 0 ; index <= n; index++) {
         ddf_list[index*2] = ddf_create();
-        printf("Creating ddf at ddf_list @ %p \n", &ddf_list[index*2], ddf_get(ddf_list[index*2]));
+        printf("Creating ddf  %p at ddf_list @ %p \n", &ddf_list[index*2], ddf_get(ddf_list[index*2]));
         ddf_list[index*2+1] = NULL;
     }
     for(index=n-1; index>=1; index--) {
