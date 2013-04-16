@@ -59,7 +59,7 @@ ddf_t ** ddf_create_n(size_t nb_ddfs, int null_terminated) {
         i++;
     }
     if (null_terminated) {
-        ddfs[nb_ddfs] = NULL;
+        ddfs[lg] = NULL;
     }
     return ddfs;
 }
