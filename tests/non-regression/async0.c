@@ -30,7 +30,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
 /**
- * DEF: Top-level async spawn
+ * DESC: Top-level async spawn
  */
 #include <stdlib.h>
 #include <stdio.h>

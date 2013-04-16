@@ -30,7 +30,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
 /**
- * DEF: recursive calls with finish (malloc-based)
+ * DESC: recursive calls with finish (malloc-based)
  */
 #include <stdlib.h>
 #include <stdio.h>

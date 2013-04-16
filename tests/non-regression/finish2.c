@@ -30,7 +30,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
 /**
- * DEF: recursive calls with finish (stack-based)
+ * DESC: recursive calls with finish (stack-based)
  */
 #include <stdlib.h>
 #include <stdio.h>

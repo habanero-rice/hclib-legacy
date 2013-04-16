@@ -30,7 +30,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
 /**
- * DEF: Fork a bunch of asyncs in a top-level loop
+ * DESC: Fork a bunch of asyncs in a top-level loop
  */
 #include <stdlib.h>
 #include <stdio.h>

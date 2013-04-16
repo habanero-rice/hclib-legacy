@@ -30,7 +30,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
 /**
- * DEF: Init/Finalize the hclib runtime
+ * DESC: Init/Finalize the hclib runtime
  */
 #include <stdio.h>
 
