@@ -110,7 +110,8 @@ void end_finish() {
     async_task_t * async = get_current_async();
     finish_t * current_finish = async->current_finish;
     while(current_finish->counter > 1) {
-        //TODO implement help-protocol, for now just busy wait.
+        // notify the runtime we are blocked
+         help_finish(current_finish);
     }
     // Pop current finish to its parent
     async->current_finish = current_finish->parent;

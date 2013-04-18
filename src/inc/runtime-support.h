@@ -109,4 +109,11 @@ async_task_t * rt_allocate_ddt(struct ddf_st ** ddf_list);
  */
 void rt_schedule_async(async_task_t * async);
 
+/**
+ * @brief Currently executing worker tries to help make progress.
+ * Typically execute asyncs on top of its own stack. Better know
+ * what you're doing when calling this.
+ */
+void rt_help();
+
 #endif /* RUNTIME_IMPL_H_ */

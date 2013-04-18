@@ -12,6 +12,13 @@ enabled for one slot.
 
 OCR is available from <https://01.org/projects/open-community-runtime>
 
+You need to clone the OCR repository and get to the hclib branch:
+
+git clone https://github.com/01org/ocr.git
+cd ocr
+git branch ocr-hclib --track origin/ocr-hclib
+git checkout ocr-hclib
+
 After installing OCR, you need to set the `OCR_ROOT` environment variable and
 update your `LD_LIBRARY_PATH` as follow:
 

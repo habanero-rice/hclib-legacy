@@ -64,4 +64,11 @@ async_task_t * allocate_async_task(async_t * async_def);
  */
 void schedule_async(async_task_t * async_task);
 
+
+/**
+ * @brief notifies the runtime end_finish is logically
+ * blocked, waiting for children to finish.
+ */
+void help_finish(finish_t * finish);
+
 #endif /* RUNTIME_HCLIB_H_ */

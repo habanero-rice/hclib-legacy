@@ -100,3 +100,7 @@ void schedule_async(async_task_t * async_task) {
         rt_schedule_async(async_task);
     }
 }
+
+void help_finish(finish_t * finish) {
+    rt_notify_waiting();
+}

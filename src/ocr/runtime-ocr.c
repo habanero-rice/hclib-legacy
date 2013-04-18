@@ -163,3 +163,10 @@ void rt_schedule_async(async_task_t * async_task) {
     assert(!retCode);
 }
 
+void rt_help() {
+    // Assumption: The runtime does not schedule a task (i.e. push a task in
+    //             a worker deque) until all its dependencies are satisfied.
+
+    // Pick up an edt if any available and executes it on the spot.
+    ocrRtBlockedHelp();
+}
