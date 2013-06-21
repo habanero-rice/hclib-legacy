@@ -57,7 +57,7 @@ fi
 if [ -z "${HCLIB_ROOT}" ]; then
 	echo "HCLIB_ROOT is not set, defaulting to ../hclib-install"
 	HCLIB_ROOT_TMP=`pwd`/../hclib-install
-	if [ -x ${HCLIB_ROOT}/lib/libhclib.la ]; then
+	if [ -x ${HCLIB_ROOT_TMP}/lib/libhclib.la ]; then
 		export HCLIB_ROOT=${HCLIB_ROOT_TMP}
 	fi
 fi
