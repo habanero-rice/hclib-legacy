@@ -76,7 +76,7 @@ static ocrGuid_t guidify_async(async_task_t * async_task) {
 }
 
 static async_task_t * deguidify_async(ocrGuid_t guid) {
-    async_task_t * task;
+    async_task_t * task = NULL;
     globalGuidProvider->getVal(globalGuidProvider, guid, (u64*)task, NULL);
     return task;
 }
