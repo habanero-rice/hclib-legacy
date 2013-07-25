@@ -50,13 +50,22 @@ typedef struct finish {
     struct finish * parent;
 } finish_t;
 
+struct _async_task_t;
+
+/**
+ * @brief Function pointer to an async executor
+ */
+typedef void (*asyncExecutorFct_t) (struct _async_task_t * async_task);
+
 /**
  * @brief The HCLIB view of an async task
  * @param def contains data filled in by the user (args, await list, etc.)
  */
-typedef struct {
+typedef struct _async_task_t {
     finish_t * current_finish;
     async_t * def;
+    asyncExecutorFct_t executor_fct_ptr;
 } async_task_t;
+
 
 #endif /* HCLIB_DEF_H_ */

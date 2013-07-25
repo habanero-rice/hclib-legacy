@@ -73,6 +73,14 @@ void async_check_out_finish(async_task_t * async_task) {
 }
 
 /**
+ * @brief Async executor function
+ */
+static void async_fct_executor(async_task_t * async_task) {
+    async_t * async_def = async_task->def;
+    ((asyncFct_t)async_def->fct_ptr)(async_def->argc, async_def->argv);
+}
+
+/**
  * @brief Async task allocator. Depending on the nature of the async
  * the runtime may allocate a different data-structure to represent the
  * async. It is the responsibility of the underlying implementation to
@@ -89,6 +97,7 @@ async_task_t * allocate_async_task(async_t * async_def) {
         async_task = rt_allocate_async_task();
     }
     async_task->def = async_def;
+    async_task->executor_fct_ptr = (void *) async_fct_executor;
     return async_task;
 }
 

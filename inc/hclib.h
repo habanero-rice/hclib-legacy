@@ -53,7 +53,7 @@ typedef void (*asyncFct_t) (int argc, void * argv[]);
  * that would prevent stack allocation.
  */
 typedef struct {
-    asyncFct_t fct_ptr;
+    void * fct_ptr;
     int argc;
     void ** argv;
     struct ddf_st ** ddf_list; // Null terminated list
