@@ -17,9 +17,9 @@ OCR is available from <https://01.org/projects/open-community-runtime>
     git clone https://github.com/01org/ocr.git
     cd ocr
 
-2.  Build OCR with ELS support:
+2.  Build OCR with ELS and runtime API support:
 
-    OCR_CONF_OPTS="--enable-els=1"; ./install.sh 
+    OCR_CONF_OPTS="--enable-els=1  --enable-rtapi"; ./install.sh 
 
 By default, OCR is installed in the current folder, under `ocr-install/`
 
