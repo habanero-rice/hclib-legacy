@@ -34,6 +34,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 // Note: OCR must have been built with ELS support
 #include "ocr.h"
+#include "ocr-lib.h"
 #include "ocr-runtime-itf.h"
 
 #include "runtime-callback.h"
@@ -48,78 +49,87 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 static async_task_t * root_async_task = NULL;
 
+// guid template for async-edt
+static ocrGuid_t asyncTemplateGuid;
+
+typedef struct ocr_finish_t_ {
+  finish_t finish;
+  volatile ocrGuid_t done_event;
+} ocr_finish_t;
+
+// Fwd declaration
+ocrGuid_t asyncEdt(u32 paramc, u64* paramv, u32 depc, ocrEdtDep_t depv[]);
+
 void runtime_init(int * argc, char ** argv) {
-    ocrInit(argc, argv, 0, NULL);
+    ocrConfig_t ocrConfig;
+    ocrParseArgs(*argc, (const char**) argv, &ocrConfig);
+    ocrInit(&ocrConfig);
+    ocrEdtTemplateCreate(&asyncTemplateGuid, asyncEdt, 1, 0);
 }
 
 void runtime_finalize() {
     // This is called only when the main implicit finish is done.
     // At this point it's safe to call ocrFinish and turn the ocr runtime off.
-    ocrFinish();
-    ocrCleanup();
+    ocrShutdown();
+    ocrFinalize();
 }
 
 typedef struct {
-    async_task_t task;
-    ocrGuid_t guid;
-} ocr_async_task_t;
-
-typedef struct {
-    ocr_async_task_t task; // the actual task
+    async_task_t task; // the actual task
     ddt_t ddt; // ddt meta-information from hclib
 } ocr_ddt_t;
 
-
 static ocrGuid_t guidify_async(async_task_t * async_task) {
-    ocr_async_task_t * ocr_async_task_wrapper = (ocr_async_task_t *) async_task;
-    return (ocrGuid_t) ocr_async_task_wrapper->guid;
+    // The right way to do that would be to use a datablock
+    // This should work and save the alloc
+    return (ocrGuid_t) async_task;
 }
 
 static async_task_t * deguidify_async(ocrGuid_t guid) {
-    async_task_t * task = NULL;
-    globalGuidProvider->getVal(globalGuidProvider, guid, (u64*)task, NULL);
-    return task;
+    // The right way to do that would be to use a datablock
+    // This should work and save the alloc
+    return (async_task_t *) guid;
 }
 
 /*
  * @brief Retrieve the async task currently executed from the ELS
  */
 async_task_t * get_current_async() {
-    ocrGuid_t edtGuid = getCurrentEdt();
+    ocrGuid_t edtGuid = currentEdtUserGet();
+    //If currentEDT is NULL_GUID
     if (edtGuid == NULL_GUID) {
         // This must be the main activity
         return root_async_task;
     }
-    //If currentEDT is NULL_GUID
-    ocrGuid_t guid = ocrElsGet(ELS_OFFSET);
+    ocrGuid_t guid = ocrElsUserGet(ELS_OFFSET);
     return deguidify_async(guid);
 }
 
 void set_current_async(async_task_t * async_task) {
-    ocrGuid_t edtGuid = getCurrentEdt();
+    ocrGuid_t edtGuid = currentEdtUserGet ();
     if (edtGuid == NULL_GUID) {
         root_async_task = async_task;
     } else {
         ocrGuid_t guid = guidify_async(async_task);
-        ocrElsSet(ELS_OFFSET, guid);
+        ocrElsUserSet(ELS_OFFSET, guid);
     }
 }
 
 /**
  * @brief An async execution is backed by an ocr edt
  */
-u8 asyncEdt(u32 paramc, u64 * params, void* paramv[], u32 depc, ocrEdtDep_t depv[]) {
+ocrGuid_t asyncEdt(u32 paramc, u64* paramv, u32 depc, ocrEdtDep_t depv[]) {
     // The async_task_t data-structure is the single argument.
     async_task_t * async_task = (async_task_t *) paramv;
 
-    // Store a pointer to the async task in the ELS
+    // Stores a pointer to the async task in the ELS
     ocrGuid_t guid = guidify_async(async_task);
-    ocrElsSet(ELS_OFFSET, guid);
+    ocrElsUserSet(ELS_OFFSET, guid);
 
     // Call back in the hclib runtime
-    async_run(async_task);
+    rtcb_async_run(async_task);
 
-    return 0;
+    return NULL_GUID;
 }
 /**
  * @brief The HCLIB view of an async task
@@ -127,7 +137,7 @@ u8 asyncEdt(u32 paramc, u64 * params, void* paramv[], u32 depc, ocrEdtDep_t depv
  */
 
 async_task_t * rt_ddt_to_async_task(ddt_t * ddt) {
-    return (async_task_t *) ((void *)ddt-(void*)sizeof(ocr_async_task_t));
+    return (async_task_t *) ((void *)ddt-(void*)sizeof(async_task_t));
 }
 
 ddt_t * rt_async_task_to_ddt(async_task_t * async_task) {
@@ -142,31 +152,53 @@ async_task_t * rt_allocate_ddt(struct ddf_st ** ddf_list) {
 }
 
 async_task_t * rt_allocate_async_task() {
-    async_task_t * async_task = (async_task_t *) calloc(1, sizeof(ocr_async_task_t));
+    async_task_t * async_task = (async_task_t *) calloc(1, sizeof(async_task_t));
     assert(async_task && "calloc failed");
     return async_task;
 }
 
 void rt_schedule_async(async_task_t * async_task) {
-    ocr_async_task_t * ocr_async_task_wrapper = (ocr_async_task_t *) async_task;
-    //Note: Forcefully pass async_task as a (void **) to avoid an extra-malloc.
-    //      To avoid any confusion in the ocr runtime, we state we're not passing
-    //      any extra argument because 'paramv' will be copied anyway.
-    //      This should work but will surely end-up broken in distributed ocr.
-    int retCode;
-    retCode = ocrEdtCreate(&(ocr_async_task_wrapper->guid), &asyncEdt,
-            0 /*paramc*/, NULL /*params*/, (void**) async_task,
-            0 /*properties*/, 0 /*depc*/, NULL /*depv*/);
+    ocrGuid_t edtGuid;
+    //Note: Forcefully pass async_task as a (u64 *) to avoid an extra-malloc.
+    u8 retCode = ocrEdtCreate(&edtGuid, asyncTemplateGuid,
+            EDT_PARAM_DEF, (u64*) async_task, EDT_PARAM_DEF, NULL, 0, NULL_GUID, NULL);
     assert(!retCode);
-
-    retCode = ocrEdtSchedule((ocrGuid_t)ocr_async_task_wrapper->guid);
-    assert(!retCode);
+    // No dependences, the EDT gets scheduled right-away
 }
 
-void rt_help() {
-    // Assumption: The runtime does not schedule a task (i.e. push a task in
-    //             a worker deque) until all its dependencies are satisfied.
+finish_t * rt_allocate_finish() {
+    ocr_finish_t * ocr_finish = (ocr_finish_t *) malloc(sizeof(ocr_finish_t));
+    assert(ocr_finish && "malloc failed");
+    ocr_finish->done_event = NULL_GUID;
+    return (finish_t *) ocr_finish;
+}
 
-    // Pick up an edt if any available and executes it on the spot.
-    ocrRtBlockedHelp();
+void rt_deallocate_finish(finish_t * finish) {
+    ocr_finish_t * ocr_finish = (ocr_finish_t *) finish;
+    if (ocr_finish->done_event != NULL_GUID) {
+        ocrEventDestroy(ocr_finish->done_event);
+    }
+    free(ocr_finish);
+}
+
+void rt_finish_reached_zero(finish_t * finish) {
+    ocr_finish_t * ocr_finish = (ocr_finish_t *) finish;
+    if (ocr_finish->done_event != NULL_GUID) {
+        ocrEventSatisfy(ocr_finish->done_event, NULL_GUID);
+    }
+}
+
+void rt_help_finish(finish_t * finish) {
+    ocr_finish_t * ocr_finish = (ocr_finish_t *) finish;
+
+    // The event is only required to be able to use ocrWait
+    u8 retCode = ocrEventCreate((ocrGuid_t *) &(ocr_finish->done_event), OCR_EVENT_STICKY_T, false);
+    assert(!retCode);
+
+    // Here we're racing with other asyncs checking out of the same finish scope
+    rtcb_check_out_finish(finish);
+
+    // OCR will try to make progress by executing other EDTs until
+    // the event is satisfied (i.e. finish-scope completed)
+    ocrWait(ocr_finish->done_event);
 }

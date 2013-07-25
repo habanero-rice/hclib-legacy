@@ -56,10 +56,14 @@ inline static void async_run_end(async_task_t * async_task) {
     async_check_out_finish(async_task);
 }
 
+void rtcb_check_out_finish(finish_t * finish) {
+    check_out_finish(finish);
+}
+
 /**
  * @brief Call-back for the underlying runtime to run an async.
  */
-void async_run(async_task_t * async_task) {
+void rtcb_async_run(async_task_t * async_task) {
     async_run_start(async_task);
 
     // Call the targeted function with its arguments

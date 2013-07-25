@@ -43,7 +43,12 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  * @brief Call back for the runtime implementation to execute an async
  * \param async The async task to execute.
  */
-void async_run(async_task_t * async);
+void rtcb_async_run(async_task_t * async);
 
+/**
+ * @brief Call back for the runtime implementation to check out of a finish
+ * \param async The finish to checkout from.
+ */
+void rtcb_check_out_finish(finish_t * finish);
 
 #endif /* RUNTIME_CALLBACK_H_ */

@@ -87,10 +87,9 @@ void hclib_finalize() {
  * the function with the root dummy async_task we maintain in a static.
  */
 void start_finish() {
-    finish_t * finish = (finish_t *) malloc(sizeof(finish_t));
+    finish_t * finish = allocate_finish();
     assert(finish && "malloc failed");
     async_task_t * async_task = get_current_async();
-    // The new finish scope has one activity (current async).
     finish->counter = 1;
 #if CHECKED_EXECUTION
     // The owner of this finish scope is the worker executing this code.
@@ -109,8 +108,11 @@ void end_finish() {
     //      worker's currently executed async.
     async_task_t * async = get_current_async();
     finish_t * current_finish = async->current_finish;
-    while(current_finish->counter > 1) {
-        // notify the runtime we are blocked
+    // If we still have children executing
+    if (current_finish->counter > 1) {
+        // Notify the runtime we are waiting for them
+        // Note: there's a race on counter. help_finish may
+        //       start and realize the finish scope is done.
          help_finish(current_finish);
     }
     // Pop current finish to its parent
@@ -118,7 +120,7 @@ void end_finish() {
     // Restore worker's currently executing async
     set_current_async(async);
     // Don't need this finish scope anymore
-    free(current_finish);
+    deallocate_finish(current_finish);
 }
 
 void async(async_t * async_def, asyncFct_t fct_ptr, int argc, void ** argv,

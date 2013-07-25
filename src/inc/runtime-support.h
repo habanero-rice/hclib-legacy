@@ -101,6 +101,24 @@ async_task_t * rt_allocate_ddt(struct ddf_st ** ddf_list);
 
 
 //
+// Finish allocation
+//
+
+/**
+ * @brief allocates a finish data-structure.
+ * Rule 1: The runtime must return a valid pointer to a finish_t.
+ * Rule 2: The runtime may allocate a larger data-structure for its
+ * own book-keeping as long as the Rule 1 is enforced.
+ */
+finish_t * rt_allocate_finish();
+
+/**
+ * @brief deallocates a finish data-structure.
+ */
+void rt_deallocate_finish(finish_t *);
+
+
+//
 // Scheduling
 //
 
@@ -110,10 +128,15 @@ async_task_t * rt_allocate_ddt(struct ddf_st ** ddf_list);
 void rt_schedule_async(async_task_t * async);
 
 /**
- * @brief Currently executing worker tries to help make progress.
- * Typically execute asyncs on top of its own stack. Better know
+ * @brief To notify a finish scope counter reached zero
+ */
+void rt_finish_reached_zero(finish_t * finish);
+
+/**
+ * @brief Try to make progress when waiting for a finish scope to complete
+ * Typically execute other asyncs on top of its own stack. Better know
  * what you're doing when calling this.
  */
-void rt_help();
+void rt_help_finish(finish_t * finish);
 
 #endif /* RUNTIME_IMPL_H_ */

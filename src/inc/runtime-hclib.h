@@ -44,6 +44,9 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 void async_check_in_finish(async_task_t * async_task);
 void async_check_out_finish(async_task_t * async_task);
 
+void check_in_finish(finish_t * finish);
+void check_out_finish(finish_t * finish);
+
 
 /*
  * Current async accessors
@@ -54,9 +57,13 @@ finish_t * get_current_finish();
 
 
 /*
- * Allocators
+ * Allocators / Deallocators
  */
 async_task_t * allocate_async_task(async_t * async_def);
+void deallocate_async_task(async_task_t * async);
+
+finish_t * allocate_finish();
+void deallocate_finish(finish_t * finish);
 
 
 /*

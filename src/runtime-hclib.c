@@ -40,20 +40,36 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "runtime-support.h"
 #include "rt-ddf.h"
 
+
+/**
+ * @brief Checking in a finish
+ */
+void check_in_finish(finish_t * finish) {
+    hc_atomic_inc(&(finish->counter));
+}
+
+/**
+ * @brief Checkout of a finish
+ */
+void check_out_finish(finish_t * finish) {
+    if (hc_atomic_dec(&(finish->counter))) {
+        // If counter reached zero notify runtime
+        rt_finish_reached_zero(finish);
+    }
+}
+
 /**
  * @brief Async task checking in a finish
  */
 void async_check_in_finish(async_task_t * async_task) {
-    finish_t * finish = async_task->current_finish;
-    hc_atomic_inc(&(finish->counter));
+    check_in_finish(async_task->current_finish);
 }
 
 /**
  * @brief Async task checking out of a finish
  */
 void async_check_out_finish(async_task_t * async_task) {
-    finish_t * finish = async_task->current_finish;
-    hc_atomic_dec(&(finish->counter));
+    check_out_finish(async_task->current_finish);
 }
 
 /**
@@ -77,6 +93,27 @@ async_task_t * allocate_async_task(async_t * async_def) {
 }
 
 /**
+ * @brief async task allocator
+ */
+void deallocate_async_task(async_task_t * async) {
+    //TODO rt_deallocate_async_task(async);
+}
+
+/**
+ * @brief Finish allocator
+ */
+finish_t * allocate_finish() {
+    return rt_allocate_finish();
+}
+
+/**
+ * @brief Finish deallocator
+ */
+void deallocate_finish(finish_t * finish) {
+    rt_deallocate_finish(finish);
+}
+
+/**
  * @brief retrieves the current async's finish scope
  */
 finish_t * get_current_finish() {
@@ -84,7 +121,6 @@ finish_t * get_current_finish() {
     // to represent the main activity.
     return get_current_async()->current_finish;
 }
-
 
 static int is_eligible_to_schedule(async_task_t * async_task) {
     if (async_task->def->ddf_list != NULL) {
@@ -102,5 +138,5 @@ void schedule_async(async_task_t * async_task) {
 }
 
 void help_finish(finish_t * finish) {
-    rt_help();
+    rt_help_finish(finish);
 }
