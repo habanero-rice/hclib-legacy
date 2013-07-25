@@ -14,8 +14,8 @@ OCR is available from <https://01.org/projects/open-community-runtime>
 
 1. Clone the OCR repository:
 
-	git clone https://github.com/01org/ocr.git
-	cd ocr
+    git clone https://github.com/01org/ocr.git
+    cd ocr
 
 2.  Build OCR with ELS support:
 
@@ -39,8 +39,8 @@ to recompile the library when updating code.
 
 1. Clone the HCLIB repository:
 
-	git clone https://github.com/vcave/hclib.git
-	cd hclib
+    git clone https://github.com/vcave/hclib.git
+    cd hclib
 
 2.  Build HCLIB
     
