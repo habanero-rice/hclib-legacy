@@ -123,6 +123,35 @@ void end_finish() {
     deallocate_finish(current_finish);
 }
 
+void forasync(async_t * async_def, forasyncFct_t fct_ptr, int argc, void ** argv,
+        struct ddf_st ** ddf_list, void * phaser_list) {
+
+    // All the sub-asyncs share async_def
+        // Populate the async definition
+    async_def->fct_ptr = fct_ptr;
+    async_def->argc = argc;
+    async_def->argv = argv;
+    async_def->ddf_list = ddf_list;
+    async_def->phaser_list = phaser_list;
+    // TODO block 
+    while (i < numblocks) {
+        low = ;
+        high = ;
+
+        // some middle-impl api
+        forasync_task_t * async_task = allocate_forasync_task(async_def, low, high);
+
+        // Set the async finish scope to be the currently executing async's one.
+        async_task->current_finish = get_current_async()->current_finish;
+
+        // The newly created async must check in the current finish scope
+        async_check_in_finish(async_task);
+
+        // delegate scheduling to the underlying runtime
+        schedule_async(async_task);
+    }
+}
+
 void async(async_t * async_def, asyncFct_t fct_ptr, int argc, void ** argv,
         struct ddf_st ** ddf_list, void * phaser_list) {
     //TODO: api is quite verbose here, the async_def pointer allows

@@ -80,6 +80,12 @@ static void async_fct_executor(async_task_t * async_task) {
     ((asyncFct_t)async_def->fct_ptr)(async_def->argc, async_def->argv);
 }
 
+static void forasync_fct_executor(async_task_t * async_task) {
+    forasync_task_t * forasync_task = (forasync_task_t *) async_task;
+    async_t * async_def = forasync_task->base->def;
+    ((forasyncFct_t)async_def->fct_ptr)(async_def->argc, async_def->argv, &(forasync_task->ctx));
+}
+
 /**
  * @brief Async task allocator. Depending on the nature of the async
  * the runtime may allocate a different data-structure to represent the
@@ -99,6 +105,11 @@ async_task_t * allocate_async_task(async_t * async_def) {
     async_task->def = async_def;
     async_task->executor_fct_ptr = (void *) async_fct_executor;
     return async_task;
+}
+
+forasync_task_t * allocate_forasync_task(async_t * async_def) {
+    //TODO ask rt_ to allocate a forasync task
+    async_task->executor_fct_ptr = (void *) forasync_fct_executor;   
 }
 
 /**

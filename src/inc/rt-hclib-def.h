@@ -67,5 +67,14 @@ typedef struct _async_task_t {
     asyncExecutorFct_t executor_fct_ptr;
 } async_task_t;
 
+typedef struct _forasync_ctx_t {
+    int low;
+    int high;
+} forasync_ctx_t;
+
+typedef struct _forasync_task_t {
+    async_task_t base;
+    forasync_ctx_t ctx;
+} forasync_task_t;
 
 #endif /* HCLIB_DEF_H_ */
