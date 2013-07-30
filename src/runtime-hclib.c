@@ -82,8 +82,8 @@ static void async_fct_executor(async_task_t * async_task) {
 
 static void forasync_fct_executor(forasync_task_t * async_task) {
     forasync_t *forasync =  async_task->def;
-    async_t *async_def = forasync->base;
-    ((forasyncWrapper_t)(async_def->fct_ptr))(async_def->argc, async_def->argv, &forasync->ctx);
+    async_t *async_def = (async_t*)&(forasync->base);
+    ((forasyncWrapper_t)(async_def->fct_ptr))(async_def->argc, async_def->argv, forasync);
 }
 
 /**
@@ -107,7 +107,7 @@ async_task_t * allocate_async_task(async_t * async_def) {
     return async_task;
 }
 
-forasync_task_t * allocate_forasync_task(async_t * async_def,int *low,int *high,void *func,int type) {
+forasync_task_t * allocate_forasync_task(async_t * async_def,int *low,int *high,int *seq,void *func) {
     forasync_task_t * forasync_task;
     //TODO ask rt_ to allocate a forasync task
     if ((async_def != NULL) && async_def->ddf_list != NULL) {
@@ -119,13 +119,18 @@ forasync_task_t * allocate_forasync_task(async_t * async_def,int *low,int *high,
 	    forasync_task = rt_allocate_forasync_task();
 	    forasync_task->def = rt_allocate_context();
     }
-    forasync_task->def->base = async_def;
+    forasync_task->def->base = *(async_def);
     forasync_task->def->ctx.func=func; 
     forasync_task->executor_fct_ptr = (void *) forasync_fct_executor;  
-    if(type==1){
-	    forasync_task->def->ctx.high[0]=high[0]; 
-	    forasync_task->def->ctx.low[0]=low[0]; 
-    }
+    forasync_task->def->ctx.high[0]=high[0]; 
+    forasync_task->def->ctx.high[1]=high[1]; 
+    forasync_task->def->ctx.high[2]=high[2]; 
+    forasync_task->def->ctx.low[0]=low[0]; 
+    forasync_task->def->ctx.low[1]=low[1]; 
+    forasync_task->def->ctx.low[2]=low[2]; 
+    forasync_task->def->ctx.seq[0]=seq[0]; 
+    forasync_task->def->ctx.seq[1]=seq[1]; 
+    forasync_task->def->ctx.seq[2]=seq[2]; 
     return forasync_task;
 }
 

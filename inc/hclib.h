@@ -72,17 +72,18 @@ typedef struct {
 typedef struct {
     int high[3];
     int low[3];
+    int seq[3];
     void *func;
 }forasync_ctx;
 
 
 typedef struct {
     //asyncFct_t fct_ptr;
-    async_t *base;
+    async_t base;
     forasync_ctx ctx;
 } forasync_t;
 
-typedef void (*forasyncWrapper_t) (int argc, void * argv[],forasync_ctx *ctx);
+typedef void (*forasyncWrapper_t) (int argc, void * argv[],forasync_t *);
 /**
  * @brief: spawn a new async.
  * @param[in] fct_ptr: the function to execute
@@ -92,6 +93,13 @@ typedef void (*forasyncWrapper_t) (int argc, void * argv[],forasync_ctx *ctx);
 void async(async_t * async_def, asyncFct_t fct_ptr, int argc, void ** argv,
            struct ddf_st ** ddf_list, void * phaser_list);
 
+void for_wrapper1D(int ,void **,forasync_t *);
+void recursive_wrapper1D(int ,void **,forasync_t *);
+void for_wrapper2D(int ,void **,forasync_t *);
+void for_wrapper3D(int ,void **,forasync_t *);
+void forasync1d_chunk(async_t * async_def, void* fct_ptr,int size, int ts, int argc, void ** argv, struct ddf_st ** ddf_list, void * phaser_list); 
+void forasync1d_recursive(async_t *, void*,int low,int high, int ts, int argc, void ** argv, struct ddf_st ** ddf_list, void * phaser_list); 
+void forasync1D(async_t* async_def,void* forasync_fct,int siz,int ts,int runtime_type, int argc, void ** argv,struct ddf_st ** ddf_list, void * phaser_list); 
 /**
  * @brief starts a new finish scope
  */
