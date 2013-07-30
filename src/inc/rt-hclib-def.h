@@ -51,30 +51,28 @@ typedef struct finish {
 } finish_t;
 
 struct _async_task_t;
+struct _forasync_task_t;
 
 /**
  * @brief Function pointer to an async executor
  */
 typedef void (*asyncExecutorFct_t) (struct _async_task_t * async_task);
+typedef void (*forasyncExecutorFct_t) (struct _forasync_task_t *forasync_task);
 
 /**
  * @brief The HCLIB view of an async task
  * @param def contains data filled in by the user (args, await list, etc.)
  */
 typedef struct _async_task_t {
-    finish_t * current_finish;
-    async_t * def;
+    finish_t *current_finish;
+    async_t *def;
     asyncExecutorFct_t executor_fct_ptr;
 } async_task_t;
 
-typedef struct _forasync_ctx_t {
-    int low;
-    int high;
-} forasync_ctx_t;
-
 typedef struct _forasync_task_t {
-    async_task_t base;
-    forasync_ctx_t ctx;
+    finish_t *current_finish;
+    forasync_t *def;
+    asyncExecutorFct_t executor_fct_ptr;
 } forasync_task_t;
 
 #endif /* HCLIB_DEF_H_ */

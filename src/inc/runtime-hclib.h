@@ -59,6 +59,8 @@ finish_t * get_current_finish();
 /*
  * Allocators / Deallocators
  */
+forasync_task_t * allocate_forasync_task(async_t * async_def,int*,int*,void*,int);
+void deallocate_forasync_task(forasync_task_t * async);
 async_task_t * allocate_async_task(async_t * async_def);
 void deallocate_async_task(async_task_t * async);
 

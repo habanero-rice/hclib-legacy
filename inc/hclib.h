@@ -46,20 +46,43 @@ void hclib_finalize();
  * @brief A pointer to a function to be executed asynchronously
  */
 typedef void (*asyncFct_t) (int argc, void * argv[]);
-
+typedef void (*forasyncFct_t1D) (int argc, void * argv[],int index);
+typedef void (*forasyncFct_t2D) (int argc, void * argv[],int index_outter,int index_inner);
+typedef void (*forasyncFct_t3D) (int argc, void * argv[],int index_out,int index_mid,int index_inner);
 /**
  * @brief An async definition
  * Note: Would have like this to be opaque but
  * that would prevent stack allocation.
  */
 typedef struct {
-    void * fct_ptr;
+    //asyncFct_t fct_ptr;
+    void* fct_ptr;
     int argc;
     void ** argv;
     struct ddf_st ** ddf_list; // Null terminated list
     void * phaser_list; // Null terminated list
 } async_t;
 
+
+/**
+ * @brief A forasync definition
+ * Note: Would have like this to be opaque but
+ * that would prevent stack allocation.
+ */
+typedef struct {
+    int high[3];
+    int low[3];
+    void *func;
+}forasync_ctx;
+
+
+typedef struct {
+    //asyncFct_t fct_ptr;
+    async_t *base;
+    forasync_ctx ctx;
+} forasync_t;
+
+typedef void (*forasyncWrapper_t) (int argc, void * argv[],forasync_ctx *ctx);
 /**
  * @brief: spawn a new async.
  * @param[in] fct_ptr: the function to execute

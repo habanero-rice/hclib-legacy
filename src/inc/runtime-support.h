@@ -93,6 +93,8 @@ struct ddt_st * rt_async_task_to_ddt(async_task_t * async_task);
  * own book-keeping as long as the Rule 1 is enforced.
  */
 async_task_t * rt_allocate_async_task();
+forasync_task_t * rt_allocate_forasync_task();
+forasync_t * rt_allocate_context();
 
 /**
  * @brief allocates a data-driven task and register a ddf_list

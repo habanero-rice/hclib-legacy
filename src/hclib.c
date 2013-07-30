@@ -30,6 +30,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
 #include <stdlib.h>
+//#include <stdio.h>
 #include <assert.h>
 
 #include "hclib.h"
@@ -122,38 +123,73 @@ void end_finish() {
     // Don't need this finish scope anymore
     deallocate_finish(current_finish);
 }
+void for_wrapper1D(int argc,void **argv,forasync_ctx *ctx){
 
-void forasync(async_t * async_def, forasyncFct_t fct_ptr, int argc, void ** argv,
-        struct ddf_st ** ddf_list, void * phaser_list) {
+     int i=0;
+  	   for(i=ctx->low[0];i<ctx->high[0];i++){
+		((forasyncFct_t1D)(ctx->func))(argc,argv,i);
+	   }
+}
+void for_wrapper2D(int argc,void **argv,forasync_ctx *ctx){
 
+     int i=0;
+     int j=0;
+     for(i=ctx->low[0];i<ctx->high[0];i++){
+  	   for(j=ctx->low[1];j<ctx->high[1];j++){
+		((forasyncFct_t2D)(ctx->func))(argc,argv,i,j);
+	   }
+    }
+}
+void forasync1d_chunk(async_t * async_def, void* fct_ptr,int size, int ts, int argc, void ** argv, struct ddf_st ** ddf_list, void * phaser_list) {
+
+    int i=0; 
+    int low[3];
+    int high[3];
+    int numblocks=size/ts;
+    
+    while (i <= numblocks) {
+       //check for type 1D,2D,3D
+        low[0] = i*ts;
+        high[0] = (i*ts+ts)>size?size:(i*ts+ts);
+	
+        // some middle-impl api
+        forasync_task_t *forasync_task = allocate_forasync_task(async_def, low, high,fct_ptr,1);
+//	printf("Scheduling Task %d %d\n",forasync_task->def->ctx.low[0],forasync_task->def->ctx.high[0]);
+        // Set the async finish scope to be the currently executing async's one.
+        forasync_task->current_finish = get_current_async()->current_finish;
+
+        // The newly created async must check in the current finish scope
+        async_check_in_finish((async_task_t*)forasync_task);
+
+        // delegate scheduling to the underlying runtime
+        schedule_async((async_task_t*)forasync_task);
+  	i++;
+    }
+}
+//
+//  1D version of forasync. runtime_type specifies the type of runtime (1 = recursive) (default = chunk)
+//
+void forasync1D(async_t* async_def,void* forasync_fct,int siz,int ts,int runtime_type, int argc, void ** argv,struct ddf_st ** ddf_list, void * phaser_list) {
     // All the sub-asyncs share async_def
         // Populate the async definition
-    async_def->fct_ptr = fct_ptr;
+    async_def->fct_ptr = for_wrapper1D;
     async_def->argc = argc;
     async_def->argv = argv;
     async_def->ddf_list = ddf_list;
     async_def->phaser_list = phaser_list;
-    // TODO block 
-    while (i < numblocks) {
-        low = ;
-        high = ;
-
-        // some middle-impl api
-        forasync_task_t * async_task = allocate_forasync_task(async_def, low, high);
-
-        // Set the async finish scope to be the currently executing async's one.
-        async_task->current_finish = get_current_async()->current_finish;
-
-        // The newly created async must check in the current finish scope
-        async_check_in_finish(async_task);
-
-        // delegate scheduling to the underlying runtime
-        schedule_async(async_task);
+ 
+    start_finish();
+    if(runtime_type==1){
+	// to do recursive
     }
+    else{
+	    forasync1d_chunk(async_def,forasync_fct,siz,ts,argc,argv,ddf_list,phaser_list);   
+
+    }
+    end_finish();
 }
 
-void async(async_t * async_def, asyncFct_t fct_ptr, int argc, void ** argv,
-        struct ddf_st ** ddf_list, void * phaser_list) {
+void async(async_t * async_def, asyncFct_t fct_ptr, int argc, void ** argv, struct ddf_st ** ddf_list, void * phaser_list) {
     //TODO: api is quite verbose here, the async_def pointer allows
     // users to pass down an address of a stack variable.
 #if CHECKED_EXECUTION
@@ -168,7 +204,7 @@ void async(async_t * async_def, asyncFct_t fct_ptr, int argc, void ** argv,
     async_def->phaser_list = phaser_list;
 
     // Build the new async task and associate with the definition
-    async_task_t * async_task = allocate_async_task(async_def);
+    async_task_t *async_task = allocate_async_task(async_def);
 
     // Set the async finish scope to be the currently executing async's one.
     async_task->current_finish = get_current_async()->current_finish;
