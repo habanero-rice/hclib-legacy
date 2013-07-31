@@ -220,17 +220,19 @@ void forasync_chunk(int type, async_t * async_def, void* fct_ptr,int *size, int 
 	seq[2] = ts[0];
     }
     for(i=0; i< higher[2];i+=seq[2]) {
-	    low[2] = i*seq[2];
-	    high[2] = (i*seq[2]+seq[2])>higher[2]?higher[2]:(i*seq[2]+seq[2]);
+	    low[2] = i;
+	    high[2] = (i+seq[2])>higher[2]?higher[2]:(i+seq[2]);
+	    //printf("Scheduling Task Loop1 %d %d\n",low[2],high[2]);
 	    for(j=0; j< higher[1];j+=seq[1]) {
-		    low[1] = j*seq[1];
-		    high[1] = (j*seq[1]+seq[1])>higher[1]?higher[1]:(j*seq[1]+seq[1]);
+		    low[1] = j;
+		    high[1] = (j+seq[1])>higher[1]?higher[1]:(j+seq[1]);
+	            //printf("Scheduling Task Loop2 %d %d\n",low[1],high[1]);
 		    for(k=0; k< higher[0];k+=seq[0]) {
-			    low[0] = k*seq[0];
-			    high[0] = (k*seq[0]+seq[0])>higher[0]?higher[0]:(k*seq[0]+seq[0]);
+			    low[0] = k;
+			    high[0] = (k+seq[0])>higher[0]?higher[0]:(k+seq[0]);
 			    // some middle-impl api
 			    forasync_task_t *forasync_task = allocate_forasync_task(async_def, low, high,seq,fct_ptr);
-			    printf("Scheduling Task %d %d\n",forasync_task->def->ctx.low[0],forasync_task->def->ctx.high[0]);
+			    //printf("Scheduling Task %d %d\n",forasync_task->def->ctx.low[0],forasync_task->def->ctx.high[0]);
 			    // Set the async finish scope to be the currently executing async's one.
 			    forasync_task->current_finish = get_current_async()->current_finish;
 
