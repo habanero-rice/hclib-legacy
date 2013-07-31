@@ -70,7 +70,7 @@ fi
 
 cd ${COMPTREE}
 
-HCLIB_CONFIGURE_FLAGS=--with-ocr=${OCR_ROOT}
+HCLIB_CONFIGURE_FLAGS="${HCLIB_CONFIGURE_FLAGS} --with-ocr=${OCR_ROOT}"
 
 ../configure ${INSTALL_ROOT} ${HCLIB_CONFIGURE_FLAGS}
 check_error "$?" "Configure failed";
