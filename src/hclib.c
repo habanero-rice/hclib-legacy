@@ -245,47 +245,51 @@ void forasync_chunk(int type, async_t * async_def, void* fct_ptr,int *size, int 
 	    }
     }
 }
-//1D recursive for forasync
-void forasync1d_recursive(async_t * async_def, void* fct_ptr,int low,int high, int ts, int argc, void ** argv, struct ddf_st ** ddf_list, void * phaser_list) {
+
+// recursive for forasync
+void forasync_recursive(async_t * async_def, void* fct_ptr,int *low,int *high, int *ts, int argc, void ** argv, struct ddf_st ** ddf_list, void * phaser_list) {
 
     int lower[3];
     int higher[3];
-    int seq[3];
 
     //split the range into two, spawn a new task for the first half and recurse on the rest  
-    if((high-low) > ts) {
-       //spawn an async
-        lower[0] = (high+low)/2;
-        higher[0] = high;
-        seq[0] = ts;
+     if((high[2]-low[2]) > ts[2]) {
+	     higher[2] =lower[2] = (high[2]+low[2])/2;
 
-        async_def->fct_ptr = recursive_wrapper1D;
-        // some middle-impl api
-        forasync_task_t *forasync_task = allocate_forasync_task(async_def, lower, higher,seq,fct_ptr);
-	printf("Scheduling Task %d %d\n",lower[0],higher[0]);
-        // Set the async finish scope to be the currently executing async's one.
-        forasync_task->current_finish = get_current_async()->current_finish;
-
-        // The newly created async must check in the current finish scope
-        async_check_in_finish((async_task_t*)forasync_task);
-
-        // delegate scheduling to the underlying runtime
-        schedule_async((async_task_t*)forasync_task);
-        /////////////////////////////////////////////////////////////////////////
-        //continue to work on the half task 
-	printf("Scheduling Task %d %d\n",low,lower[0]);
-	forasync1d_recursive(async_def,fct_ptr,low,lower[0], ts, argc,argv,ddf_list,phaser_list); 
-
-	
-    }
-    else{//compute the tile
-	    int i=0;
-	    for(i=low;i<high;i++){
-		    ((forasyncFct_t1D)(fct_ptr))(argc,argv,i);
      }
+     else if((high[1]-low[1]) > ts[1]) {
+	     higher[1] =lower[1] = (high[1]+low[1])/2;
 
-    }
+     }
+     else  if((high[0]-low[0]) > ts[0]) {
+	     //spawn an async
+	     higher[0] =lower[0] = (high[0]+low[0])/2;
+
+	     // some middle-impl api
+	     forasync_task_t *forasync_task = allocate_forasync_task(async_def, lower, high,ts,fct_ptr);
+	     printf("Scheduling Task %d %d\n",lower[0],high[0]);
+	     // Set the async finish scope to be the currently executing async's one.
+	     forasync_task->current_finish = get_current_async()->current_finish;
+
+	     // The newly created async must check in the current finish scope
+	     async_check_in_finish((async_task_t*)forasync_task);
+
+	     // delegate scheduling to the underlying runtime
+	     schedule_async((async_task_t*)forasync_task);
+	     /////////////////////////////////////////////////////////////////////////
+	     //continue to work on the half task 
+	     printf("Scheduling Task %d %d\n",low[0],higher[0]);
+	     forasync1d_recursive(async_def,fct_ptr,low,higher, ts, argc,argv,ddf_list,phaser_list); 
+
+     }
+     else{//compute the tile
+	     int i=0;
+	     for(i=low[0];i<high[0];i++){
+		     ((forasyncFct_t1D)(fct_ptr))(argc,argv,i);
+	     }
+     }
 }
+
 //
 //  forasync. runtime_type specifies the type of runtime (1 = recursive) (default = chunk)
 //
@@ -298,32 +302,19 @@ void forasync(async_t* async_def, int argc, void ** argv,struct ddf_st ** ddf_li
     async_def->phaser_list = phaser_list;
  
     start_finish();
-    if(runtime_type==1){
-	    if(dimen==1){
-		 //   forasync1d_recursive(async_def,forasync_fct,0,size, ts, argc,argv,ddf_list,phaser_list); 
-	    }
-	    else if(dimen==2){
-		   // forasync2d_recursive(async_def,forasync_fct,0,size, ts, argc,argv,ddf_list,phaser_list); 
-	    }
-	    else if(dimen==3){
-		    //forasync3d_recursive(async_def,forasync_fct,0,size, ts, argc,argv,ddf_list,phaser_list); 
+    if(dimen>0 && dimen<4){
+	    if(runtime_type==1){
+		    async_def->fct_ptr = recursive_wrapper;
+		    forasync1d_recursive(async_def,forasync_fct,0,size, ts, argc,argv,ddf_list,phaser_list); 
 	    }
 	    else{
-		    printf("forasync supports upto 3 dimensional loops only.\n");
-		    assert(0);
+		    forasync_chunk(dimen,async_def,forasync_fct,size,ts,argc,argv,ddf_list,phaser_list);   
 	    }
     }
     else{
-	   if(dimen>0 && dimen<4){
-		    forasync_chunk(dimen,async_def,forasync_fct,size,ts,argc,argv,ddf_list,phaser_list);   
-	    }
-	    else{
-		    printf("forasync supports upto 3 dimensional loops only.\n");
-		    assert(0);
-	    }
+	    printf("forasync supports upto 3 dimensional loops only.\n");
+	    assert(0);
     }
-
-
     end_finish();
 }
 
