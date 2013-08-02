@@ -96,10 +96,14 @@ void async(async_t * async_def, asyncFct_t fct_ptr, int argc, void ** argv,
 void for_wrapper1D(int ,void **,forasync_t *);
 void recursive_wrapper1D(int ,void **,forasync_t *);
 void for_wrapper2D(int ,void **,forasync_t *);
+void recursive_wrapper2D(int ,void **,forasync_t *);
 void for_wrapper3D(int ,void **,forasync_t *);
+void recursive_wrapper3D(int ,void **,forasync_t *);
 void forasync_chunk(int,async_t * async_def, void* fct_ptr,int *size, int *ts, int argc, void ** argv, struct ddf_st ** ddf_list, void * phaser_list); 
-void forasync1d_recursive(async_t *, void*,int low,int high, int ts, int argc, void ** argv, struct ddf_st ** ddf_list, void * phaser_list); 
-void forasync1D(async_t* async_def,void* forasync_fct,int siz,int ts,int runtime_type, int argc, void ** argv,struct ddf_st ** ddf_list, void * phaser_list); 
+void forasync_recursive1D(async_t *, void*,int *low,int *high, int *ts, int argc, void ** argv, struct ddf_st ** ddf_list, void * phaser_list); 
+void forasync_recursive2D(async_t *, void*,int *low,int *high, int *ts, int argc, void ** argv, struct ddf_st ** ddf_list, void * phaser_list); 
+void forasync_recursive3D(async_t *, void*,int *low,int *high, int *ts, int argc, void ** argv, struct ddf_st ** ddf_list, void * phaser_list); 
+void forasync(async_t* async_def, int argc, void ** argv,struct ddf_st ** ddf_list, void * phaser_list,int dimen,int *size,int *tilesize,void* forasync_fct,int runtime_type);
 /**
  * @brief starts a new finish scope
  */

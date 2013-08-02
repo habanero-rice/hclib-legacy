@@ -132,15 +132,6 @@ void for_wrapper1D(int argc,void **argv,forasync_t *forasynk){
 	     ((forasyncFct_t1D)(ctx.func))(argc,argv,i);
      }
 }
-//1D for loop recursive wrapper for forasync
-void recursive_wrapper1D(int argc,void **argv,forasync_t *forasynk){
-
-     async_t *async_def=(async_t*)&(forasynk->base);
-     forasync_ctx ctx=forasynk->ctx;
-     forasync1d_recursive(async_def,ctx.func,ctx.low[0],ctx.high[0], ctx.seq[0], async_def-> argc, async_def->argv,async_def->ddf_list, async_def->phaser_list); 
-     
-}
-
 //2D for loop wrapper for forasync
 void for_wrapper2D(int argc,void **argv,forasync_t *forasynk){
 
@@ -152,14 +143,6 @@ void for_wrapper2D(int argc,void **argv,forasync_t *forasynk){
 		((forasyncFct_t2D)(ctx.func))(argc,argv,i,j);
 	   }
     }
-}
-//2D for loop recursive wrapper for forasync
-void recursive_wrapper2D(int argc,void **argv,forasync_t *forasynk){
-
-     //async_t *async_def=(async_t*)&(forasynk->base);
-     //forasync_ctx ctx=forasynk->ctx;
-     //forasync2d_recursive(async_def,ctx.func,ctx.low[0],ctx.high[0], ctx.seq[0], async_def-> argc, async_def->argv,async_def->ddf_list, async_def->phaser_list); 
-     
 }
 //3D for loop wrapper for forasync
 void for_wrapper3D(int argc,void **argv,forasync_t *forasynk){
@@ -176,63 +159,36 @@ void for_wrapper3D(int argc,void **argv,forasync_t *forasynk){
 	     }
      }
 }
-//3D for loop recursive wrapper for forasync
-void recursive_wrapper3D(int argc,void **argv,forasync_t *forasynk){
-
-    // async_t *async_def=(async_t*)&(forasynk->base);
-    // forasync_ctx ctx=forasynk->ctx;
-     //forasync3d_recursive(async_def,ctx.func,ctx.low[0],ctx.high[0], ctx.seq[0], async_def-> argc, async_def->argv,async_def->ddf_list, async_def->phaser_list); 
-     
-}
-
 
 //1D chunking for forasync
-void forasync_chunk(int type, async_t * async_def, void* fct_ptr,int *size, int *ts, int argc, void ** argv, struct ddf_st ** ddf_list, void * phaser_list) {
+void forasync_chunk(int type, async_t * async_def, void* fct_ptr,int *higher, int *seq, int argc, void ** argv, struct ddf_st ** ddf_list, void * phaser_list) {
 
     int i=0; 
     int j=0; 
     int k=0; 
- //   int lower[3]={0,0,0};
-    int higher[3]={1,1,1};
     int low[3]={0,0,0};
     int high[3]={1,1,1};
-    int seq[3]={1,1,1};
 
-    if(type==1){
- 	async_def->fct_ptr = for_wrapper1D;
-	higher[0]=size[0];
-	seq[0] = ts[0];
-    }
-    else if(type==2){
- 	async_def->fct_ptr = for_wrapper2D;
-	higher[0]=size[1];
-	seq[0] = ts[1];
-	higher[1]=size[0];
-	seq[1] = ts[0];
-    }
-    else if(type==3){
- 	async_def->fct_ptr = for_wrapper3D;
-	higher[0]=size[2];
-	seq[0] = ts[2];
-	higher[1]=size[1];
-	seq[1] = ts[1];
-	higher[2]=size[0];
-	seq[2] = ts[0];
-    }
     for(i=0; i< higher[2];i+=seq[2]) {
 	    low[2] = i;
 	    high[2] = (i+seq[2])>higher[2]?higher[2]:(i+seq[2]);
-	    //printf("Scheduling Task Loop1 %d %d\n",low[2],high[2]);
+#ifdef HC_LIB_DEBUG
+	    printf("Scheduling Task Loop1 %d %d\n",low[2],high[2]);
+#endif
 	    for(j=0; j< higher[1];j+=seq[1]) {
 		    low[1] = j;
 		    high[1] = (j+seq[1])>higher[1]?higher[1]:(j+seq[1]);
-	            //printf("Scheduling Task Loop2 %d %d\n",low[1],high[1]);
+#ifdef HC_LIB_DEBUG
+	            printf("Scheduling Task Loop2 %d %d\n",low[1],high[1]);
+#endif
 		    for(k=0; k< higher[0];k+=seq[0]) {
 			    low[0] = k;
 			    high[0] = (k+seq[0])>higher[0]?higher[0]:(k+seq[0]);
 			    // some middle-impl api
 			    forasync_task_t *forasync_task = allocate_forasync_task(async_def, low, high,seq,fct_ptr);
-			    //printf("Scheduling Task %d %d\n",forasync_task->def->ctx.low[0],forasync_task->def->ctx.high[0]);
+#ifdef HC_LIB_DEBUG
+			    printf("Scheduling Task %d %d\n",forasync_task->def->ctx.low[0],forasync_task->def->ctx.high[0]);
+#endif
 			    // Set the async finish scope to be the currently executing async's one.
 			    forasync_task->current_finish = get_current_async()->current_finish;
 
@@ -245,29 +201,44 @@ void forasync_chunk(int type, async_t * async_def, void* fct_ptr,int *size, int 
 	    }
     }
 }
+//3D for loop recursive wrapper for forasync
+void recursive_wrapper3D(int argc,void **argv,forasync_t *forasynk){
 
-// recursive for forasync
-void forasync_recursive(async_t * async_def, void* fct_ptr,int *low,int *high, int *ts, int argc, void ** argv, struct ddf_st ** ddf_list, void * phaser_list) {
+     async_t *async_def=(async_t*)&(forasynk->base);
+     forasync_ctx ctx=forasynk->ctx;
+     forasync_recursive3D(async_def,ctx.func,ctx.low,ctx.high,ctx.seq, async_def-> argc, async_def->argv,async_def->ddf_list, async_def->phaser_list); 
+     
+}
+//2D for loop recursive wrapper for forasync
+void recursive_wrapper2D(int argc,void **argv,forasync_t *forasynk){
 
-    int lower[3];
-    int higher[3];
+     async_t *async_def=(async_t*)&(forasynk->base);
+     forasync_ctx ctx=forasynk->ctx;
+     forasync_recursive2D(async_def,ctx.func,ctx.low,ctx.high,ctx.seq, async_def-> argc, async_def->argv,async_def->ddf_list, async_def->phaser_list); 
+     
+}
+//1D for loop recursive wrapper for forasync
+void recursive_wrapper1D(int argc,void **argv,forasync_t *forasynk){
 
+     async_t *async_def=(async_t*)&(forasynk->base);
+     forasync_ctx ctx=forasynk->ctx;
+     forasync_recursive1D(async_def,ctx.func,ctx.low,ctx.high,ctx.seq, async_def-> argc, async_def->argv,async_def->ddf_list, async_def->phaser_list); 
+     
+}
+// recursive1D for forasync
+void forasync_recursive1D(async_t * async_def, void* fct_ptr,int *low,int *high, int *ts, int argc, void ** argv, struct ddf_st ** ddf_list, void * phaser_list) {
+
+    int lower[1]={0};
+    int higher[1]={0};
     //split the range into two, spawn a new task for the first half and recurse on the rest  
-     if((high[2]-low[2]) > ts[2]) {
-	     higher[2] =lower[2] = (high[2]+low[2])/2;
-
-     }
-     else if((high[1]-low[1]) > ts[1]) {
-	     higher[1] =lower[1] = (high[1]+low[1])/2;
-
-     }
-     else  if((high[0]-low[0]) > ts[0]) {
+     if((high[0]-low[0]) > ts[0]) {
 	     //spawn an async
 	     higher[0] =lower[0] = (high[0]+low[0])/2;
-
 	     // some middle-impl api
 	     forasync_task_t *forasync_task = allocate_forasync_task(async_def, lower, high,ts,fct_ptr);
-	     printf("Scheduling Task %d %d\n",lower[0],high[0]);
+#ifdef HC_LIB_DEBUG
+	     printf("Scheduling Tasks %d %d\n",lower[0],high[0]);
+#endif
 	     // Set the async finish scope to be the currently executing async's one.
 	     forasync_task->current_finish = get_current_async()->current_finish;
 
@@ -278,14 +249,136 @@ void forasync_recursive(async_t * async_def, void* fct_ptr,int *low,int *high, i
 	     schedule_async((async_task_t*)forasync_task);
 	     /////////////////////////////////////////////////////////////////////////
 	     //continue to work on the half task 
-	     printf("Scheduling Task %d %d\n",low[0],higher[0]);
-	     forasync1d_recursive(async_def,fct_ptr,low,higher, ts, argc,argv,ddf_list,phaser_list); 
+#ifdef HC_LIB_DEBUG
+	     printf("Scheduling Tasks %d_%d %d_%d\n",low[1],low[0],higher[1],higher[0]);
+#endif
+	     forasync_recursive1D(async_def,fct_ptr,low,higher, ts, argc,argv,ddf_list,phaser_list); 
+
+     }
+     else{//compute the tile
+	     int k=0;
+	     for(k=low[0];k<high[0];k++){
+		     ((forasyncFct_t1D)(fct_ptr))(argc,argv,k);
+	     }
+     }
+}
+
+// recursive2D for forasync
+void forasync_recursive2D(async_t * async_def, void* fct_ptr,int *low,int *high, int *ts, int argc, void ** argv, struct ddf_st ** ddf_list, void * phaser_list) {
+
+    int lower[2]={0,0};
+    int higher[2]={0,0};
+    int recurse=0;
+    //split the range into two, spawn a new task for the first half and recurse on the rest  
+     if((high[1]-low[1]) > ts[1]) {
+	     higher[1] =lower[1] = (high[1]+low[1])/2;
+	     lower[0]=low[0];
+	     higher[0]=high[0];
+	     recurse=1;
+     }
+     else  if((high[0]-low[0]) > ts[0]) {
+	     //spawn an async
+	     higher[0] =lower[0] = (high[0]+low[0])/2;
+	     lower[1]=low[1];
+	     higher[1]=high[1];
+	     recurse=1;
+     }
+     if(recurse==1){
+	     // some middle-impl api
+	     forasync_task_t *forasync_task = allocate_forasync_task(async_def, lower, high,ts,fct_ptr);
+#ifdef HC_LIB_DEBUG
+	     printf("Scheduling Tasks %d_%d %d_%d\n",lower[1],lower[0],high[1],high[0]);
+#endif
+	     // Set the async finish scope to be the currently executing async's one.
+	     forasync_task->current_finish = get_current_async()->current_finish;
+
+	     // The newly created async must check in the current finish scope
+	     async_check_in_finish((async_task_t*)forasync_task);
+
+	     // delegate scheduling to the underlying runtime
+	     schedule_async((async_task_t*)forasync_task);
+	     /////////////////////////////////////////////////////////////////////////
+	     //continue to work on the half task 
+#ifdef HC_LIB_DEBUG
+	     printf("Scheduling Tasks %d_%d %d_%d\n",low[1],low[0],higher[1],higher[0]);
+#endif
+	     forasync_recursive2D(async_def,fct_ptr,low,higher, ts, argc,argv,ddf_list,phaser_list); 
+
+     }
+     else{//compute the tile
+	     int j=0;
+	     int k=0;
+	     for(j=low[1];j<high[1];j++){
+		     for(k=low[0];k<high[0];k++){
+			     ((forasyncFct_t2D)(fct_ptr))(argc,argv,j,k);
+		     }
+	     }
+     }
+}
+// recursive3D for forasync
+void forasync_recursive3D(async_t * async_def, void* fct_ptr,int *low,int *high, int *ts, int argc, void ** argv, struct ddf_st ** ddf_list, void * phaser_list) {
+
+    int lower[3]={0,0,0};
+    int higher[3]={0,0,0};
+    int recurse=0;
+    //split the range into two, spawn a new task for the first half and recurse on the rest  
+     if((high[2]-low[2]) > ts[2]) {
+	     higher[2] =lower[2] = (high[2]+low[2])/2;
+	     lower[1]=low[1];
+	     higher[1]=high[1];
+	     lower[0]=low[0];
+	     higher[0]=high[0];
+	     recurse=1;
+     }
+     else if((high[1]-low[1]) > ts[1]) {
+	     higher[1] =lower[1] = (high[1]+low[1])/2;
+	     lower[0]=low[0];
+	     higher[0]=high[0];
+	     lower[2]=low[2];
+	     higher[2]=high[2];
+	     recurse=1;
+     }
+     else  if((high[0]-low[0]) > ts[0]) {
+	     //spawn an async
+	     higher[0] =lower[0] = (high[0]+low[0])/2;
+	     lower[2]=low[2];
+	     higher[2]=high[2];
+	     lower[1]=low[1];
+	     higher[1]=high[1];
+	     recurse=1;
+     }
+     if(recurse==1){
+	     // some middle-impl api
+	     forasync_task_t *forasync_task = allocate_forasync_task(async_def, lower, high,ts,fct_ptr);
+#ifdef HC_LIB_DEBUG
+	     printf("Scheduling Tasks %d_%d_%d %d_%d_%d\n",lower[2],lower[1],lower[0],high[2],high[1],high[0]);
+#endif
+	     // Set the async finish scope to be the currently executing async's one.
+	     forasync_task->current_finish = get_current_async()->current_finish;
+
+	     // The newly created async must check in the current finish scope
+	     async_check_in_finish((async_task_t*)forasync_task);
+
+	     // delegate scheduling to the underlying runtime
+	     schedule_async((async_task_t*)forasync_task);
+	     /////////////////////////////////////////////////////////////////////////
+	     //continue to work on the half task 
+#ifdef HC_LIB_DEBUG
+	     printf("Scheduling Tasks %d_%d_%d %d_%d_%d\n",low[2],low[1],low[0],higher[2],higher[1],higher[0]);
+#endif
+	     forasync_recursive3D(async_def,fct_ptr,low,higher, ts, argc,argv,ddf_list,phaser_list); 
 
      }
      else{//compute the tile
 	     int i=0;
-	     for(i=low[0];i<high[0];i++){
-		     ((forasyncFct_t1D)(fct_ptr))(argc,argv,i);
+	     int j=0;
+	     int k=0;
+	     for(i=low[2];i<high[2];i++){
+		     for(j=low[1];j<high[1];j++){
+			     for(k=low[0];k<high[0];k++){
+				     ((forasyncFct_t3D)(fct_ptr))(argc,argv,i,j,k);
+				}
+			}
 	     }
      }
 }
@@ -301,14 +394,62 @@ void forasync(async_t* async_def, int argc, void ** argv,struct ddf_st ** ddf_li
     async_def->ddf_list = ddf_list;
     async_def->phaser_list = phaser_list;
  
+    int lower[3]={0,0,0};
+    int higher[3]={1,1,1};
+    int seq[3]={1,1,1};
+
     start_finish();
     if(dimen>0 && dimen<4){
 	    if(runtime_type==1){
-		    async_def->fct_ptr = recursive_wrapper;
-		    forasync1d_recursive(async_def,forasync_fct,0,size, ts, argc,argv,ddf_list,phaser_list); 
+		    if(dimen==1){
+		    	    async_def->fct_ptr = recursive_wrapper1D;
+			    higher[0]=size[0];
+			    seq[0] = ts[0];
+			    forasync_recursive1D(async_def,forasync_fct,lower,higher, seq, argc,argv,ddf_list,phaser_list); 
+		    }
+		    else if(dimen==2){
+		    	    async_def->fct_ptr = recursive_wrapper2D;
+			    higher[0]=size[1];
+			    seq[0] = ts[1];
+			    higher[1]=size[0];
+			    seq[1] = ts[0];
+			    forasync_recursive2D(async_def,forasync_fct,lower,higher, seq, argc,argv,ddf_list,phaser_list); 
+		    }
+		    else if(dimen==3){
+		    	    async_def->fct_ptr = recursive_wrapper3D;
+			    higher[0]=size[2];
+			    seq[0] = ts[2];
+			    higher[1]=size[1];
+			    seq[1] = ts[1];
+			    higher[2]=size[0];
+			    seq[2] = ts[0];
+			    forasync_recursive3D(async_def,forasync_fct,lower,higher, seq, argc,argv,ddf_list,phaser_list); 
+		    }
+
 	    }
 	    else{
-		    forasync_chunk(dimen,async_def,forasync_fct,size,ts,argc,argv,ddf_list,phaser_list);   
+		    if(dimen==1){
+			    async_def->fct_ptr = for_wrapper1D;
+			    higher[0]=size[0];
+			    seq[0] = ts[0];
+		    }
+		    else if(dimen==2){
+			    async_def->fct_ptr = for_wrapper2D;
+			    higher[0]=size[1];
+			    seq[0] = ts[1];
+			    higher[1]=size[0];
+			    seq[1] = ts[0];
+		    }
+		    else if(dimen==3){
+			    async_def->fct_ptr = for_wrapper3D;
+			    higher[0]=size[2];
+			    seq[0] = ts[2];
+			    higher[1]=size[1];
+			    seq[1] = ts[1];
+			    higher[2]=size[0];
+			    seq[2] = ts[0];
+		    }
+		    forasync_chunk(dimen,async_def,forasync_fct,higher,seq,argc,argv,ddf_list,phaser_list);   
 	    }
     }
     else{
