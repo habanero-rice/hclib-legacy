@@ -127,7 +127,7 @@ void end_finish() {
     deallocate_finish(current_finish);
 }
 
-void async(async_t * async_def, asyncFct_t fct_ptr, int argc, void ** argv,
+void async(async_t * async_def, asyncFct_t fct_ptr, void * arg,
         struct ddf_st ** ddf_list, struct _phased_t * phased_clause, int property) {
     //TODO: api is quite verbose here, the async_def pointer allows
     // users to pass down an address of a stack variable.
@@ -137,8 +137,7 @@ void async(async_t * async_def, asyncFct_t fct_ptr, int argc, void ** argv,
 
     // Populate the async definition
     async_def->fct_ptr = fct_ptr;
-    async_def->argc = argc;
-    async_def->argv = argv;
+    async_def->arg = arg;
     async_def->ddf_list = ddf_list;
     #ifdef HAVE_PHASER
     async_def->phased_clause = phased_clause;

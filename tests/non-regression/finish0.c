@@ -42,8 +42,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 int ran[NB_ASYNC];
 
-void async_fct(int argc, void * argv[]) {
-    int idx = *((int *) argv);
+void async_fct(void * arg) {
+    int idx = *((int *) arg);
     assert(ran[idx] == -1);
     ran[idx] = idx;
 }
@@ -77,7 +77,7 @@ int main (int argc, char ** argv) {
     while(i < mid) {
         indices[i] = i;
         //Note: Forcefully pass the address we want to write to as a void **
-        async(asyncs+i, async_fct, 1, (void**) (indices+i), NULL, NULL, NO_PROP);
+        async(asyncs+i, async_fct, (void*) (indices+i), NULL, NULL, NO_PROP);
         i++;
     }
     end_finish();
@@ -87,7 +87,7 @@ int main (int argc, char ** argv) {
     while(i < NB_ASYNC) {
         indices[i] = i;
         //Note: Forcefully pass the address we want to write to as a void **
-        async(asyncs+i, async_fct, 1, (void**) (indices+i), NULL, NULL, NO_PROP);
+        async(asyncs+i, async_fct, (void*) (indices+i), NULL, NULL, NO_PROP);
         i++;
     }
     printf("Call Finalize\n");

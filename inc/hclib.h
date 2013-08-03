@@ -51,7 +51,7 @@ void hclib_finalize();
 /**
  * @brief A pointer to a function to be executed asynchronously
  */
-typedef void (*asyncFct_t) (int argc, void * argv []);
+typedef void (*asyncFct_t) (void * arg);
 
 // defined in phased.h
 struct _phased_t;
@@ -63,8 +63,7 @@ struct _phased_t;
  */
 typedef struct {
     void * fct_ptr;
-    int argc;
-    void ** argv;
+    void * arg;
     struct ddf_st ** ddf_list; // Null terminated list
     struct _phased_t * phased_clause;
 } async_t;
@@ -72,13 +71,12 @@ typedef struct {
 /**
  * @brief: spawn a new async.
  * @param[in] fct_ptr: the function to execute
- * @param[in] argc:             the number of arguments for the function
- * @param[in] argv:             the actual arguments
+ * @param[in] arg:             argument to the async
  * @param[in] phased_clause:    The list of DDFs the async awaits
  * @param[in] phased_clause:    Specify which phasers to register on
  * @param[in] property:         Flag to pass information to the runtime
  */
-void async(async_t * async_def, asyncFct_t fct_ptr, int argc, void ** argv,
+void async(async_t * async_def, asyncFct_t fct_ptr, void * arg,
            struct ddf_st ** ddf_list, struct _phased_t * phased_clause, int property);
 
 /**

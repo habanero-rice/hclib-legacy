@@ -92,7 +92,7 @@ void async_drop_phasers(async_task_t * async_task) {
  */
 static void async_fct_executor(async_task_t * async_task) {
     async_t * async_def = async_task->def;
-    ((asyncFct_t)async_def->fct_ptr)(async_def->argc, async_def->argv);
+    ((asyncFct_t)async_def->fct_ptr)(async_def->arg);
 }
 
 /**

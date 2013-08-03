@@ -12,7 +12,8 @@
 
 #include "hclib.h"
 
-void async_fct(int argc, void * argv[]) {
+void async_fct(void * arg) {
+    void ** argv = (void **) arg;
     int index = *((int *) argv[0]);
     struct ddf_st ** ddf_list = (struct ddf_st **) argv[1];
     printf("Running async %d\n", index);
@@ -56,7 +57,7 @@ int main(int argc, char ** argv) {
         // Pass down the whole ddf_list, and async uses index*2 to resolve ddfs it needs
         argv[1] = (void *)ddf_list;
         printf("Creating async %d await on %p will enable %p\n", index, ddf_list, &(ddf_list[index*2]));
-        async(async_store[index], async_fct, 2, argv, &(ddf_list[(index-1)*2]), NULL, NO_PROP);
+        async(async_store[index], async_fct, argv, &(ddf_list[(index-1)*2]), NULL, NO_PROP);
     }
 
     int * value = (int *) malloc(sizeof(int));
