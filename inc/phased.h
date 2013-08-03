@@ -29,54 +29,11 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 */
 
-#ifndef RUNTIME_HCLIB_H_
-#define RUNTIME_HCLIB_H_
+// From hcPhaserLib
+#include "phaser-api.h"
 
-#include "rt-hclib-def.h"
-
-/**
- * @file This file contains the HCLIB runtime implementation
- */
-
-/*
- * Finish check in/out protocol for asyncs
- */
-void async_check_in_finish(async_task_t * async_task);
-void async_check_out_finish(async_task_t * async_task);
-
-void check_in_finish(finish_t * finish);
-void check_out_finish(finish_t * finish);
-
-void async_drop_phasers(async_task_t * async_task);
-
-/*
- * Current async accessors
- */
-void set_current_async(async_task_t * async);
-async_task_t * get_current_async();
-finish_t * get_current_finish();
-
-
-/*
- * Allocators / Deallocators
- */
-async_task_t * allocate_async_task(async_t * async_def);
-void deallocate_async_task(async_task_t * async);
-
-finish_t * allocate_finish();
-void deallocate_finish(finish_t * finish);
-
-
-/*
- * Scheduling
- */
-void schedule_async(async_task_t * async_task);
-
-
-/**
- * @brief notifies the runtime end_finish is logically
- * blocked, waiting for children to finish.
- */
-void help_finish(finish_t * finish);
-
-#endif /* RUNTIME_HCLIB_H_ */
+typedef struct _phased_t {
+  int count;
+  phaser_t * phasers;
+  phaser_mode_t * phasers_mode;
+} phased_t;

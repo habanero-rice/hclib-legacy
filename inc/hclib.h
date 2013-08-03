@@ -42,10 +42,19 @@ void hclib_init(int * argc, char ** argv);
 
 void hclib_finalize();
 
+//
+// Async property bits
+//
+#define NO_PROP 0
+#define PHASER_TRANSMIT_ALL ((int) 0x1) /**< To indicate an async must register with all phasers */
+
 /**
  * @brief A pointer to a function to be executed asynchronously
  */
-typedef void (*asyncFct_t) (int argc, void * argv[]);
+typedef void (*asyncFct_t) (int argc, void * argv []);
+
+// defined in phased.h
+struct _phased_t;
 
 /**
  * @brief An async definition
@@ -57,17 +66,20 @@ typedef struct {
     int argc;
     void ** argv;
     struct ddf_st ** ddf_list; // Null terminated list
-    void * phaser_list; // Null terminated list
+    struct _phased_t * phased_clause;
 } async_t;
 
 /**
  * @brief: spawn a new async.
  * @param[in] fct_ptr: the function to execute
- * @param[in] argc: the number of arguments for the function
- * @param[in] argv: the actual arguments
+ * @param[in] argc:             the number of arguments for the function
+ * @param[in] argv:             the actual arguments
+ * @param[in] phased_clause:    The list of DDFs the async awaits
+ * @param[in] phased_clause:    Specify which phasers to register on
+ * @param[in] property:         Flag to pass information to the runtime
  */
 void async(async_t * async_def, asyncFct_t fct_ptr, int argc, void ** argv,
-           struct ddf_st ** ddf_list, void * phaser_list);
+           struct ddf_st ** ddf_list, struct _phased_t * phased_clause, int property);
 
 /**
  * @brief starts a new finish scope

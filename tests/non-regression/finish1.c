@@ -67,7 +67,7 @@ void spawn_async(async_t * async_defs, volatile int * indices, int i) {
     if (i < NB_ASYNC) {
         start_finish();
         indices[i] = i;
-        async(async_defs+i, async_fct, 1, (void**) (indices+i), NULL, NULL);
+        async(async_defs+i, async_fct, 1, (void**) (indices+i), NULL, NULL, NO_PROP);
         spawn_async(async_defs, indices, i+1);
         end_finish();
         assert_done(i, i+1);

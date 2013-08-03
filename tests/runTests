@@ -62,7 +62,6 @@ if [ -z "${HCLIB_ROOT}" ]; then
 	fi
 fi
 
-
 INC_DIR="${HCLIB_ROOT}/include"
 LIB_DIR="${HCLIB_ROOT}/lib"
 
@@ -72,8 +71,15 @@ LIB_DIR="${HCLIB_ROOT}/lib"
 
 export INCLUDES="-I${INC_DIR}"
 export CFLAGS=" -Wall -g -Werror "
-export LDFLAGS="-L${LIB_DIR} -L${OCR_ROOT}/lib -lhclib -locr"
+export LDFLAGS="-L${LIB_DIR} -L${OCR_ROOT}/lib -lhclib -locr -lm"
 export HCLIB_TESTS_BIN_OUTPUT=
+
+if [ -z "${PHASERLIB_ROOT}" ]; then
+       echo "No PhaserLib install found"
+else 
+    CFLAGS="${CFLAGS} -I${PHASERLIB_ROOT}/include"
+    LDFLAGS="${LDFLAGS} -L${PHASERLIB_ROOT}/lib -lphasertask"
+fi
 
 #
 #checking options

@@ -56,7 +56,7 @@ int main(int argc, char ** argv) {
         // Pass down the whole ddf_list, and async uses index*2 to resolve ddfs it needs
         argv[1] = (void *)ddf_list;
         printf("Creating async %d await on %p will enable %p\n", index, ddf_list, &(ddf_list[index*2]));
-        async(async_store[index], async_fct, 2, argv, &(ddf_list[(index-1)*2]), NULL);
+        async(async_store[index], async_fct, 2, argv, &(ddf_list[(index-1)*2]), NULL, NO_PROP);
     }
 
     int * value = (int *) malloc(sizeof(int));

@@ -46,12 +46,12 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 // Store async task in ELS @ offset 0
 #define ELS_OFFSET_ASYNC 0
-#define ELS_OFFSET_PHASER_CTX 1
 
 /**
  * @file OCR-based implementation of HCLIB (implements runtime-support.h)
  */
 
+// Set when initializing hclib
 static async_task_t * root_async_task = NULL;
 
 // guid template for async-edt
@@ -65,34 +65,9 @@ typedef struct ocr_finish_t_ {
 // Fwd declaration
 ocrGuid_t asyncEdt(u32 paramc, u64* paramv, u32 depc, ocrEdtDep_t depv[]);
 
-
 #ifdef HAVE_PHASER
-// This is to store the phaser context of the master thread
-// since it is not an EDT, it doesn't have an ELS.
-static phaser_context_t * mainEdtPhaserContext;
-
-// The ocr-based implementation stores the phaser-context in the
-// ELS of the currently executing task.
-phaser_context_t * get_phaser_context_from_els(bool create) {
-    ocrGuid_t edtGuid = currentEdtUserGet();
-    ocrGuid_t phaserCtxGuid = NULL_GUID;
-    if (edtGuid == NULL) {
-        // Handling master thread phaser context
-        phaserCtxGuid = ((mainEdtPhaserContext == NULL) ? 
-            ((ocrGuid_t) phaser_context_construct()) : mainEdtPhaserContext)
-    }
-    // For EDTs, we rely on the ELS to store the phaser context
-    assert(edtGuid != NULL_GUID);
-    phaserCtxGuid = ocrElsUserGet(ELS_OFFSET_PHASER_CTX);    
-    if (phaserCtxGuid == NULL_GUID) {
-        phaser_context_t * ctx = phaser_context_construct();
-        phaserCtxGuid = (ocrGuid_t) ctx;
-        ocrElsUserSet(ELS_OFFSET_PHASER_CTX, phaserCtxGuid);        
-    }
-    return (phaser_context_t *) phaserCtxGuid;
-}
+phaser_context_t * get_phaser_context_from_els();
 #endif
-
 
 void runtime_init(int * argc, char ** argv) {
     ocrConfig_t ocrConfig;
@@ -152,6 +127,19 @@ void set_current_async(async_task_t * async_task) {
         ocrElsUserSet(ELS_OFFSET_ASYNC, guid);
     }
 }
+
+// Defines the function the phaser library should use to
+// get the phaser context of the currently executing async
+#ifdef HAVE_PHASER
+phaser_context_t * get_phaser_context_from_els() {
+    async_task_t * current_async = get_current_async();
+    // Lazily create phaser contexts
+    if (current_async->phaser_context == NULL) {
+        current_async->phaser_context = phaser_context_construct();
+    }
+    return current_async->phaser_context;
+}
+#endif
 
 /**
  * @brief An async execution is backed by an ocr edt

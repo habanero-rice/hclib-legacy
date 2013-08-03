@@ -49,7 +49,7 @@ int main (int argc, char ** argv) {
     hclib_init(&argc, argv);
     printf("Hello\n");
     async_t async_def;
-    async(&async_def, async_fct, 0, NULL, NULL, NULL);
+    async(&async_def, async_fct, 0, NULL, NULL, NULL, NO_PROP);
     hclib_finalize();
     assert(ran == 1);
     return 0;

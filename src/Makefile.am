@@ -4,7 +4,8 @@ SUBDIRS =
 INCLUDES_DIR = -I$(top_srcdir)/inc -I$(top_srcdir)/src/inc
 
 # cflags: important to define that otherwise we inherit default values too
-CFLAGS = -Werror -Wall -g -O2
+CFLAGS = $(PHASER_CFLAGS) -Werror -Wall -g -O2 
+LDFLAGS = $(PHASER_LDFLAGS)
 
 # build the hclib library
 lib_LTLIBRARIES = libhclib.la

@@ -28,7 +28,7 @@ THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  */
-
+#include <stdio.h>
 #include <stdlib.h>
 #include <assert.h>
 
@@ -36,6 +36,10 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "rt-hclib-def.h"
 #include "runtime-support.h"
 #include "runtime-hclib.h"
+#ifdef HAVE_PHASER
+#include "phased.h"
+#include "phaser-api.h"
+#endif
 
 /**
  * @file This file should only contain implementations of user-level defined HCLIB functions.
@@ -124,7 +128,7 @@ void end_finish() {
 }
 
 void async(async_t * async_def, asyncFct_t fct_ptr, int argc, void ** argv,
-        struct ddf_st ** ddf_list, void * phaser_list) {
+        struct ddf_st ** ddf_list, struct _phased_t * phased_clause, int property) {
     //TODO: api is quite verbose here, the async_def pointer allows
     // users to pass down an address of a stack variable.
 #if CHECKED_EXECUTION
@@ -136,8 +140,9 @@ void async(async_t * async_def, asyncFct_t fct_ptr, int argc, void ** argv,
     async_def->argc = argc;
     async_def->argv = argv;
     async_def->ddf_list = ddf_list;
-    async_def->phaser_list = phaser_list;
-
+    #ifdef HAVE_PHASER
+    async_def->phased_clause = phased_clause;
+    #endif
     // Build the new async task and associate with the definition
     async_task_t * async_task = allocate_async_task(async_def);
 
@@ -146,6 +151,25 @@ void async(async_t * async_def, asyncFct_t fct_ptr, int argc, void ** argv,
 
     // The newly created async must check in the current finish scope
     async_check_in_finish(async_task);
+
+    #ifdef HAVE_PHASER
+    assert(!(phased_clause && (property & PHASER_TRANSMIT_ALL)));
+    if (phased_clause != NULL) {
+        phaser_context_t * currentCtx = get_phaser_context();
+        phaser_context_t * ctx = phaser_context_construct();
+        async_task->phaser_context = ctx;
+        transmit_specific_phasers(currentCtx, ctx, 
+            phased_clause->count, 
+            phased_clause->phasers,
+            phased_clause->phasers_mode);
+    }
+    if (property & PHASER_TRANSMIT_ALL) {
+        phaser_context_t * currentCtx = get_phaser_context();
+        phaser_context_t * ctx = phaser_context_construct();
+        async_task->phaser_context = ctx;
+        transmit_all_phasers(currentCtx, ctx);
+    }
+    #endif
 
     // delegate scheduling to the underlying runtime
     schedule_async(async_task);

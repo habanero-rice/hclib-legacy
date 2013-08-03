@@ -54,6 +54,9 @@ inline static void async_run_start(async_task_t * async_task) {
 inline static void async_run_end(async_task_t * async_task) {
     // Async has ran, checkout from its finish scope
     async_check_out_finish(async_task);
+    #ifdef HAVE_PHASER
+    async_drop_phasers(async_task);
+    #endif
 }
 
 /**
@@ -69,7 +72,6 @@ void rtcb_check_out_finish(finish_t * finish) {
  */
 void rtcb_async_run(async_task_t * async_task) {
     async_run_start(async_task);
-
     // Call the targeted function with its arguments
     async_task->executor_fct_ptr(async_task);
     async_run_end(async_task);
