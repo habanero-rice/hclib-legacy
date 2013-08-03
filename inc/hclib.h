@@ -113,7 +113,7 @@ void forasync_chunk(int,async_t * async_def, void* fct_ptr,int *size, int *ts, v
 void forasync_recursive1D(async_t *, void*,int *low,int *high, int *ts, void * argv, struct ddf_st ** ddf_list, struct _phased_t * phased_clause); 
 void forasync_recursive2D(async_t *, void*,int *low,int *high, int *ts, void * argv, struct ddf_st ** ddf_list, struct _phased_t * phased_clause); 
 void forasync_recursive3D(async_t *, void*,int *low,int *high, int *ts, void * argv, struct ddf_st ** ddf_list, struct _phased_t * phased_clause); 
-void forasync(async_t* async_def, void * argv,struct ddf_st ** ddf_list, struct _phased_t * phased_clause,int dimen,int *size,int *tilesize,void* forasync_fct,int runtime_type);
+void forasync(async_t* async_def, void* forasync_fct, void * argv,struct ddf_st ** ddf_list, struct _phased_t * phased_clause,int dimen,int *size,int *tilesize,int runtime_type);
 /**
  * @brief starts a new finish scope
  */

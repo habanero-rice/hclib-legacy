@@ -389,7 +389,7 @@ void forasync_recursive3D(async_t * async_def, void* fct_ptr,int *low,int *high,
 //
 //  forasync. runtime_type specifies the type of runtime (1 = recursive) (default = chunk)
 //
-void forasync(async_t* async_def, void * arg,struct ddf_st ** ddf_list, phased_t * phased_clause,int dimen,int *size,int *ts,void* forasync_fct,int runtime_type) {
+void forasync(async_t* async_def, void* forasync_fct, void * arg,struct ddf_st ** ddf_list, phased_t * phased_clause,int dimen,int *size,int *ts,int runtime_type) {
     // All the sub-asyncs share async_def
         // Populate the async definition
     async_def->arg = arg;
