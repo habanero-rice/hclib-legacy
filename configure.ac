@@ -21,10 +21,7 @@ AC_PROG_LIBTOOL
 AC_LANG(C)
 
 AC_ARG_WITH([ocr], [AS_HELP_STRING([--with-ocr], [defines the root directory of an ocr installation.])], [OCR_ROOT=$withval], [])
-# Use -isystem instead of -I to avoid warnings (converted to errors by
-# -Werror) in Rose headers.  For example, they redefine our PACKAGE_*
-# macros.
-OCR_CPPFLAGS="-isystem $OCR_ROOT/include"
+OCR_CPPFLAGS="-I$OCR_ROOT/include"
 OCR_LDFLAGS="-L$OCR_ROOT/lib"
 OCR_LIBS="-locr"
 
@@ -44,9 +41,33 @@ AC_SUBST(OCR_CPPFLAGS)
 AC_SUBST(OCR_LDFLAGS)
 AC_SUBST(OCR_LIBS)
 
+AC_ARG_WITH([phaser], [AS_HELP_STRING([--with-phaser], [defines the root directory of a phaser lib installation.])], [PHASER_ROOT=$withval], [])
+
+AS_IF([test "x$PHASER_ROOT" != x],
+      [AC_DEFINE([HAVE_PHASER], [1], [Have phaser support])
+	   PHASER_CFLAGS="-I$PHASER_ROOT/include";
+	   PHASER_LDFLAGS="-L$PHASER_ROOT/lib -lphasertask";
+	   CPPFLAGS_BACKUP=$CPPFLAGS
+       CPPFLAGS="$CPPFLAGS $PHASER_CFLAGS"
+       AC_CHECK_HEADERS([phaser-api.h], [], [AC_MSG_ERROR([
+       ======================================================================
+       |    ERROR                                                           |
+       ======================================================================
+       | Phaser library not found at specified location: ${PHASER_ROOT}
+       ======================================================================
+       ])],[])
+	   CPPFLAGS=$CPPFLAGS_BACKUP
+      ],
+      [ AC_MSG_NOTICE([No phaser support]) ])
+
+AC_SUBST([PHASER_CFLAGS])
+AC_SUBST([PHASER_LDFLAGS])
+
+
 # Variable substitutions.
 AC_SUBST([ac_aux_dir])
 AC_SUBST([abs_top_srcdir])
+
 
 #
 # Config file to process

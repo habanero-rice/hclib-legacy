@@ -59,20 +59,26 @@ struct _forasync_task_t;
 typedef void (*asyncExecutorFct_t) (struct _async_task_t * async_task);
 typedef void (*forasyncExecutorFct_t) (struct _forasync_task_t *forasync_task);
 
+// Fwd declaration for phaser context
+struct _phaser_context_t;
+
 /**
  * @brief The HCLIB view of an async task
  * @param def contains data filled in by the user (args, await list, etc.)
  */
 typedef struct _async_task_t {
-    finish_t *current_finish;
-    async_t *def;
-    asyncExecutorFct_t executor_fct_ptr;
+    finish_t * current_finish;
+    #ifdef HAVE_PHASER
+    struct _phaser_context_t * phaser_context;
+    #endif
+    async_t * def;
+    asyncExecutorFct_t executor_fct_ptr; 
 } async_task_t;
 
 typedef struct _forasync_task_t {
     finish_t *current_finish;
     forasync_t *def;
-    asyncExecutorFct_t executor_fct_ptr;
+    asyncExecutorFct_t executor_fct_ptr; 
 } forasync_task_t;
 
 #endif /* HCLIB_DEF_H_ */

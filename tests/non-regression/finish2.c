@@ -42,8 +42,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 int ran[NB_ASYNC];
 
-void async_fct(int argc, void ** argv) {
-    int idx = *((volatile int *) argv);
+void async_fct(void *arg) {
+    int idx = *((volatile int *) arg);
     assert(ran[idx] == -1);
     ran[idx] = idx;
 }
@@ -67,7 +67,7 @@ void spawn_async(async_t * async_defs, volatile int * indices, int i) {
     if (i < NB_ASYNC) {
         start_finish();
         indices[i] = i;
-        async(async_defs+i, async_fct, 1, (void**) (indices+i), NULL, NULL);
+        async(async_defs+i, async_fct, (void*) (indices+i), NULL, NULL, NO_PROP);
         spawn_async(async_defs, indices, i+1);
         end_finish();
         assert_done(i, i+1);

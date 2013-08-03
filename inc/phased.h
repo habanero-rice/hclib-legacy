@@ -29,52 +29,11 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 */
 
-/**
- * @file This file contains the interface to perform call-backs
- * from the runtime implementation to the HCLIB.
- */
+// From hcPhaserLib
+#include "phaser-api.h"
 
-#include "runtime-callback.h"
-#include "runtime-hclib.h"
-
-/**
- * @brief Async is starting execution.
- */
-inline static void async_run_start(async_task_t * async_task) {
-    // Currently nothing to do here
-
-    // Note: not to be mistaken with the 'async'
-    //       function that create the async and
-    //       check in the finish scope.
-}
-
-/**
- * @brief Async is done executing.
- */
-inline static void async_run_end(async_task_t * async_task) {
-    // Async has ran, checkout from its finish scope
-    async_check_out_finish(async_task);
-    #ifdef HAVE_PHASER
-    async_drop_phasers(async_task);
-    #endif
-}
-
-/**
- * @brief Call-back to checkout from a finish scope.
- * Note: Just here because of the ocr-based implementation
- */
-void rtcb_check_out_finish(finish_t * finish) {
-    check_out_finish(finish);
-}
-
-/**
- * @brief Call-back for the underlying runtime to run an async.
- */
-void rtcb_async_run(async_task_t * async_task) {
-    async_run_start(async_task);
-    // Call the targeted function with its arguments
-    async_task->executor_fct_ptr(async_task);
-    async_run_end(async_task);
-}
-
-
+typedef struct _phased_t {
+  int count;
+  phaser_t * phasers;
+  phaser_mode_t * phasers_mode;
+} phased_t;

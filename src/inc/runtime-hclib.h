@@ -47,6 +47,7 @@ void async_check_out_finish(async_task_t * async_task);
 void check_in_finish(finish_t * finish);
 void check_out_finish(finish_t * finish);
 
+void async_drop_phasers(async_task_t * async_task);
 
 /*
  * Current async accessors

@@ -40,7 +40,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 int ran = 0;
 
-void async_fct(int argc, void * argv[]) {
+void async_fct(void * arg) {
     printf("Running Async\n");
     ran = 1;
 }
@@ -49,7 +49,7 @@ int main (int argc, char ** argv) {
     hclib_init(&argc, argv);
     printf("Hello\n");
     async_t async_def;
-    async(&async_def, async_fct, 0, NULL, NULL, NULL);
+    async(&async_def, async_fct, NULL, NULL, NULL, NO_PROP);
     hclib_finalize();
     assert(ran == 1);
     return 0;

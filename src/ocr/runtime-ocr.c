@@ -40,13 +40,18 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "runtime-callback.h"
 #include "rt-ddf.h"
 
+#ifdef HAVE_PHASER
+#include "phaser-api.h"
+#endif
+
 // Store async task in ELS @ offset 0
-#define ELS_OFFSET 0
+#define ELS_OFFSET_ASYNC 0
 
 /**
  * @file OCR-based implementation of HCLIB (implements runtime-support.h)
  */
 
+// Set when initializing hclib
 static async_task_t * root_async_task = NULL;
 
 // guid template for async-edt
@@ -60,11 +65,19 @@ typedef struct ocr_finish_t_ {
 // Fwd declaration
 ocrGuid_t asyncEdt(u32 paramc, u64* paramv, u32 depc, ocrEdtDep_t depv[]);
 
+#ifdef HAVE_PHASER
+phaser_context_t * get_phaser_context_from_els();
+#endif
+
 void runtime_init(int * argc, char ** argv) {
     ocrConfig_t ocrConfig;
     ocrParseArgs(*argc, (const char**) argv, &ocrConfig);
     ocrInit(&ocrConfig);
     ocrEdtTemplateCreate(&asyncTemplateGuid, asyncEdt, 1, 0);
+    #ifdef HAVE_PHASER
+    // setup phaser library
+    phaser_lib_setup(get_phaser_context_from_els);
+    #endif
 }
 
 void runtime_finalize() {
@@ -101,7 +114,7 @@ async_task_t * get_current_async() {
         // This must be the main activity
         return root_async_task;
     }
-    ocrGuid_t guid = ocrElsUserGet(ELS_OFFSET);
+    ocrGuid_t guid = ocrElsUserGet(ELS_OFFSET_ASYNC);
     return deguidify_async(guid);
 }
 
@@ -111,9 +124,22 @@ void set_current_async(async_task_t * async_task) {
         root_async_task = async_task;
     } else {
         ocrGuid_t guid = guidify_async(async_task);
-        ocrElsUserSet(ELS_OFFSET, guid);
+        ocrElsUserSet(ELS_OFFSET_ASYNC, guid);
     }
 }
+
+// Defines the function the phaser library should use to
+// get the phaser context of the currently executing async
+#ifdef HAVE_PHASER
+phaser_context_t * get_phaser_context_from_els() {
+    async_task_t * current_async = get_current_async();
+    // Lazily create phaser contexts
+    if (current_async->phaser_context == NULL) {
+        current_async->phaser_context = phaser_context_construct();
+    }
+    return current_async->phaser_context;
+}
+#endif
 
 /**
  * @brief An async execution is backed by an ocr edt
@@ -124,7 +150,7 @@ ocrGuid_t asyncEdt(u32 paramc, u64* paramv, u32 depc, ocrEdtDep_t depv[]) {
 
     // Stores a pointer to the async task in the ELS
     ocrGuid_t guid = guidify_async(async_task);
-    ocrElsUserSet(ELS_OFFSET, guid);
+    ocrElsUserSet(ELS_OFFSET_ASYNC, guid);
 
     // Call back in the hclib runtime
     rtcb_async_run(async_task);
