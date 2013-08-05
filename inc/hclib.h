@@ -103,16 +103,6 @@ typedef void (*forasyncWrapper_t) (void * arg,forasync_t *);
 void async(async_t * async_def, asyncFct_t fct_ptr, void * arg,
            struct ddf_st ** ddf_list, struct _phased_t * phased_clause, int property);
 
-void for_wrapper1D(void *,forasync_t *);
-void recursive_wrapper1D(void *,forasync_t *);
-void for_wrapper2D(void *,forasync_t *);
-void recursive_wrapper2D(void *,forasync_t *);
-void for_wrapper3D(void *,forasync_t *);
-void recursive_wrapper3D(void *,forasync_t *);
-void forasync_chunk(int,async_t * async_def, void* fct_ptr,int *size, int *ts, void * argv, struct ddf_st ** ddf_list, struct _phased_t * phased_clause); 
-void forasync_recursive1D(async_t *, void*,int *low,int *high, int *ts, void * argv, struct ddf_st ** ddf_list, struct _phased_t * phased_clause); 
-void forasync_recursive2D(async_t *, void*,int *low,int *high, int *ts, void * argv, struct ddf_st ** ddf_list, struct _phased_t * phased_clause); 
-void forasync_recursive3D(async_t *, void*,int *low,int *high, int *ts, void * argv, struct ddf_st ** ddf_list, struct _phased_t * phased_clause); 
 void forasync(async_t* async_def, void* forasync_fct, void * argv,struct ddf_st ** ddf_list, struct _phased_t * phased_clause,int dimen,int *size,int *tilesize,int runtime_type);
 /**
  * @brief starts a new finish scope

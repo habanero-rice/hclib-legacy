@@ -17,7 +17,7 @@ libhclib_la_LIBADD =
 include ocr/Makefile.inc
 
 # build hclib
-libhclib_la_SOURCES = runtime-hclib.c runtime-callback.c hclib.c ddf.c
+libhclib_la_SOURCES = runtime-hclib.c runtime-callback.c hclib.c ddf.c forasync.c
 libhclib_la_CFLAGS= $(CFLAGS) $(INCLUDES_DIR)
 
 MAINTAINERCLEANFILES = Makefile.in
