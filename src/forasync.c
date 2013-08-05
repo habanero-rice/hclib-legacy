@@ -85,7 +85,7 @@ void for_wrapper3D(void * arg, forasync_t *forasynk){
 }
 
 //1D chunking for forasync
-void forasync_chunk(int type, async_t * async_def, void* fct_ptr,int *higher, int *seq, void * arg, struct ddf_st ** ddf_list, phased_t * phased_clause) {
+void forasync_chunk(int type, async_t * async_def, void* fct_ptr,int *higher, int *seq, void * arg, struct ddf_st ** ddf_list, struct _phased_t * phased_clause) {
 
     int i=0; 
     int j=0; 
@@ -150,7 +150,7 @@ void recursive_wrapper1D(void * arg, forasync_t *forasynk){
      
 }
 // recursive1D for forasync
-void forasync_recursive1D(async_t * async_def, void* fct_ptr,int *low,int *high, int *ts, void * arg, struct ddf_st ** ddf_list, phased_t * phased_clause) {
+void forasync_recursive1D(async_t * async_def, void* fct_ptr,int *low,int *high, int *ts, void * arg, struct ddf_st ** ddf_list,struct _phased_t * phased_clause) {
 
     int lower[1]={0};
     int higher[1]={0};
@@ -188,7 +188,7 @@ void forasync_recursive1D(async_t * async_def, void* fct_ptr,int *low,int *high,
 }
 
 // recursive2D for forasync
-void forasync_recursive2D(async_t * async_def, void* fct_ptr,int *low,int *high, int *ts, void * arg, struct ddf_st ** ddf_list, phased_t * phased_clause) {
+void forasync_recursive2D(async_t * async_def, void* fct_ptr,int *low,int *high, int *ts, void * arg, struct ddf_st ** ddf_list, struct _phased_t * phased_clause) {
 
     int lower[2]={0,0};
     int higher[2]={0,0};
@@ -240,7 +240,7 @@ void forasync_recursive2D(async_t * async_def, void* fct_ptr,int *low,int *high,
      }
 }
 // recursive3D for forasync
-void forasync_recursive3D(async_t * async_def, void* fct_ptr,int *low,int *high, int *ts, void * arg, struct ddf_st ** ddf_list, phased_t * phased_clause) {
+void forasync_recursive3D(async_t * async_def, void* fct_ptr,int *low,int *high, int *ts, void * arg, struct ddf_st ** ddf_list, struct _phased_t * phased_clause) {
 
     int lower[3]={0,0,0};
     int higher[3]={0,0,0};
@@ -311,7 +311,7 @@ void forasync_recursive3D(async_t * async_def, void* fct_ptr,int *low,int *high,
 //
 //  forasync. runtime_type specifies the type of runtime (1 = recursive) (default = chunk)
 //
-void forasync(async_t* async_def, void* forasync_fct, void * arg,struct ddf_st ** ddf_list, phased_t * phased_clause,int dimen,int *size,int *ts,int runtime_type) {
+void forasync(async_t* async_def, void* forasync_fct, void * arg,struct ddf_st ** ddf_list, struct _phased_t * phased_clause,int dimen,int *size,int *ts,int runtime_type) {
     // All the sub-asyncs share async_def
         // Populate the async definition
     async_def->arg = arg;
