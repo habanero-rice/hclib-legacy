@@ -146,7 +146,7 @@ phaser_context_t * get_phaser_context_from_els() {
  */
 ocrGuid_t asyncEdt(u32 paramc, u64* paramv, u32 depc, ocrEdtDep_t depv[]) {
     // The async_task_t data-structure is the single argument.
-    async_task_t * async_task = (async_task_t *) paramv;
+    async_task_t * async_task = (async_task_t *) paramv[0];
 
     // Stores a pointer to the async task in the ELS
     ocrGuid_t guid = guidify_async(async_task);
@@ -194,9 +194,10 @@ async_task_t * rt_allocate_async_task() {
 
 void rt_schedule_async(async_task_t * async_task) {
     ocrGuid_t edtGuid;
-    //Note: Forcefully pass async_task as a (u64 *) to avoid an extra-malloc.
+    u64 paramv[1];
+    paramv[0] = (u64) async_task;
     u8 retCode = ocrEdtCreate(&edtGuid, asyncTemplateGuid,
-            EDT_PARAM_DEF, (u64*) async_task, EDT_PARAM_DEF, NULL, 0, NULL_GUID, NULL);
+        EDT_PARAM_DEF, paramv, EDT_PARAM_DEF, NULL, 0, NULL_GUID, NULL);
     assert(!retCode);
     // No dependences, the EDT gets scheduled right-away
 }
