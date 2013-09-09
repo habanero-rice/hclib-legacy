@@ -28,7 +28,7 @@ THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  */
-
+#include <stdio.h>
 #include <stdlib.h>
 #include <assert.h>
 
@@ -154,7 +154,6 @@ ocrGuid_t asyncEdt(u32 paramc, u64* paramv, u32 depc, ocrEdtDep_t depv[]) {
 
     // Call back in the hclib runtime
     rtcb_async_run(async_task);
-
     return NULL_GUID;
 }
 /**
@@ -212,7 +211,8 @@ finish_t * rt_allocate_finish() {
 void rt_deallocate_finish(finish_t * finish) {
     ocr_finish_t * ocr_finish = (ocr_finish_t *) finish;
     if (ocr_finish->done_event != NULL_GUID) {
-        ocrEventDestroy(ocr_finish->done_event);
+        //TODO handle ocrWait bug
+        //ocrEventDestroy(ocr_finish->done_event);
     }
     free(ocr_finish);
 }
@@ -237,4 +237,5 @@ void rt_help_finish(finish_t * finish) {
     // OCR will try to make progress by executing other EDTs until
     // the event is satisfied (i.e. finish-scope completed)
     ocrWait(ocr_finish->done_event);
+    assert(finish->counter == 0);
 }

@@ -27,58 +27,40 @@ THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-*/
-
-#ifndef HCLIB_DEF_H_
-#define HCLIB_DEF_H_
-
-
-/**
- * This file contains runtime-level HCLIB data structures
  */
 
-#include "hclib.h"
+#ifndef ACCUMULATOR_H_
+#define ACCUMULATOR_H_
 
-#define CHECKED_EXECUTION 0
+typedef enum {
+    ACCUM_OP_NONE,
+    ACCUM_OP_PLUS
+} accum_op_t;
 
-typedef struct finish {
-    volatile int counter;
-#if CHECKED_EXECUTION
-    int owner; //TODO correctness tracking
-#endif
-    struct finish * parent;
-    struct accum_t ** accumulators; //TODO generify that ?
-} finish_t;
+typedef enum {
+    ACCUM_MODE_SEQ,
+    ACCUM_MODE_LAZY,
+    ACCUM_MODE_REC
+} accum_mode_t;
 
-struct _async_task_t;
-struct _forasync_task_t;
+typedef struct accum_t {
 
-/**
- * @brief Function pointer to an async executor
- */
-typedef void (*asyncExecutorFct_t) (struct _async_task_t * async_task);
-typedef void (*forasyncExecutorFct_t) (struct _forasync_task_t *forasync_task);
+} accum_t;
 
-// Fwd declaration for phaser context
-struct _phaser_context_t;
+// accum_clause_t {
+//     int nb_accums;
+//     accum_t ** accums; // NULL_TERMINATED
+// };
 
-/**
- * @brief The HCLIB view of an async task
- * @param def contains data filled in by the user (args, await list, etc.)
- */
-typedef struct _async_task_t {
-    finish_t * current_finish;
-    #ifdef HAVE_PHASER
-    struct _phaser_context_t * phaser_context;
-    #endif
-    async_t * def;
-    asyncExecutorFct_t executor_fct_ptr;
-} async_task_t;
+// Register accumulator to current finish scope
+// This can be done statically in start_finish(accum_t *)
+// Warning: this overwrites currently registered accum
+void accum_register(accum_t ** accs, int n);
 
-typedef struct _forasync_task_t {
-    finish_t *current_finish;
-    forasync_t *def;
-    asyncExecutorFct_t executor_fct_ptr; 
-} forasync_task_t;
+accum_t * accum_create_int(accum_op_t op, accum_mode_t mode, int init);
 
-#endif /* HCLIB_DEF_H_ */
+int accum_get_int(accum_t * acc);
+void accum_put_int(accum_t * acc, int v);
+void accum_destroy(accum_t * acc);
+
+#endif /* ACCUMULATOR_H_ */

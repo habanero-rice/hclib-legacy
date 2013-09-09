@@ -29,56 +29,59 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 */
 
-#ifndef HCLIB_DEF_H_
-#define HCLIB_DEF_H_
-
-
 /**
- * This file contains runtime-level HCLIB data structures
+ * DESC: Recursive accumulator
  */
+#include <stdlib.h>
+#include <stdio.h>
+#include <assert.h>
 
 #include "hclib.h"
 
-#define CHECKED_EXECUTION 0
+int ran = 0;
 
-typedef struct finish {
-    volatile int counter;
-#if CHECKED_EXECUTION
-    int owner; //TODO correctness tracking
-#endif
-    struct finish * parent;
-    struct accum_t ** accumulators; //TODO generify that ?
-} finish_t;
+void async_fct(void * arg) {
+    printf("Running Async\n");
+    ran = 1;
+}
 
-struct _async_task_t;
-struct _forasync_task_t;
+void accum_create_n(accum_t ** accums, int n) {
+    int i = 0;
+    while(i < n) {
+        accums[i] = accum_create_int(ACCUM_OP_PLUS, ACCUM_MODE_SEQ, 0);
+        i++;
+    }
+}
 
-/**
- * @brief Function pointer to an async executor
- */
-typedef void (*asyncExecutorFct_t) (struct _async_task_t * async_task);
-typedef void (*forasyncExecutorFct_t) (struct _forasync_task_t *forasync_task);
+void accum_destroy_n(accum_t ** accums, int n) {
+    int i = 0;
+    while(i < n) {
+        accum_destroy(accums[i]);
+        i++;
+    }
+}
 
-// Fwd declaration for phaser context
-struct _phaser_context_t;
+void accum_print_n(accum_t ** accums, int n) {
+    int i = 0;
+    while(i < n) {
+        int res = accum_get_int(accums[i]);
+        printf("Hello[%d] = %d\n", i, res);
+        i++;
+    }
+}
 
-/**
- * @brief The HCLIB view of an async task
- * @param def contains data filled in by the user (args, await list, etc.)
- */
-typedef struct _async_task_t {
-    finish_t * current_finish;
-    #ifdef HAVE_PHASER
-    struct _phaser_context_t * phaser_context;
-    #endif
-    async_t * def;
-    asyncExecutorFct_t executor_fct_ptr;
-} async_task_t;
-
-typedef struct _forasync_task_t {
-    finish_t *current_finish;
-    forasync_t *def;
-    asyncExecutorFct_t executor_fct_ptr; 
-} forasync_task_t;
-
-#endif /* HCLIB_DEF_H_ */
+int main (int argc, char ** argv) {
+    hclib_init(&argc, argv);
+    int n = 10;
+    accum_t * accums_s[n];
+    accum_t ** accums =  (accum_t **) accums_s;
+    accum_create_n(accums, n);
+    start_finish();
+    accum_register(accums, n);
+    accum_put_int(accums[3], 2);        
+    end_finish();
+    accum_print_n(accums, n);
+    accum_destroy_n(accums, n);
+    hclib_finalize();
+    return 0;
+}

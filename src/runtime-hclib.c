@@ -38,10 +38,12 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include "hc_sysdep.h"
 #include "runtime-support.h"
+#include "rt-accumulator.h"
 #include "rt-ddf.h"
 #ifdef HAVE_PHASER
 #include "phaser-api.h"
 #endif
+
 
 /**
  * @brief Checking in a finish
@@ -53,6 +55,7 @@ void check_in_finish(finish_t * finish) {
 /**
  * @brief Checkout of a finish
  */
+
 void check_out_finish(finish_t * finish) {
     if (hc_atomic_dec(&(finish->counter))) {
         // If counter reached zero notify runtime
@@ -148,7 +151,7 @@ forasync_task_t * allocate_forasync_task(async_t * async_def,int *low,int *high,
     forasync_task->def->ctx.low[2]=low[2]; 
     forasync_task->def->ctx.seq[0]=seq[0]; 
     forasync_task->def->ctx.seq[1]=seq[1]; 
-    forasync_task->def->ctx.seq[2]=seq[2]; 
+    forasync_task->def->ctx.seq[2]=seq[2];
     return forasync_task;
 }
 
@@ -182,6 +185,18 @@ finish_t * get_current_finish() {
     return get_current_async()->current_finish;
 }
 
+void end_finish_notify(finish_t * current_finish) {
+    accum_t ** accumulators = current_finish->accumulators;
+    if(accumulators != NULL) {
+        int i = 0;
+        while (accumulators[i] != NULL) {
+            accum_impl_t * accum_impl = (accum_impl_t *) accumulators[i];
+            accum_impl->close(accum_impl);
+            i++;
+        }
+    }
+}
+
 static int is_eligible_to_schedule(async_task_t * async_task) {
     if (async_task->def->ddf_list != NULL) {
         ddt_t * ddt = (ddt_t *) rt_async_task_to_ddt(async_task);
@@ -189,6 +204,12 @@ static int is_eligible_to_schedule(async_task_t * async_task) {
     } else {
         return 1;
     }
+}
+
+int get_nb_workers() {
+    //TODO set that up correctly
+    printf("Warning: number of worker pre-set in get_nb_workers\n");
+    return 8;
 }
 
 void schedule_async(async_task_t * async_task) {

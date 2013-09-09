@@ -29,56 +29,31 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 */
 
-#ifndef HCLIB_DEF_H_
-#define HCLIB_DEF_H_
-
-
 /**
- * This file contains runtime-level HCLIB data structures
+ * DESC: Sequential accumulator, no registration.
  */
+#include <stdlib.h>
+#include <stdio.h>
+#include <assert.h>
 
 #include "hclib.h"
 
-#define CHECKED_EXECUTION 0
+int ran = 0;
 
-typedef struct finish {
-    volatile int counter;
-#if CHECKED_EXECUTION
-    int owner; //TODO correctness tracking
-#endif
-    struct finish * parent;
-    struct accum_t ** accumulators; //TODO generify that ?
-} finish_t;
+void async_fct(void * arg) {
+    printf("Running Async\n");
+    ran = 1;
+}
 
-struct _async_task_t;
-struct _forasync_task_t;
-
-/**
- * @brief Function pointer to an async executor
- */
-typedef void (*asyncExecutorFct_t) (struct _async_task_t * async_task);
-typedef void (*forasyncExecutorFct_t) (struct _forasync_task_t *forasync_task);
-
-// Fwd declaration for phaser context
-struct _phaser_context_t;
-
-/**
- * @brief The HCLIB view of an async task
- * @param def contains data filled in by the user (args, await list, etc.)
- */
-typedef struct _async_task_t {
-    finish_t * current_finish;
-    #ifdef HAVE_PHASER
-    struct _phaser_context_t * phaser_context;
-    #endif
-    async_t * def;
-    asyncExecutorFct_t executor_fct_ptr;
-} async_task_t;
-
-typedef struct _forasync_task_t {
-    finish_t *current_finish;
-    forasync_t *def;
-    asyncExecutorFct_t executor_fct_ptr; 
-} forasync_task_t;
-
-#endif /* HCLIB_DEF_H_ */
+int main (int argc, char ** argv) {
+    hclib_init(&argc, argv);
+    accum_t * acc = accum_create_int(ACCUM_OP_PLUS, ACCUM_MODE_SEQ, 0);
+    start_finish();
+    accum_put_int(acc, 2);        
+    end_finish();
+    int res = accum_get_int(acc);
+    accum_destroy(acc);
+    printf("Hello %d\n", res);
+    hclib_finalize();
+    return 0;
+}
