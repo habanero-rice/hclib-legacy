@@ -86,7 +86,6 @@ typedef struct {
 
 
 typedef struct {
-    //asyncFct_t fct_ptr;
     async_t base;
     forasync_ctx ctx;
 } forasync_t;
@@ -104,6 +103,7 @@ void async(async_t * async_def, asyncFct_t fct_ptr, void * arg,
            struct ddf_st ** ddf_list, struct _phased_t * phased_clause, int property);
 
 void forasync(async_t* async_def, void* forasync_fct, void * argv,struct ddf_st ** ddf_list, struct _phased_t * phased_clause,int dimen,int *size,int *tilesize,int runtime_type);
+
 /**
  * @brief starts a new finish scope
  */

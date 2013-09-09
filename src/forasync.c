@@ -40,6 +40,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "phased.h"
 #endif
 
+#define DEBUG_FORASYNC 0
+
 void recursive_wrapper1D(void *,forasync_t *);
 void recursive_wrapper2D(void *,forasync_t *);
 void recursive_wrapper3D(void *,forasync_t *);
@@ -58,7 +60,6 @@ void for_wrapper1D(void * arg, forasync_t *forasynk){
 }
 //2D for loop wrapper for forasync
 void for_wrapper2D(void * arg, forasync_t *forasynk){
-
      int i=0;
      int j=0;
      forasync_ctx ctx= forasynk->ctx;
@@ -70,7 +71,6 @@ void for_wrapper2D(void * arg, forasync_t *forasynk){
 }
 //3D for loop wrapper for forasync
 void for_wrapper3D(void * arg, forasync_t *forasynk){
-
      int i=0;
      int j=0;
      int k=0;
@@ -84,37 +84,41 @@ void for_wrapper3D(void * arg, forasync_t *forasynk){
      }
 }
 
-//1D chunking for forasync
+//chunking for forasync
 void forasync_chunk(int type, async_t * async_def, void* fct_ptr,int *higher, int *seq, void * arg, struct ddf_st ** ddf_list, struct _phased_t * phased_clause) {
-
-    int i=0; 
+    int i=0;
     int j=0; 
     int k=0; 
     int low[3]={0,0,0};
     int high[3]={1,1,1};
-
+    // Retrieve current finish scope
+    finish_t * current_finish = get_current_async()->current_finish;
+#if DEBUG_FORASYNC
+    int nb_spawn = 0;
+#endif
     for(i=0; i< higher[2];i+=seq[2]) {
         low[2] = i;
         high[2] = (i+seq[2])>higher[2]?higher[2]:(i+seq[2]);
-#ifdef HC_LIB_DEBUG
+#if DEBUG_FORASYNC
         printf("Scheduling Task Loop1 %d %d\n",low[2],high[2]);
 #endif
         for(j=0; j< higher[1];j+=seq[1]) {
             low[1] = j;
             high[1] = (j+seq[1])>higher[1]?higher[1]:(j+seq[1]);
-#ifdef HC_LIB_DEBUG
-                printf("Scheduling Task Loop2 %d %d\n",low[1],high[1]);
+#if DEBUG_FORASYNC
+            printf("Scheduling Task Loop2 %d %d\n",low[1],high[1]);
 #endif
             for(k=0; k< higher[0];k+=seq[0]) {
                 low[0] = k;
                 high[0] = (k+seq[0])>higher[0]?higher[0]:(k+seq[0]);
                 // some middle-impl api
                 forasync_task_t *forasync_task = allocate_forasync_task(async_def, low, high,seq,fct_ptr);
-#ifdef HC_LIB_DEBUG
+#if DEBUG_FORASYNC
                 printf("Scheduling Task %d %d\n",forasync_task->def->ctx.low[0],forasync_task->def->ctx.high[0]);
+                nb_spawn++;
 #endif
                 // Set the async finish scope to be the currently executing async's one.
-                forasync_task->current_finish = get_current_async()->current_finish;
+                forasync_task->current_finish = current_finish;
 
                 // The newly created async must check in the current finish scope
                 async_check_in_finish((async_task_t*)forasync_task);
@@ -124,6 +128,9 @@ void forasync_chunk(int type, async_t * async_def, void* fct_ptr,int *higher, in
             }
         }
     }
+#if DEBUG_FORASYNC
+    printf("forasync spawned %d\n", nb_spawn);
+#endif
 }
 //3D for loop recursive wrapper for forasync
 void recursive_wrapper3D(void * arg, forasync_t *forasynk){
@@ -160,7 +167,7 @@ void forasync_recursive1D(async_t * async_def, void* fct_ptr,int *low,int *high,
          higher[0] =lower[0] = (high[0]+low[0])/2;
          // some middle-impl api
          forasync_task_t *forasync_task = allocate_forasync_task(async_def, lower, high,ts,fct_ptr);
-#ifdef HC_LIB_DEBUG
+#if DEBUG_FORASYNC
          printf("Scheduling Tasks %d %d\n",lower[0],high[0]);
 #endif
          // Set the async finish scope to be the currently executing async's one.
@@ -173,7 +180,7 @@ void forasync_recursive1D(async_t * async_def, void* fct_ptr,int *low,int *high,
          schedule_async((async_task_t*)forasync_task);
          /////////////////////////////////////////////////////////////////////////
          //continue to work on the half task 
-#ifdef HC_LIB_DEBUG
+#if DEBUG_FORASYNC
          printf("Scheduling Tasks %d_%d %d_%d\n",low[1],low[0],higher[1],higher[0]);
 #endif
          forasync_recursive1D(async_def,fct_ptr,low,higher, ts, arg,ddf_list,phased_clause); 
@@ -210,7 +217,7 @@ void forasync_recursive2D(async_t * async_def, void* fct_ptr,int *low,int *high,
      if(recurse==1){
          // some middle-impl api
          forasync_task_t *forasync_task = allocate_forasync_task(async_def, lower, high,ts,fct_ptr);
-#ifdef HC_LIB_DEBUG
+#if DEBUG_FORASYNC
          printf("Scheduling Tasks %d_%d %d_%d\n",lower[1],lower[0],high[1],high[0]);
 #endif
          // Set the async finish scope to be the currently executing async's one.
@@ -223,7 +230,7 @@ void forasync_recursive2D(async_t * async_def, void* fct_ptr,int *low,int *high,
          schedule_async((async_task_t*)forasync_task);
          /////////////////////////////////////////////////////////////////////////
          //continue to work on the half task 
-#ifdef HC_LIB_DEBUG
+#if DEBUG_FORASYNC
          printf("Scheduling Tasks %d_%d %d_%d\n",low[1],low[0],higher[1],higher[0]);
 #endif
          forasync_recursive2D(async_def,fct_ptr,low,higher, ts, arg,ddf_list,phased_clause); 
@@ -274,7 +281,7 @@ void forasync_recursive3D(async_t * async_def, void* fct_ptr,int *low,int *high,
      if(recurse==1){
          // some middle-impl api
          forasync_task_t *forasync_task = allocate_forasync_task(async_def, lower, high,ts,fct_ptr);
-#ifdef HC_LIB_DEBUG
+#if DEBUG_FORASYNC
          printf("Scheduling Tasks %d_%d_%d %d_%d_%d\n",lower[2],lower[1],lower[0],high[2],high[1],high[0]);
 #endif
          // Set the async finish scope to be the currently executing async's one.
@@ -287,7 +294,7 @@ void forasync_recursive3D(async_t * async_def, void* fct_ptr,int *low,int *high,
          schedule_async((async_task_t*)forasync_task);
          /////////////////////////////////////////////////////////////////////////
          //continue to work on the half task 
-#ifdef HC_LIB_DEBUG
+#if DEBUG_FORASYNC
          printf("Scheduling Tasks %d_%d_%d %d_%d_%d\n",low[2],low[1],low[0],higher[2],higher[1],higher[0]);
 #endif
          forasync_recursive3D(async_def,fct_ptr,low,higher, ts, arg,ddf_list,phased_clause); 
