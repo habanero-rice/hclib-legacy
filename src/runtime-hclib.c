@@ -43,6 +43,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "phaser-api.h"
 #endif
 
+
 /**
  * @brief Checking in a finish
  */
@@ -53,6 +54,7 @@ void check_in_finish(finish_t * finish) {
 /**
  * @brief Checkout of a finish
  */
+
 void check_out_finish(finish_t * finish) {
     if (hc_atomic_dec(&(finish->counter))) {
         // If counter reached zero notify runtime
@@ -129,6 +131,7 @@ forasync_task_t * allocate_forasync_task(async_t * async_def,int *low,int *high,
     forasync_task_t * forasync_task;
     //TODO ask rt_ to allocate a forasync task
     if ((async_def != NULL) && async_def->ddf_list != NULL) {
+        assert(0 && "forasync with ddf not implemented");
     // When the async has ddfs, we allocate a ddt instead
     // of a regular async. The ddt has extra data-structures.
 	    forasync_task = (forasync_task_t*)rt_allocate_ddt(async_def->ddf_list);
@@ -148,7 +151,7 @@ forasync_task_t * allocate_forasync_task(async_t * async_def,int *low,int *high,
     forasync_task->def->ctx.low[2]=low[2]; 
     forasync_task->def->ctx.seq[0]=seq[0]; 
     forasync_task->def->ctx.seq[1]=seq[1]; 
-    forasync_task->def->ctx.seq[2]=seq[2]; 
+    forasync_task->def->ctx.seq[2]=seq[2];
     return forasync_task;
 }
 

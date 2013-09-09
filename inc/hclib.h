@@ -84,7 +84,6 @@ typedef struct {
     void *func;
 }forasync_ctx;
 
-
 typedef struct {
     async_t base;
     forasync_ctx ctx;

@@ -41,7 +41,6 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #define CHECKED_EXECUTION 0
 
-
 typedef struct finish {
     volatile int counter;
 #if CHECKED_EXECUTION
@@ -72,9 +71,10 @@ typedef struct _async_task_t {
     struct _phaser_context_t * phaser_context;
     #endif
     async_t * def;
-    asyncExecutorFct_t executor_fct_ptr; 
+    asyncExecutorFct_t executor_fct_ptr;
 } async_task_t;
 
+//TODO would rather fully piggy on async since it's the runtime implementation downcast to async_task_t anyway
 typedef struct _forasync_task_t {
     finish_t *current_finish;
     forasync_t *def;
