@@ -29,6 +29,9 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 */
 
+#ifndef PHASED_H_
+#define PHASED_H_
+
 // From hcPhaserLib
 #include "phaser-api.h"
 
@@ -37,3 +40,5 @@ typedef struct _phased_t {
   phaser_t * phasers;
   phaser_mode_t * phasers_mode;
 } phased_t;
+
+#endif /* PHASED_H_ */
