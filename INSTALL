@@ -19,7 +19,7 @@ OCR is available from <https://01.org/projects/open-community-runtime>
 
 2.  Build OCR with ELS and runtime API support:
 
-    OCR_CONF_OPTS="--enable-els=1  --enable-rtapi" ./install.sh 
+    OCR_CONF_OPTS="--enable-els=1 --enable-rtapi --enable-ocrlib" ./install.sh 
 
 By default, OCR is installed in the current folder, under `ocr-install/`
 
