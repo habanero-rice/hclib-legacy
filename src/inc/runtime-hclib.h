@@ -54,8 +54,12 @@ void async_drop_phasers(async_task_t * async_task);
  */
 void set_current_async(async_task_t * async);
 async_task_t * get_current_async();
-finish_t * get_current_finish();
 
+
+/*
+ * Finish utilities functions
+ */
+finish_t * get_current_finish();
 
 /*
  * Allocators / Deallocators
