@@ -127,6 +127,7 @@ void end_finish() {
     // Pop current finish to its parent
     async->current_finish = current_finish->parent;
     // Restore worker's currently executing async
+    //TODO not need that I think
     set_current_async(async);
     // Don't need this finish scope anymore
     deallocate_finish(current_finish);

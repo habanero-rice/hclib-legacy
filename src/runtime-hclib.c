@@ -132,6 +132,7 @@ forasync_task_t * allocate_forasync_task(async_t * async_def,int *low,int *high,
     forasync_task_t * forasync_task;
     //TODO ask rt_ to allocate a forasync task
     if ((async_def != NULL) && async_def->ddf_list != NULL) {
+        assert(0 && "forasync with ddf not implemented");
     // When the async has ddfs, we allocate a ddt instead
     // of a regular async. The ddt has extra data-structures.
 	    forasync_task = (forasync_task_t*)rt_allocate_ddt(async_def->ddf_list);
