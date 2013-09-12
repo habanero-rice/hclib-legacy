@@ -34,7 +34,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 typedef enum {
     ACCUM_OP_NONE,
-    ACCUM_OP_PLUS
+    ACCUM_OP_PLUS,
+    ACCUM_OP_MAX
 } accum_op_t;
 
 typedef enum {
@@ -47,10 +48,10 @@ typedef struct accum_t {
 
 } accum_t;
 
-// accum_clause_t {
-//     int nb_accums;
-//     accum_t ** accums; // NULL_TERMINATED
-// };
+typedef struct _accumed_t {
+    int count;
+    accum_t ** accums;
+} accumed_t;
 
 // Register accumulator to current finish scope
 // This can be done statically in start_finish(accum_t *)
@@ -58,9 +59,13 @@ typedef struct accum_t {
 void accum_register(accum_t ** accs, int n);
 
 accum_t * accum_create_int(accum_op_t op, accum_mode_t mode, int init);
-
 int accum_get_int(accum_t * acc);
 void accum_put_int(accum_t * acc, int v);
+
+accum_t * accum_create_double(accum_op_t op, accum_mode_t mode, double init);
+double accum_get_double(accum_t * acc);
+void accum_put_double(accum_t * acc, double v);
+
 void accum_destroy(accum_t * acc);
 
 #endif /* ACCUMULATOR_H_ */

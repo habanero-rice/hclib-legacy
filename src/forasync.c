@@ -298,7 +298,6 @@ void forasync_recursive3D(async_t * async_def, void* fct_ptr,int *low,int *high,
          printf("Scheduling Tasks %d_%d_%d %d_%d_%d\n",low[2],low[1],low[0],higher[2],higher[1],higher[0]);
 #endif
          forasync_recursive3D(async_def,fct_ptr,low,higher, ts, arg,ddf_list,phased_clause); 
-
      }
      else{//compute the tile
          int i=0;
@@ -318,7 +317,9 @@ void forasync_recursive3D(async_t * async_def, void* fct_ptr,int *low,int *high,
 //
 //  forasync. runtime_type specifies the type of runtime (1 = recursive) (default = chunk)
 //
-void forasync(async_t* async_def, void* forasync_fct, void * arg,struct ddf_st ** ddf_list, struct _phased_t * phased_clause,int dimen,int *size,int *ts,int runtime_type) {
+void forasync(async_t* async_def, void* forasync_fct, void * arg, struct ddf_st ** ddf_list, 
+                    struct _phased_t * phased_clause, struct _accumed_t * accum_clause, 
+                    int dimen, int *size, int *ts, int runtime_type) {
     // All the sub-asyncs share async_def
         // Populate the async definition
     async_def->arg = arg;
@@ -330,6 +331,10 @@ void forasync(async_t* async_def, void* forasync_fct, void * arg,struct ddf_st *
     int seq[3]={1,1,1};
 
     start_finish();
+    if (accum_clause != NULL) {
+        accum_register(accum_clause->accums, accum_clause->count);
+    }
+
     if(dimen>0 && dimen<4){
         if(runtime_type==1){
             if(dimen==1){
@@ -389,4 +394,3 @@ void forasync(async_t* async_def, void* forasync_fct, void * arg,struct ddf_st *
     }
     end_finish();
 }
-
