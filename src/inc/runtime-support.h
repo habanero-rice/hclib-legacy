@@ -141,4 +141,19 @@ void rt_finish_reached_zero(finish_t * finish);
  */
 void rt_help_finish(finish_t * finish);
 
+
+//
+// Worker info
+//
+
+/**
+ * @brief The number of worker the underlying runtime dispose of
+ */
+int rt_get_nb_workers();
+
+/**
+ * @brief The identifier of the currently executing worker
+ */
+int rt_get_worker_id();
+
 #endif /* RUNTIME_IMPL_H_ */

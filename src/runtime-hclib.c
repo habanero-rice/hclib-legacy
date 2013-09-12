@@ -208,9 +208,11 @@ static int is_eligible_to_schedule(async_task_t * async_task) {
 }
 
 int get_nb_workers() {
-    //TODO set that up correctly
-    printf("Warning: number of worker pre-set in get_nb_workers\n");
-    return 8;
+    return rt_get_nb_workers();
+}
+
+int get_worker_id() {
+    return rt_get_worker_id();
 }
 
 void schedule_async(async_task_t * async_task) {
