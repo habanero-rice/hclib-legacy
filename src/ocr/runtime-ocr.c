@@ -175,20 +175,36 @@ async_task_t * rt_allocate_ddt(struct ddf_st ** ddf_list) {
     assert(dd_task && "calloc failed");
     return (async_task_t *) dd_task;
 }
-forasync_task_t * rt_allocate_forasync_task() {
-    forasync_task_t * forasync_task = (forasync_task_t *) calloc(1, sizeof(forasync_task_t));
-    assert(forasync_task && "calloc failed");
-    return forasync_task;
-}
-forasync_t * rt_allocate_context() {
-    forasync_t * async_t = (forasync_t *) calloc(1, sizeof(forasync_t));
-    assert(async_t && "calloc failed");
-    return async_t;
-}
+
 async_task_t * rt_allocate_async_task() {
     async_task_t * async_task = (async_task_t *) calloc(1, sizeof(async_task_t));
     assert(async_task && "calloc failed");
     return async_task;
+}
+
+void rt_deallocate_async_task(async_task_t * async_task) {
+    free(async_task);
+}
+
+forasync1D_task_t * rt_allocate_forasync1D_task() {
+    //TODO malloc or calloc ?
+    forasync1D_task_t * forasync_task = (forasync1D_task_t *) calloc(1, sizeof(forasync1D_task_t));
+    assert(forasync_task && "calloc failed");
+    return forasync_task;
+}
+
+forasync2D_task_t * rt_allocate_forasync2D_task() {
+    //TODO malloc or calloc ?
+    forasync2D_task_t * forasync_task = (forasync2D_task_t *) calloc(1, sizeof(forasync2D_task_t));
+    assert(forasync_task && "calloc failed");
+    return forasync_task;
+}
+
+forasync3D_task_t * rt_allocate_forasync3D_task() {
+    //TODO malloc or calloc ?
+    forasync3D_task_t * forasync_task = (forasync3D_task_t *) calloc(1, sizeof(forasync3D_task_t));
+    assert(forasync_task && "calloc failed");
+    return forasync_task;
 }
 
 void rt_schedule_async(async_task_t * async_task) {

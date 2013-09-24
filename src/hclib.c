@@ -128,53 +128,21 @@ void end_finish() {
     deallocate_finish(current_finish);
 }
 
-
-void async(async_t * async_def, asyncFct_t fct_ptr, void * arg,
-        struct ddf_st ** ddf_list, struct _phased_t * phased_clause, int property) {
-    //TODO: api is quite verbose here, the async_def pointer allows
-    // users to pass down an address of a stack variable.
+void async(asyncFct_t fct_ptr, void * arg,
+           struct ddf_st ** ddf_list, struct _phased_t * phased_clause, int property) {
 #if CHECKED_EXECUTION
     assert(runtime_on);
 #endif
-
     // Populate the async definition
-    async_def->fct_ptr = fct_ptr;
-    async_def->arg = arg;
-    async_def->ddf_list = ddf_list;
+    async_t async_def;
+    async_def.fct_ptr = fct_ptr;
+    async_def.arg = arg;
+    async_def.ddf_list = ddf_list;
     #ifdef HAVE_PHASER
-    async_def->phased_clause = phased_clause;
+        async_def.phased_clause = phased_clause;
     #endif
+
     // Build the new async task and associate with the definition
-    async_task_t *async_task = allocate_async_task(async_def);
-
-    // Set the async finish scope to be the currently executing async's one.
-    async_task->current_finish = get_current_async()->current_finish;
-
-    // The newly created async must check in the current finish scope
-    async_check_in_finish(async_task);
-
-    #ifdef HAVE_PHASER
-    assert(!(phased_clause && (property & PHASER_TRANSMIT_ALL)));
-    if (phased_clause != NULL) {
-        phaser_context_t * currentCtx = get_phaser_context();
-        phaser_context_t * ctx = phaser_context_construct();
-        async_task->phaser_context = ctx;
-        transmit_specific_phasers(currentCtx, ctx, 
-            phased_clause->count, 
-            phased_clause->phasers,
-            phased_clause->phasers_mode);
-    }
-    if (property & PHASER_TRANSMIT_ALL) {
-        phaser_context_t * currentCtx = get_phaser_context();
-        phaser_context_t * ctx = phaser_context_construct();
-        async_task->phaser_context = ctx;
-        transmit_all_phasers(currentCtx, ctx);
-    }
-    #endif
-
-    // delegate scheduling to the underlying runtime
-    schedule_async(async_task);
-
-    // Note: here the async has been scheduled and may or may not
-    //       have been executed yet. Careful when adding code here.
+    async_task_t * async_task = allocate_async_task(&async_def);
+    schedule_async(async_task, get_current_finish(), property);
 }

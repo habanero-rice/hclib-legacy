@@ -52,18 +52,14 @@ void forasync_fct2(void * argv,int idx1,int idx2) {
     assert(ran[idx1*H2+idx2] == -1);
     ran[idx1*H2+idx2] = idx1*H2+idx2;
 }
+
 void init_ran(int *ran, int size) {
     while (size > 0) {
         ran[size-1] = -1;
         size--;
     }
 }
-void init_check(int *ran, int size) {
-    while (size > 0) {
-    	assert(ran[size-1] == -1);
-        size--;
-    }
-}
+
 int main (int argc, char ** argv) {
     printf("Call Init\n");
     hclib_init(&argc, argv);
@@ -73,12 +69,10 @@ int main (int argc, char ** argv) {
     // code is alive until the end of the program.
 
     init_ran(ran, H1*H2);
-//    init_check(ran, H1*H2*H3);
-        //Note: Forcefully pass the address we want to write to as a void **
-     async_t forasyn[1];
-    int size[2]={H1,H2};
-    int seq[2]={T1,T2};
-    forasync(forasyn,forasync_fct2,(void*)(ran),NULL, NULL,2,size,seq,1);
+    loop_domain_t loop0 = {0,H1,1,T1};
+    loop_domain_t loop1 = {0,H2,1,T2};
+    loop_domain_t loop[2] = {loop0, loop1};
+    forasync(forasync_fct2,(void*)(ran),NULL, NULL,2,loop,FORASYNC_MODE_RECURSIVE);
 
     printf("Call Finalize\n");
     hclib_finalize();

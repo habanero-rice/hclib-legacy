@@ -61,13 +61,12 @@ int main (int argc, char ** argv) {
     int i = 0;
     // This is ok to have these on stack because this
     // code is alive until the end of the program.
-    async_t asyncs [NB_ASYNC];
     int indices [NB_ASYNC];
     init_ran(ran, NB_ASYNC);
     while(i < NB_ASYNC) {
         indices[i] = i;
         //Note: Forcefully pass the address we want to write to as a void **
-        async(asyncs+i, async_fct, (void*) (indices+i), NULL, NULL, NO_PROP);
+        async(async_fct, (void*) (indices+i), NULL, NULL, NO_PROP);
         i++;
     }
     printf("Call Finalize\n");

@@ -90,20 +90,6 @@ void async_drop_phasers(async_task_t * async_task) {
 }
 
 /**
- * @brief Async executor function
- */
-static void async_fct_executor(async_task_t * async_task) {
-    async_t * async_def = async_task->def;
-    ((asyncFct_t)(async_def->fct_ptr))(async_def->arg);
-}
-
-static void forasync_fct_executor(forasync_task_t * async_task) {
-    forasync_t *forasync =  async_task->def;
-    async_t *async_def = (async_t*)&(forasync->base);
-    ((forasyncWrapper_t)(async_def->fct_ptr))(async_def->arg, forasync);
-}
-
-/**
  * @brief Async task allocator. Depending on the nature of the async
  * the runtime may allocate a different data-structure to represent the
  * async. It is the responsibility of the underlying implementation to
@@ -119,47 +105,42 @@ async_task_t * allocate_async_task(async_t * async_def) {
         // Initializes and zeroes
         async_task = rt_allocate_async_task();
     }
-    async_task->def = async_def;
+    // Copy the definition
+    if (async_def != NULL) {
+        async_task->def = *async_def;
+    }
     #ifdef HAVE_PHASER
     async_task->phaser_context = NULL;
     #endif
-    async_task->executor_fct_ptr = (void *) async_fct_executor;
     return async_task;
 }
 
-forasync_task_t * allocate_forasync_task(async_t * async_def,int *low,int *high,int *seq,void *func) {
-    forasync_task_t * forasync_task;
-    //TODO ask rt_ to allocate a forasync task
-    if ((async_def != NULL) && async_def->ddf_list != NULL) {
-        assert(0 && "forasync with ddf not implemented");
-    // When the async has ddfs, we allocate a ddt instead
-    // of a regular async. The ddt has extra data-structures.
-	    forasync_task = (forasync_task_t*)rt_allocate_ddt(async_def->ddf_list);
-    }else {
-	    // Initializes and zeroes
-	    forasync_task = rt_allocate_forasync_task();
-	    forasync_task->def = rt_allocate_context();
-    }
-    forasync_task->def->base = *(async_def);
-    forasync_task->def->ctx.func=func; 
-    forasync_task->executor_fct_ptr = (void *) forasync_fct_executor;  
-    forasync_task->def->ctx.high[0]=high[0]; 
-    forasync_task->def->ctx.high[1]=high[1]; 
-    forasync_task->def->ctx.high[2]=high[2]; 
-    forasync_task->def->ctx.low[0]=low[0]; 
-    forasync_task->def->ctx.low[1]=low[1]; 
-    forasync_task->def->ctx.low[2]=low[2]; 
-    forasync_task->def->ctx.seq[0]=seq[0]; 
-    forasync_task->def->ctx.seq[1]=seq[1]; 
-    forasync_task->def->ctx.seq[2]=seq[2];
-    return forasync_task;
+/**
+ * @brief forasync 1D task allocator. 
+ */
+forasync1D_task_t * allocate_forasync1D_task() {
+    return rt_allocate_forasync1D_task();
 }
 
 /**
- * @brief async task allocator
+ * @brief forasync 2D task allocator. 
+ */
+forasync2D_task_t * allocate_forasync2D_task() {
+    return rt_allocate_forasync2D_task();
+}
+
+/**
+ * @brief forasync 3D task allocator. 
+ */
+forasync3D_task_t * allocate_forasync3D_task() {
+    return rt_allocate_forasync3D_task();
+}
+
+/**
+ * @brief async task deallocator
  */
 void deallocate_async_task(async_task_t * async) {
-    //TODO rt_deallocate_async_task(async);
+    rt_deallocate_async_task(async);
 }
 
 /**
@@ -180,13 +161,13 @@ void deallocate_finish(finish_t * finish) {
  * @brief retrieves the current async's finish scope
  */
 finish_t * get_current_finish() {
-    // This is legal because there's a fake async
-    // to represent the main activity.
+    // Calling get_current_async is always legal because there's 
+    // a fake async to represent the main activity.
     return get_current_async()->current_finish;
 }
 
 static int is_eligible_to_schedule(async_task_t * async_task) {
-    if (async_task->def->ddf_list != NULL) {
+    if (async_task->def.ddf_list != NULL) {
         ddt_t * ddt = (ddt_t *) rt_async_task_to_ddt(async_task);
         return iterate_ddt_frontier(ddt);
     } else {
@@ -194,10 +175,42 @@ static int is_eligible_to_schedule(async_task_t * async_task) {
     }
 }
 
-void schedule_async(async_task_t * async_task) {
+void try_schedule_async(async_task_t * async_task) {
     if (is_eligible_to_schedule(async_task)) {
         rt_schedule_async(async_task);
     }
+}
+
+void schedule_async(async_task_t * async_task, finish_t * finish_scope, int property) {
+    // Set the async finish scope to be the currently executing async's one.
+    async_task->current_finish = finish_scope;
+    // The newly created async must check in the current finish scope
+    async_check_in_finish(async_task);
+
+    #ifdef HAVE_PHASER
+        assert(!(phased_clause && (property & PHASER_TRANSMIT_ALL)));
+        if (phased_clause != NULL) {
+            phaser_context_t * currentCtx = get_phaser_context();
+            phaser_context_t * ctx = phaser_context_construct();
+            async_task->phaser_context = ctx;
+            transmit_specific_phasers(currentCtx, ctx, 
+                phased_clause->count, 
+                phased_clause->phasers,
+                phased_clause->phasers_mode);
+        }
+        if (property & PHASER_TRANSMIT_ALL) {
+            phaser_context_t * currentCtx = get_phaser_context();
+            phaser_context_t * ctx = phaser_context_construct();
+            async_task->phaser_context = ctx;
+            transmit_all_phasers(currentCtx, ctx);
+        }
+    #endif
+
+    // delegate scheduling to the underlying runtime
+    try_schedule_async(async_task);
+
+    // Note: here the async has been scheduled and may or may not
+    //       have been executed yet. Careful when adding code here.
 }
 
 void help_finish(finish_t * finish) {

@@ -56,12 +56,7 @@ void init_ran(int *ran, int size) {
         size--;
     }
 }
-void init_check(int *ran, int size) {
-    while (size > 0) {
-    	assert(ran[size-1] == -1);
-        size--;
-    }
-}
+
 int main (int argc, char ** argv) {
     printf("Call Init\n");
     hclib_init(&argc, argv);
@@ -71,12 +66,8 @@ int main (int argc, char ** argv) {
     // code is alive until the end of the program.
 
     init_ran(ran, H1);
-//    init_check(ran, H1*H2*H3);
-        //Note: Forcefully pass the address we want to write to as a void **
-     async_t forasyn[1];
-    int size[1]={H1};
-    int seq[1]={T1};
-    forasync(forasyn,forasync_fct1, (void*)(ran),NULL, NULL,1,size,seq,  0);
+    loop_domain_t loop = {0, H1, 1, T1};
+    forasync(forasync_fct1, (void*)ran, NULL, NULL, 1, &loop, FORASYNC_MODE_FLAT);
 
     printf("Call Finalize\n");
     hclib_finalize();

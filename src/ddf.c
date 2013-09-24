@@ -193,7 +193,7 @@ void ddf_put(ddf_t * ddf, void * datum) {
             // DDT eligible to scheduling
             async_task_t * async_task = rt_ddt_to_async_task(currDDT);
             if (DEBUG_DDF) { printf("ddf: async_task %p\n", async_task); }
-            schedule_async(async_task);
+            try_schedule_async(async_task);
         }
         currDDT = currDDT->nextDDTWaitingOnSameDDF;
     }

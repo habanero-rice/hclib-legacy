@@ -32,8 +32,6 @@ int main(int argc, char ** argv) {
     start_finish();
     int n = 5;
     int index = 0;
-    // Create asyncs
-    async_t ** async_store = (async_t **) malloc(sizeof(async_t *) * n);
     // Building 'n' NULL-terminated lists of a single DDF each
     struct ddf_st ** ddf_list = (struct ddf_st **) malloc(sizeof(struct ddf_st *) * (2*(n+1)));
     for (index = 0 ; index <= n; index++) {
@@ -43,15 +41,13 @@ int main(int argc, char ** argv) {
     }
     for(index=n-1; index>=1; index--) {
         printf("Creating async %d\n", index);
-        // Build async
-        async_store[index] = (async_t *) malloc(sizeof(async_t));
         // Build async's arguments
         void ** argv = malloc(sizeof(void *) * 2);
         argv[0] = malloc(sizeof(int) *1);
         *((int *)argv[0]) = index*2;
         argv[1] = (void *)(ddf_list[index*2]);
         printf("Creating async %d await on %p will enable %p\n", index, &(ddf_list[(index-1)*2]), &(ddf_list[index*2]));
-        async(async_store[index], async_fct, argv, &(ddf_list[(index-1)*2]), NULL, NO_PROP);
+        async(async_fct, argv, &(ddf_list[(index-1)*2]), NULL, NO_PROP);
     }
     int * value = (int *) malloc(sizeof(int)*1);
     *value = 2222;
@@ -64,10 +60,6 @@ int main(int argc, char ** argv) {
         ddf_free(ddf_list[index*2]);
     }
     free(ddf_list);
-    for(index=n-1; index>=1; index--) {
-        free(async_store[index]);
-    }
-    free(async_store);
     hclib_finalize();
     return 0;
 }

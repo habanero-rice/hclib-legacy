@@ -64,8 +64,12 @@ finish_t * get_current_finish();
 /*
  * Allocators / Deallocators
  */
-forasync_task_t * allocate_forasync_task(async_t * async_def,int*,int*,int*,void*);
-void deallocate_forasync_task(forasync_task_t * async);
+
+forasync1D_task_t * allocate_forasync1D_task();
+forasync2D_task_t * allocate_forasync2D_task();
+forasync3D_task_t * allocate_forasync3D_task();
+void deallocate_forasync_task(forasync_task_t * forasync);
+
 async_task_t * allocate_async_task(async_t * async_def);
 void deallocate_async_task(async_task_t * async);
 
@@ -74,9 +78,17 @@ void deallocate_finish(finish_t * finish);
 
 
 /*
- * Scheduling
+ * Schedule an async for execution, transmitting finish, phasers, etc..
  */
-void schedule_async(async_task_t * async_task);
+
+void schedule_async(async_task_t * async_task, finish_t * finish_scope, int property);
+
+/*
+ * Hand over an async to the underlying runtime.
+ * The task must have been properly configured beforehand.
+ */
+void try_schedule_async(async_task_t * async_task);
+
 
 
 /**

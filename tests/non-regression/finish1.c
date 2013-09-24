@@ -63,12 +63,12 @@ void init_ran(int *ran, int size) {
     }
 }
 
-void spawn_async(async_t * async_defs, volatile int * indices, int i) {
+void spawn_async(volatile int * indices, int i) {
     if (i < NB_ASYNC) {
         start_finish();
         indices[i] = i;
-        async(async_defs+i, async_fct, (void*) (indices+i), NULL, NULL, NO_PROP);
-        spawn_async(async_defs, indices, i+1);
+        async(async_fct, (void*) (indices+i), NULL, NULL, NO_PROP);
+        spawn_async(indices, i+1);
         end_finish();
         assert_done(i, i+1);
     }
@@ -77,12 +77,11 @@ void spawn_async(async_t * async_defs, volatile int * indices, int i) {
 int main (int argc, char ** argv) {
     printf("Call Init\n");
     hclib_init(&argc, argv);
-    async_t * asyncs = (async_t *) malloc(sizeof(async_t)*NB_ASYNC);
     volatile int * indices = (int *) malloc(sizeof(int)*NB_ASYNC);
     ran = (int *) malloc(sizeof(int)*NB_ASYNC);
     init_ran(ran, NB_ASYNC);
     start_finish();
-    spawn_async(asyncs, indices, 0);
+    spawn_async(indices, 0);
     end_finish();
     printf("Call Finalize\n");
     hclib_finalize();

@@ -73,8 +73,8 @@ void rtcb_check_out_finish(finish_t * finish) {
 void rtcb_async_run(async_task_t * async_task) {
     async_run_start(async_task);
     // Call the targeted function with its arguments
-    async_task->executor_fct_ptr(async_task);
+    async_t async_def = async_task->def;
+    ((asyncFct_t)(async_def.fct_ptr))(async_def.arg);
     async_run_end(async_task);
+    deallocate_async_task(async_task);
 }
-
-

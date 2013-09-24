@@ -67,18 +67,52 @@ struct _phaser_context_t;
  */
 typedef struct _async_task_t {
     finish_t * current_finish;
+    async_t def;
     #ifdef HAVE_PHASER
     struct _phaser_context_t * phaser_context;
     #endif
-    async_t * def;
-    asyncExecutorFct_t executor_fct_ptr;
 } async_task_t;
 
-//TODO would rather fully piggy on async since it's the runtime implementation downcast to async_task_t anyway
+typedef struct {
+    async_t * user;
+} forasync_t;
+
 typedef struct _forasync_task_t {
-    finish_t *current_finish;
-    forasync_t *def;
-    asyncExecutorFct_t executor_fct_ptr; 
+    async_task_t forasync_task;
 } forasync_task_t;
+
+typedef struct {
+    forasync_t base;
+    loop_domain_t loop0;
+} forasync1D_t;
+
+typedef struct _forasync_1D_task_t {
+    forasync_task_t task;
+    forasync1D_t def;
+} forasync1D_task_t;
+
+typedef struct {
+    forasync_t base;
+    loop_domain_t loop0;
+    loop_domain_t loop1;
+} forasync2D_t;
+
+typedef struct _forasync_2D_task_t {
+    forasync_task_t task;
+    forasync2D_t def;
+} forasync2D_task_t;
+
+typedef struct {
+    forasync_t base;
+    loop_domain_t loop0;
+    loop_domain_t loop1;
+    loop_domain_t loop2;
+} forasync3D_t;
+
+typedef struct _forasync_3D_task_t {
+    forasync_task_t task;
+    forasync3D_t def;
+} forasync3D_task_t;
+
 
 #endif /* HCLIB_DEF_H_ */

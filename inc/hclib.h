@@ -42,19 +42,23 @@ void hclib_init(int * argc, char ** argv);
 
 void hclib_finalize();
 
+
 //
 // Async property bits
 //
+
 #define NO_PROP 0
 #define PHASER_TRANSMIT_ALL ((int) 0x1) /**< To indicate an async must register with all phasers */
+
+
+//
+// Async definition and API
+//
 
 /**
  * @brief A pointer to a function to be executed asynchronously
  */
 typedef void (*asyncFct_t) (void * arg);
-typedef void (*forasyncFct_t1D) (void * arg,int index);
-typedef void (*forasyncFct_t2D) (void * arg,int index_outter,int index_inner);
-typedef void (*forasyncFct_t3D) (void * arg,int index_out,int index_mid,int index_inner);
 
 // defined in phased.h
 struct _phased_t;
@@ -71,25 +75,6 @@ typedef struct {
     struct _phased_t * phased_clause;
 } async_t;
 
-
-/**
- * @brief A forasync definition
- * Note: Would have like this to be opaque but
- * that would prevent stack allocation.
- */
-typedef struct {
-    int high[3];
-    int low[3];
-    int seq[3];
-    void *func;
-}forasync_ctx;
-
-typedef struct {
-    async_t base;
-    forasync_ctx ctx;
-} forasync_t;
-
-typedef void (*forasyncWrapper_t) (void * arg,forasync_t *);
 /**
  * @brief: spawn a new async.
  * @param[in] fct_ptr: the function to execute
@@ -98,10 +83,33 @@ typedef void (*forasyncWrapper_t) (void * arg,forasync_t *);
  * @param[in] phased_clause:    Specify which phasers to register on
  * @param[in] property:         Flag to pass information to the runtime
  */
-void async(async_t * async_def, asyncFct_t fct_ptr, void * arg,
+void async(asyncFct_t fct_ptr, void * arg,
            struct ddf_st ** ddf_list, struct _phased_t * phased_clause, int property);
 
-void forasync(async_t* async_def, void* forasync_fct, void * argv,struct ddf_st ** ddf_list, struct _phased_t * phased_clause,int dimen,int *size,int *tilesize,int runtime_type);
+//
+// Forasync definition and API
+//
+
+typedef int forasync_mode_t;
+#define FORASYNC_MODE_RECURSIVE 1
+#define FORASYNC_MODE_FLAT 0
+
+typedef void (*forasync1D_Fct_t) (void * arg,int index);
+typedef void (*forasync2D_Fct_t) (void * arg,int index_outter,int index_inner);
+typedef void (*forasync3D_Fct_t) (void * arg,int index_out,int index_mid,int index_inner);
+
+/**
+ * @brief To describe loop domain when spawning forasyncs
+ */
+typedef struct _loop_domain_t {
+    int low;
+    int high;
+    int stride;
+    int tile;
+} loop_domain_t;
+
+void forasync(void* forasync_fct, void * argv, struct ddf_st ** ddf_list, struct _phased_t * phased_clause, 
+            int dim, loop_domain_t * domain, forasync_mode_t mode);
 
 /**
  * @brief starts a new finish scope
