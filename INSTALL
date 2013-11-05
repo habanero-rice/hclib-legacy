@@ -56,7 +56,7 @@ is optional but comes handy when writing compiler command lines.
 
     export HCLIB_ROOT=$PWD/hclib-install
     export LD_LIBRARY_PATH=${HCLIB_ROOT}/lib:${LD_LIBRARY_PATH}
-    export OCR_CONFIG=${HCLIB_ROOT}/configs/default.cfg
+    export OCR_CONFIG=${OCR_ROOT}/configs/default.cfg
 
 Note: OCR_CONFIG points to the OCR configuration file from which you can set the number of OCR workers.
 
