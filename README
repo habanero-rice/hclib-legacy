@@ -24,8 +24,8 @@ Just use the include directive in your program to import the interface:
 
 If you have set the `HCLIB_ROOT` and `OCR_ROOT` environment variable as described in the `INSTALL` file, you can define the following environment variables to simplify compiler command line simpler:
 
-	export HCLIB_CFLAGS=-I${HCLIB_ROOT}/include
-	export HCLIB_LDFLAGS=-L${HCLIB_ROOT}/lib -L${OCR_ROOT}/lib -locr -lhclib
+	export HCLIB_CFLAGS="-I${HCLIB_ROOT}/include"
+	export HCLIB_LDFLAGS="-L${HCLIB_ROOT}/lib -L${OCR_ROOT}/lib -locr -lhclib"
 
 Linking against OCR and HCLIB is then done easily:
 
