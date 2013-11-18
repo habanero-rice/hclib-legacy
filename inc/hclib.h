@@ -75,6 +75,11 @@ typedef struct {
     struct _phased_t * phased_clause;
 } async_t;
 
+// NULL clauses
+#define NO_DDF NULL
+#define NO_PHASER NULL
+#define NO_ACCUM NULL
+
 /**
  * @brief: spawn a new async.
  * @param[in] fct_ptr: the function to execute
