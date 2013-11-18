@@ -179,7 +179,7 @@ void ddf_put(ddf_t * ddf, void * datum) {
     // Try to cas the wait list to prevent new DDTs from registering on this ddf.
     // When cas successed, new DDTs see the DDF has been satisfied and proceed.
     while (!__sync_bool_compare_and_swap(&(ddf->headDDTWaitList),
-            headDDTWaitList, DDF_SATISFIED )) {
+            (struct ddt_st *) headDDTWaitList, DDF_SATISFIED )) {
         headDDTWaitList = ddf->headDDTWaitList;
     }
     if (DEBUG_DDF) {
