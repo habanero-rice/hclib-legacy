@@ -75,7 +75,9 @@ typedef struct {
     struct _phased_t * phased_clause;
 } async_t;
 
-// NULL clauses
+// Default async argumetns
+#define NO_ARG NULL
+#define NO_DATUM NULL
 #define NO_DDF NULL
 #define NO_PHASER NULL
 #define NO_ACCUM NULL
