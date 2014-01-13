@@ -38,6 +38,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include "hc_sysdep.h"
 #include "runtime-support.h"
+#include "rt-accumulator.h"
 #include "rt-ddf.h"
 #ifdef HAVE_PHASER
 #include "phaser-api.h"
@@ -166,6 +167,18 @@ finish_t * get_current_finish() {
     return get_current_async()->current_finish;
 }
 
+void end_finish_notify(finish_t * current_finish) {
+    accum_t ** accumulators = current_finish->accumulators;
+    if(accumulators != NULL) {
+        int i = 0;
+        while (accumulators[i] != NULL) {
+            accum_impl_t * accum_impl = (accum_impl_t *) accumulators[i];
+            accum_impl->close(accum_impl);
+            i++;
+        }
+    }
+}
+
 static int is_eligible_to_schedule(async_task_t * async_task) {
     if (async_task->def.ddf_list != NULL) {
         ddt_t * ddt = (ddt_t *) rt_async_task_to_ddt(async_task);
@@ -173,6 +186,14 @@ static int is_eligible_to_schedule(async_task_t * async_task) {
     } else {
         return 1;
     }
+}
+
+int get_nb_workers() {
+    return rt_get_nb_workers();
+}
+
+int get_worker_id_hc() {
+    return rt_get_worker_id();
 }
 
 void try_schedule_async(async_task_t * async_task) {

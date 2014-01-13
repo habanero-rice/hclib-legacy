@@ -36,6 +36,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  * @file Interface to HCLIB
  */
 
+#include "accumulator.h"
 #include "ddf.h"
 
 void hclib_init(int * argc, char ** argv);
@@ -86,7 +87,7 @@ typedef struct {
  * @brief: spawn a new async.
  * @param[in] fct_ptr: the function to execute
  * @param[in] arg:             argument to the async
- * @param[in] phased_clause:    The list of DDFs the async awaits
+ * @param[in] ddf_list:    The list of DDFs the async awaits
  * @param[in] phased_clause:    Specify which phasers to register on
  * @param[in] property:         Flag to pass information to the runtime
  */
@@ -116,7 +117,7 @@ typedef struct _loop_domain_t {
 } loop_domain_t;
 
 void forasync(void* forasync_fct, void * argv, struct ddf_st ** ddf_list, struct _phased_t * phased_clause, 
-            int dim, loop_domain_t * domain, forasync_mode_t mode);
+            struct _accumed_t * accumed, int dim, loop_domain_t * domain, forasync_mode_t mode);
 
 /**
  * @brief starts a new finish scope

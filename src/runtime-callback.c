@@ -34,6 +34,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  * from the runtime implementation to the HCLIB.
  */
 
+#include <stdio.h>
+
 #include "runtime-callback.h"
 #include "runtime-hclib.h"
 

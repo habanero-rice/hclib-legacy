@@ -352,6 +352,7 @@ void forasync3D_flat(void * forasync_arg) {
 }
 
 static void forasync_internal(void* user_fct_ptr, void * user_arg,
+                    accumed_t * accumed,
                     int dim, loop_domain_t * loop_domain, forasync_mode_t mode) {
     // All the sub-asyncs share async_def
     
@@ -361,6 +362,9 @@ static void forasync_internal(void* user_fct_ptr, void * user_arg,
     user_def.arg = user_arg;
  
     start_finish();
+    if (accumed != NULL) {
+        accum_register(accumed->accums, accumed->count);
+    }
 
     assert(dim>0 && dim<4);
     // TODO put those somewhere as static
@@ -384,6 +388,6 @@ static void forasync_internal(void* user_fct_ptr, void * user_arg,
 //
 //  forasync. runtime_type specifies the type of runtime (1 = recursive) (default = chunk)
 void forasync(void* forasync_fct, void * argv, struct ddf_st ** ddf_list, struct _phased_t * phased_clause, 
-            int dim, loop_domain_t * domain, forasync_mode_t mode) {
-    forasync_internal(forasync_fct, argv, dim, domain, mode);
+            struct _accumed_t * accumed, int dim, loop_domain_t * domain, forasync_mode_t mode) {
+    forasync_internal(forasync_fct, argv, accumed, dim, domain, mode);
 }

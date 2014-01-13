@@ -29,54 +29,43 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  */
 
-/**
- * DESC: Fork a bunch of asyncs in a top-level loop
- */
-#include <stdlib.h>
-#include <stdio.h>
-#include <assert.h>
+#ifndef ACCUMULATOR_H_
+#define ACCUMULATOR_H_
 
-#include "hclib.h"
+typedef enum {
+    ACCUM_OP_NONE,
+    ACCUM_OP_PLUS,
+    ACCUM_OP_MAX
+} accum_op_t;
 
-#define H1 1024
-#define T1 33
+typedef enum {
+    ACCUM_MODE_SEQ,
+    ACCUM_MODE_LAZY,
+    ACCUM_MODE_REC
+} accum_mode_t;
 
+typedef struct _accum_t {
 
-//user written code
-void forasync_fct1(void *argv,int idx) {
-    
-    int *ran=(int *)argv;
-    assert(ran[idx] == -1);
-    ran[idx] = idx;
-}
+} accum_t;
 
-void init_ran(int *ran, int size) {
-    while (size > 0) {
-        ran[size-1] = -1;
-        size--;
-    }
-}
+typedef struct _accumed_t {
+    int count;
+    accum_t ** accums;
+} accumed_t;
 
-int main (int argc, char ** argv) {
-    printf("Call Init\n");
-    hclib_init(&argc, argv);
-    int i = 0;
-    int *ran=(int *)malloc(H1*sizeof(int));
-    // This is ok to have these on stack because this
-    // code is alive until the end of the program.
+// Register accumulator to current finish scope
+// This can be done statically in start_finish(accum_t *)
+// Warning: this overwrites currently registered accum
+void accum_register(accum_t ** accs, int n);
 
-    init_ran(ran, H1);
-    loop_domain_t loop = {0, H1, 1, T1};
-    forasync(forasync_fct1, (void*)ran, NULL, NULL, NULL, 1, &loop, FORASYNC_MODE_FLAT);
+accum_t * accum_create_int(accum_op_t op, accum_mode_t mode, int init);
+int accum_get_int(accum_t * acc);
+void accum_put_int(accum_t * acc, int v);
 
-    printf("Call Finalize\n");
-    hclib_finalize();
-    printf("Check results: ");
-    i=0;
-    while(i < H1) {
-        assert(ran[i] == i);
-        i++;
-    }
-    printf("OK\n");
-    return 0;
-}
+accum_t * accum_create_double(accum_op_t op, accum_mode_t mode, double init);
+double accum_get_double(accum_t * acc);
+void accum_put_double(accum_t * acc, double v);
+
+void accum_destroy(accum_t * acc);
+
+#endif /* ACCUMULATOR_H_ */

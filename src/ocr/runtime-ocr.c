@@ -255,3 +255,13 @@ void rt_help_finish(finish_t * finish) {
     ocrWait(ocr_finish->done_event);
     assert(finish->counter == 0);
 }
+
+int rt_get_nb_workers() {
+    return nbWorkers();
+}
+
+int rt_get_worker_id() {
+    int wid = currentWorkerId();
+    return wid;
+}
+

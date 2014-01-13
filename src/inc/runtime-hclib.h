@@ -55,11 +55,12 @@ void async_drop_phasers(async_task_t * async_task);
 void set_current_async(async_task_t * async);
 async_task_t * get_current_async();
 
-
 /*
  * Finish utilities functions
  */
 finish_t * get_current_finish();
+void end_finish_notify(finish_t * current_finish);
+
 
 /*
  * Allocators / Deallocators
@@ -89,6 +90,12 @@ void schedule_async(async_task_t * async_task, finish_t * finish_scope, int prop
  */
 void try_schedule_async(async_task_t * async_task);
 
+
+/*
+ * Workers info
+ */
+int get_nb_workers();
+int get_worker_id_hc();
 
 
 /**

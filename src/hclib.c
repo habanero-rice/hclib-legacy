@@ -95,9 +95,10 @@ void start_finish() {
     assert(finish && "malloc failed");
     async_task_t * async_task = get_current_async();
     finish->counter = 1;
+    finish->accumulators = NULL;
 #if CHECKED_EXECUTION
     // The owner of this finish scope is the worker executing this code.
-    finish->owner = get_worker_id();
+    finish->owner = get_worker_id_hc();
 #endif
     // The parent of this finish scope is the finish scope the
     // async is currently executing in.
@@ -119,6 +120,10 @@ void end_finish() {
         //       start and realize the finish scope is done.
          help_finish(current_finish);
     }
+    //TODO careful with that, async has not been restored
+    // Notify this finish listeners, accumulators may be registered on this
+    end_finish_notify(current_finish);
+
     // Pop current finish to its parent
     async->current_finish = current_finish->parent;
     // Restore worker's currently executing async

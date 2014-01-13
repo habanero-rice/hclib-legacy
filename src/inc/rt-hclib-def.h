@@ -47,6 +47,7 @@ typedef struct finish {
     int owner; //TODO correctness tracking
 #endif
     struct finish * parent;
+    struct _accum_t ** accumulators; //TODO generify that ?
 } finish_t;
 
 struct _async_task_t;

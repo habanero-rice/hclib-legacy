@@ -27,10 +27,10 @@ THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
- */
+*/
 
 /**
- * DESC: Fork a bunch of asyncs in a top-level loop
+ * DESC: Recursive accumulator
  */
 #include <stdlib.h>
 #include <stdio.h>
@@ -38,45 +38,52 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include "hclib.h"
 
-#define H1 1024
-#define T1 33
+int ran = 0;
 
-
-//user written code
-void forasync_fct1(void *argv,int idx) {
-    
-    int *ran=(int *)argv;
-    assert(ran[idx] == -1);
-    ran[idx] = idx;
+void async_fct(void * arg) {
+    printf("Running Async\n");
+    ran = 1;
 }
 
-void init_ran(int *ran, int size) {
-    while (size > 0) {
-        ran[size-1] = -1;
-        size--;
+void accum_create_n(accum_t ** accums, int n) {
+    int i = 0;
+    while(i < n) {
+        accums[i] = accum_create_int(ACCUM_OP_PLUS, ACCUM_MODE_LAZY, 0);
+        i++;
+    }
+}
+
+void accum_destroy_n(accum_t ** accums, int n) {
+    int i = 0;
+    while(i < n) {
+        accum_destroy(accums[i]);
+        i++;
+    }
+}
+
+void accum_print_n(accum_t ** accums, int n) {
+    int i = 0;
+    while(i < n) {
+        int res = accum_get_int(accums[i]);
+        printf("Hello[%d] = %d\n", i, res);
+        i++;
     }
 }
 
 int main (int argc, char ** argv) {
-    printf("Call Init\n");
     hclib_init(&argc, argv);
-    int i = 0;
-    int *ran=(int *)malloc(H1*sizeof(int));
-    // This is ok to have these on stack because this
-    // code is alive until the end of the program.
-
-    init_ran(ran, H1);
-    loop_domain_t loop = {0, H1, 1, T1};
-    forasync(forasync_fct1, (void*)ran, NULL, NULL, NULL, 1, &loop, FORASYNC_MODE_FLAT);
-
-    printf("Call Finalize\n");
+    int n = 10;
+    accum_t * accums_s[n];
+    accum_t ** accums =  (accum_t **) accums_s;
+    accum_create_n(accums, n);
+    start_finish();
+    accum_register(accums, n);
+    accum_put_int(accums[3], 2);
+    accum_put_int(accums[4], 2);
+    accum_put_int(accums[5], 2);     
+    end_finish();
+    accum_print_n(accums, n);
+    accum_destroy_n(accums, n);
     hclib_finalize();
-    printf("Check results: ");
-    i=0;
-    while(i < H1) {
-        assert(ran[i] == i);
-        i++;
-    }
-    printf("OK\n");
     return 0;
 }
