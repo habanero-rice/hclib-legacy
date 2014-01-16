@@ -7,7 +7,7 @@ layout: hclib
 
 ## Installation
 
-Refer the the [installation guide](installation.html) for instructions on how to install HClib and its dependences.
+Refer to the [installation guide](installation.html) for instructions on how to install HClib and its dependences.
 
 ## Running HClib non-regression tests
 
