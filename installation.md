@@ -5,7 +5,7 @@ layout: hclib
 
 # Installation Instructions
 
-HClib is a library layer built on top of existing runtimes. The reference HClib implementation is built on top of the Open Community Runtime (OCR) that must be installed separately.
+HClib is a library layer built on top of a supporting runtime. The reference HClib implementation is built on top of the Open Community Runtime (OCR) that must be installed separately.
 
 ## Installing Open Community Runtime (OCR)
 
@@ -67,4 +67,4 @@ to recompile the library when updating code.
 
     Note: `OCR_CONFIG` points to the OCR configuration file from which you can set the number of OCR workers.
 
-You're done !
+You're done ! Check the [tutorial](tutorial.html) for an overview of HClib examples.
