@@ -1,0 +1,7 @@
+var searchData=
+[
+  ['fctptrs',['fctPtrs',['../structocrCompPlatform__t.html#a2807a373b4e1b24b85db34679271f635',1,'ocrCompPlatform_t::fctPtrs()'],['../structocrCompTarget__t.html#af80798c4de2047d9e16ec2d10b205111',1,'ocrCompTarget_t::fctPtrs()'],['../structocrDataBlock__t.html#a7b3397160fc28fd495db5c4879e1d702',1,'ocrDataBlock_t::fctPtrs()'],['../structocrEvent__t.html#a9aeb142dc67995a131ca4286b2976df8',1,'ocrEvent_t::fctPtrs()'],['../structocrGuidProvider__t.html#add10e4a81ab6351a7054e8ffb2e6de3a',1,'ocrGuidProvider_t::fctPtrs()'],['../structocrMemPlatform__t.html#adf2c82be9830bfa386c98e7877c1292a',1,'ocrMemPlatform_t::fctPtrs()'],['../structocrMemTarget__t.html#a227c2fdf767ce628666a16e4786a6296',1,'ocrMemTarget_t::fctPtrs()']]],
+  ['finish',['finish',['../structocrPolicyDomain__t.html#aefc8828eca8bcfecd5b9187f81b33b95',1,'ocrPolicyDomain_t::finish()'],['../structocrWorkerFcts__t.html#a09f40792b693e8699c54eaa9b398662a',1,'ocrWorkerFcts_t::finish()']]],
+  ['free',['free',['../structocrAllocatorFcts__t.html#a3bb92c81e3979948a01f8cd7ec4be14d',1,'ocrAllocatorFcts_t::free()'],['../structocrDataBlockFcts__t.html#a38c3bb704fb2f4e6b9ffe45dcd975369',1,'ocrDataBlockFcts_t::free()'],['../structocrMemPlatformFcts__t.html#a36f198fe18da0b3a9621ecbbfeb3073e',1,'ocrMemPlatformFcts_t::free()'],['../structocrMemTargetFcts__t.html#af88000fe110c140c4b81d996114db993',1,'ocrMemTargetFcts_t::free()']]],
+  ['from',['from',['../structocrModuleMapping__t.html#a83a5025f1455dc4ae5ab8f071ab4053a',1,'ocrModuleMapping_t']]]
+];
