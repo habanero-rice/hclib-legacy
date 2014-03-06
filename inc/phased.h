@@ -32,13 +32,32 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #ifndef PHASED_H_
 #define PHASED_H_
 
+/**
+ * @defgroup Phasers Phasers
+ * @brief Phasers API for lightweight point-to-point and collective synchronizations.
+ *
+ * @{
+ **/
+
+//
+// Attention: Need to compile Hclib with phaser support to be able to use phasers
+//
+
 // From hcPhaserLib
 #include "phaser-api.h"
 
+/**
+ * @brief Phased clause.
+ * User-level data-structure to represent a phased clause.
+ */
 typedef struct _phased_t {
   int count;
   phaser_t * phasers;
   phaser_mode_t * phasers_mode;
 } phased_t;
+
+/**
+ * @}
+ */
 
 #endif /* PHASED_H_ */

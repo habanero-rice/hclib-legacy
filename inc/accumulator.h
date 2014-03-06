@@ -32,40 +32,109 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #ifndef ACCUMULATOR_H_
 #define ACCUMULATOR_H_
 
+/**
+ * @defgroup Accumulators Accumulators
+ * @brief Accumulator API for reductions.
+ *
+ * @{
+ **/
+
+/**
+ * @brief Runtime-supported accumulator operations.
+ */
 typedef enum {
     ACCUM_OP_NONE,
     ACCUM_OP_PLUS,
     ACCUM_OP_MAX
 } accum_op_t;
 
+/**
+ * @brief Accumulators' reduction modes.
+ * To specify the accumulation strategy an accumulator is backed by.
+ */
 typedef enum {
     ACCUM_MODE_SEQ,
     ACCUM_MODE_LAZY,
     ACCUM_MODE_REC
 } accum_mode_t;
 
+/**
+ * @brief Opaque type for accumulators.
+ */
 typedef struct _accum_t {
-
 } accum_t;
 
+/**
+ * @brief Accumed clause.
+ * User-level data-structure to represent an accumulator clause.
+ */
 typedef struct _accumed_t {
     int count;
     accum_t ** accums;
 } accumed_t;
 
-// Register accumulator to current finish scope
-// This can be done statically in start_finish(accum_t *)
-// Warning: this overwrites currently registered accum
+/**
+ * @brief Register a list of accumulators in the current finish scope.
+ * @param[in] accs        The accumulator list to register
+ * @param[in] v           The size of the list
+ * Warning/Limitation: this overwrites currently registered accum
+ */
 void accum_register(accum_t ** accs, int n);
 
+/**
+ * @brief Allocate and initialize an 'int' accumulator.
+ * @param[in] op         Operation to apply on reduction
+ * @param[in] mode       Accumulator backend implementation
+ * @param[in] init       Initial value of the accumulator
+ * @return A contiguous array of DDFs
+ */
 accum_t * accum_create_int(accum_op_t op, accum_mode_t mode, int init);
+
+/**
+ * @brief Get the value of an accumulator.
+ * @param[in] acc        The accumulator to get the value from
+ * @return Current accumulator's value
+ */
 int accum_get_int(accum_t * acc);
+
+/**
+ * @brief Contribute a value to an accumulator.
+ * @param[in] acc        The accumulator to put a value
+ * @param[in] v          The value to accumulate
+ */
 void accum_put_int(accum_t * acc, int v);
 
+/**
+ * @brief Allocate and initialize a 'double' accumulator.
+ * @param[in] op         Operation to apply on reduction
+ * @param[in] mode       Accumulator backend implementation
+ * @param[in] init       Initial value of the accumulator
+ * @return A contiguous array of DDFs
+ */
 accum_t * accum_create_double(accum_op_t op, accum_mode_t mode, double init);
+
+/**
+ * @brief Get the value of an accumulator.
+ * @param[in] acc        The accumulator to get the value from
+ * @return Current accumulator's value
+ */
 double accum_get_double(accum_t * acc);
+
+/**
+ * @brief Contribute a value to an accumulator.
+ * @param[in] acc        The accumulator to put a value
+ * @param[in] v          The value to accumulate
+ */
 void accum_put_double(accum_t * acc, double v);
 
+/**
+ * @brief Destroy an accumulator.
+ * @param[in] acc        The accumulator to destroy
+ */
 void accum_destroy(accum_t * acc);
+
+/**
+ * @}
+ */
 
 #endif /* ACCUMULATOR_H_ */

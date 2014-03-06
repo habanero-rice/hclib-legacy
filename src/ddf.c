@@ -68,7 +68,7 @@ void ddt_init(ddt_t * ddt, ddf_t ** ddf_list) {
 }
 
 /**
- * Allocate a DDF and initializes it with default values
+ * Allocate a DDF and initializes it.
  */
 ddf_t * ddf_create() {
     ddf_t * ddf = (ddf_t *) malloc(sizeof(ddf_t));
@@ -79,7 +79,6 @@ ddf_t * ddf_create() {
 
 /**
  * Allocate 'nb_ddfs' DDFs in contiguous memory.
- * \param null_terminated indicates whether or not the last slot is set to NULL.
  */
 ddf_t ** ddf_create_n(size_t nb_ddfs, int null_terminated) {
     ddf_t ** ddfs = (ddf_t **) malloc((sizeof(ddf_t*) * nb_ddfs));

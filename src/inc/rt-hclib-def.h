@@ -41,6 +41,16 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #define CHECKED_EXECUTION 0
 
+/**
+ * @brief An async definition
+ */
+typedef struct {
+    void * fct_ptr;
+    void * arg;
+    struct ddf_st ** ddf_list; // Null terminated list
+    struct _phased_t * phased_clause;
+} async_t;
+
 typedef struct finish {
     volatile int counter;
 #if CHECKED_EXECUTION
