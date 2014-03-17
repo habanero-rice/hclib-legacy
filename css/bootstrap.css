@@ -7096,3 +7096,20 @@ td.visible-print {
     display: none !important;
   }
 }
+
+.links,
+.links:hover,
+.links:active{
+color: orange;
+}
+
+.tile-main {
+    /*background-color: #EEEEEE;*/
+    border-radius:10px;
+    padding: 5px;
+}
+
+h3.tile-main {
+    color: #FF8000;
+}
+
