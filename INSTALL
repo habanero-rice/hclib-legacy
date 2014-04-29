@@ -61,3 +61,23 @@ is optional but comes handy when writing compiler command lines.
 Note: OCR_CONFIG points to the OCR configuration file from which you can set the number of OCR workers.
 
 You're done ! Check the `README` file for more information on using HCLIB
+
+## Installation with phaser support
+
+HClib can optionally link with a 'phaserLib' installation to enable utilization
+of the phaser construct in HClib source files.
+
+1. Set the PHASERLIB_ROOT environment variable to point to the path for an installation 
+of 'phaserLib'. 
+    
+    export PHASERLIB_ROOT=/path/to/phaserLib/install
+
+2. Invoking HClib's install script with PHASERLIB_ROOT defined automatically makes 
+HClib link with the phaserLib library.
+     
+     ./install.sh
+
+If you're not relying on the install script, you need to invoke configure with 
+the '--with-phaser=/path/to/phaserLib/install' option to specify the location of
+a 'phaserLib' installation.
+

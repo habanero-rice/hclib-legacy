@@ -41,7 +41,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "rt-accumulator.h"
 #include "rt-ddf.h"
 #ifdef HAVE_PHASER
-#include "phaser-api.h"
+#include "phased.h"
 #endif
 
 
@@ -209,6 +209,7 @@ void schedule_async(async_task_t * async_task, finish_t * finish_scope, int prop
     async_check_in_finish(async_task);
 
     #ifdef HAVE_PHASER
+        phased_t * phased_clause = async_task->def.phased_clause;
         assert(!(phased_clause && (property & PHASER_TRANSMIT_ALL)));
         if (phased_clause != NULL) {
             phaser_context_t * currentCtx = get_phaser_context();

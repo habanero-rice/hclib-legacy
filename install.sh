@@ -72,6 +72,10 @@ cd ${COMPTREE}
 
 HCLIB_CONFIGURE_FLAGS="${HCLIB_CONFIGURE_FLAGS} --with-ocr=${OCR_ROOT}"
 
+if [ -n "${PHASERLIB_ROOT}" ]; then
+    HCLIB_CONFIGURE_FLAGS+=" --with-phaser=${PHASERLIB_ROOT} "
+fi
+
 ../configure ${INSTALL_ROOT} ${HCLIB_CONFIGURE_FLAGS}
 check_error "$?" "Configure failed";
 
