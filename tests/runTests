@@ -462,7 +462,7 @@ function select_tests {
 	RES_FILTER_TESTS=
 	for file in `echo $LIST_TESTS`; do
 	    for pattern in `echo ${PATTERNS}`; do
-	        if [[ "$file" == ${pattern} ]]; then
+	        if [[ "$file" == *${pattern}* ]]; then
 	            MATCH=1
 	        fi
 	    done
@@ -927,6 +927,16 @@ function runTests () {
 	# By default we don't exclude anything
 	select_tests "${TEST_LIST}" "${EXCL_PATTERN}" "EXC"
 	TEST_LIST="${RES_FILTER_TESTS}"
+
+	#
+	# Exclude phaser tests if library is not present
+	#
+	if [ -z "${PHASERLIB_ROOT}" ]; then
+		select_tests "${TEST_LIST}" "**/phaser*" "EXC"
+		TEST_LIST="${RES_FILTER_TESTS}"	
+       echo "No PhaserLib install found"
+	fi
+
 
 	#
 	# Take care to exclude files defined in .opts files
