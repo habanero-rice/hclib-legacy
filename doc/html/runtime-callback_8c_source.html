@@ -23,7 +23,7 @@
  <tr style="height: 56px;">
   <td style="padding-left: 0.5em;">
    <div id="projectname">HClib
-   &#160;<span id="projectnumber">0.2</span>
+   &#160;<span id="projectnumber">0.3</span>
    </div>
    <div id="projectbrief">Documentation for Habanero-C Library API</div>
   </td>
@@ -148,7 +148,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;<span class="keywordtype">void</span> rtcb_async_run(<a class="code" href="structasync__task__t.html" title="The HCLIB view of an async task.">async_task_t</a> * async_task) {</div>
 <div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;    async_run_start(async_task);</div>
 <div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;    <span class="comment">// Call the targeted function with its arguments</span></div>
-<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;    async_t async_def = async_task-&gt;def;</div>
+<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;    <a class="code" href="structasync__t.html" title="An async definition.">async_t</a> async_def = async_task-&gt;def;</div>
 <div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;    ((<a class="code" href="group__HClib.html#ga20743540e3494c2c031dffd26bf92915" title="Function prototype executable by an async.">asyncFct_t</a>)(async_def.fct_ptr))(async_def.arg);</div>
 <div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;    async_run_end(async_task);</div>
 <div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;    deallocate_async_task(async_task);</div>
@@ -156,7 +156,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Thu Jan 16 2014 08:14:34 for HClib by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Thu Jun 12 2014 12:49:26 for HClib by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.3.1
 </small></address>

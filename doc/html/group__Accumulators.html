@@ -23,7 +23,7 @@
  <tr style="height: 56px;">
   <td style="padding-left: 0.5em;">
    <div id="projectname">HClib
-   &#160;<span id="projectnumber">0.2</span>
+   &#160;<span id="projectnumber">0.3</span>
    </div>
    <div id="projectbrief">Documentation for Habanero-C Library API</div>
   </td>
@@ -99,9 +99,21 @@ Data Structures</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="enum-members"></a>
 Enumerations</h2></td></tr>
-<tr class="memitem:ga3e4cb0c11f9af51019be26ec54dab3d5"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__Accumulators.html#ga3e4cb0c11f9af51019be26ec54dab3d5">accum_op_t</a> { <b>ACCUM_OP_NONE</b>, 
+<tr class="memitem:ga3e4cb0c11f9af51019be26ec54dab3d5"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__Accumulators.html#ga3e4cb0c11f9af51019be26ec54dab3d5">accum_op_t</a> { <br/>
+&#160;&#160;<b>ACCUM_OP_NONE</b>, 
 <b>ACCUM_OP_PLUS</b>, 
-<b>ACCUM_OP_MAX</b>
+<b>ACCUM_OP_PROD</b>, 
+<b>ACCUM_OP_MIN</b>, 
+<br/>
+&#160;&#160;<b>ACCUM_OP_MAX</b>, 
+<b>ACCUM_OP_LAND</b>, 
+<b>ACCUM_OP_BAND</b>, 
+<b>ACCUM_OP_LOR</b>, 
+<br/>
+&#160;&#160;<b>ACCUM_OP_BOR</b>, 
+<b>ACCUM_OP_LXOR</b>, 
+<b>ACCUM_OP_BXOR</b>
+<br/>
  }</td></tr>
 <tr class="memdesc:ga3e4cb0c11f9af51019be26ec54dab3d5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Runtime-supported accumulator operations. <br/></td></tr>
 <tr class="separator:ga3e4cb0c11f9af51019be26ec54dab3d5"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -183,7 +195,7 @@ Functions</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>A contiguous array of DDFs </dd></dl>
 
-<p>Definition at line <a class="el" href="accumulator-hand-coded_8c_source.html#l00297">297</a> of file <a class="el" href="accumulator-hand-coded_8c_source.html">accumulator-hand-coded.c</a>.</p>
+<p>Definition at line <a class="el" href="accumulator_8c_source.html#l00853">853</a> of file <a class="el" href="accumulator_8c_source.html">accumulator.c</a>.</p>
 
 </div>
 </div>
@@ -228,7 +240,7 @@ Functions</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>A contiguous array of DDFs </dd></dl>
 
-<p>Definition at line <a class="el" href="accumulator-hand-coded_8c_source.html#l00241">241</a> of file <a class="el" href="accumulator-hand-coded_8c_source.html">accumulator-hand-coded.c</a>.</p>
+<p>Definition at line <a class="el" href="accumulator_8c_source.html#l00619">619</a> of file <a class="el" href="accumulator_8c_source.html">accumulator.c</a>.</p>
 
 </div>
 </div>
@@ -254,7 +266,7 @@ Functions</h2></td></tr>
   </dd>
 </dl>
 
-<p>Definition at line <a class="el" href="accumulator-hand-coded_8c_source.html#l00391">391</a> of file <a class="el" href="accumulator-hand-coded_8c_source.html">accumulator-hand-coded.c</a>.</p>
+<p>Definition at line <a class="el" href="accumulator_8c_source.html#l00987">987</a> of file <a class="el" href="accumulator_8c_source.html">accumulator.c</a>.</p>
 
 </div>
 </div>
@@ -281,7 +293,7 @@ Functions</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>Current accumulator's value </dd></dl>
 
-<p>Definition at line <a class="el" href="accumulator-hand-coded_8c_source.html#l00367">367</a> of file <a class="el" href="accumulator-hand-coded_8c_source.html">accumulator-hand-coded.c</a>.</p>
+<p>Definition at line <a class="el" href="accumulator_8c_source.html#l00963">963</a> of file <a class="el" href="accumulator_8c_source.html">accumulator.c</a>.</p>
 
 </div>
 </div>
@@ -308,7 +320,7 @@ Functions</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>Current accumulator's value </dd></dl>
 
-<p>Definition at line <a class="el" href="accumulator-hand-coded_8c_source.html#l00357">357</a> of file <a class="el" href="accumulator-hand-coded_8c_source.html">accumulator-hand-coded.c</a>.</p>
+<p>Definition at line <a class="el" href="accumulator_8c_source.html#l00933">933</a> of file <a class="el" href="accumulator_8c_source.html">accumulator.c</a>.</p>
 
 </div>
 </div>
@@ -345,7 +357,7 @@ Functions</h2></td></tr>
   </dd>
 </dl>
 
-<p>Definition at line <a class="el" href="accumulator-hand-coded_8c_source.html#l00372">372</a> of file <a class="el" href="accumulator-hand-coded_8c_source.html">accumulator-hand-coded.c</a>.</p>
+<p>Definition at line <a class="el" href="accumulator_8c_source.html#l00968">968</a> of file <a class="el" href="accumulator_8c_source.html">accumulator.c</a>.</p>
 
 </div>
 </div>
@@ -382,7 +394,7 @@ Functions</h2></td></tr>
   </dd>
 </dl>
 
-<p>Definition at line <a class="el" href="accumulator-hand-coded_8c_source.html#l00362">362</a> of file <a class="el" href="accumulator-hand-coded_8c_source.html">accumulator-hand-coded.c</a>.</p>
+<p>Definition at line <a class="el" href="accumulator_8c_source.html#l00938">938</a> of file <a class="el" href="accumulator_8c_source.html">accumulator.c</a>.</p>
 
 </div>
 </div>
@@ -419,14 +431,14 @@ Functions</h2></td></tr>
   </dd>
 </dl>
 
-<p>Definition at line <a class="el" href="accumulator-hand-coded_8c_source.html#l00377">377</a> of file <a class="el" href="accumulator-hand-coded_8c_source.html">accumulator-hand-coded.c</a>.</p>
+<p>Definition at line <a class="el" href="accumulator_8c_source.html#l00973">973</a> of file <a class="el" href="accumulator_8c_source.html">accumulator.c</a>.</p>
 
 </div>
 </div>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Thu Jan 16 2014 08:14:34 for HClib by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Thu Jun 12 2014 12:49:26 for HClib by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.3.1
 </small></address>

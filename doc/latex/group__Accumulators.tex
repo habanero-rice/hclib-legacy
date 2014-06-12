@@ -1,0 +1,257 @@
+\hypertarget{group__Accumulators}{\section{Accumulators}
+\label{group__Accumulators}\index{Accumulators@{Accumulators}}
+}
+
+
+Accumulator A\-P\-I for reductions.  
+
+
+\subsection*{Data Structures}
+\begin{DoxyCompactItemize}
+\item 
+struct \hyperlink{structaccum__t}{accum\-\_\-t}
+\begin{DoxyCompactList}\small\item\em Opaque type for accumulators. \end{DoxyCompactList}\item 
+struct \hyperlink{structaccumed__t}{accumed\-\_\-t}
+\begin{DoxyCompactList}\small\item\em Accumed clause. User-\/level data-\/structure to represent an accumulator clause. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Enumerations}
+\begin{DoxyCompactItemize}
+\item 
+enum \hyperlink{group__Accumulators_ga3e4cb0c11f9af51019be26ec54dab3d5}{accum\-\_\-op\-\_\-t} \{ \\*
+{\bfseries A\-C\-C\-U\-M\-\_\-\-O\-P\-\_\-\-N\-O\-N\-E}, 
+{\bfseries A\-C\-C\-U\-M\-\_\-\-O\-P\-\_\-\-P\-L\-U\-S}, 
+{\bfseries A\-C\-C\-U\-M\-\_\-\-O\-P\-\_\-\-P\-R\-O\-D}, 
+{\bfseries A\-C\-C\-U\-M\-\_\-\-O\-P\-\_\-\-M\-I\-N}, 
+\\*
+{\bfseries A\-C\-C\-U\-M\-\_\-\-O\-P\-\_\-\-M\-A\-X}, 
+{\bfseries A\-C\-C\-U\-M\-\_\-\-O\-P\-\_\-\-L\-A\-N\-D}, 
+{\bfseries A\-C\-C\-U\-M\-\_\-\-O\-P\-\_\-\-B\-A\-N\-D}, 
+{\bfseries A\-C\-C\-U\-M\-\_\-\-O\-P\-\_\-\-L\-O\-R}, 
+\\*
+{\bfseries A\-C\-C\-U\-M\-\_\-\-O\-P\-\_\-\-B\-O\-R}, 
+{\bfseries A\-C\-C\-U\-M\-\_\-\-O\-P\-\_\-\-L\-X\-O\-R}, 
+{\bfseries A\-C\-C\-U\-M\-\_\-\-O\-P\-\_\-\-B\-X\-O\-R}
+ \}
+\begin{DoxyCompactList}\small\item\em Runtime-\/supported accumulator operations. \end{DoxyCompactList}\item 
+enum \hyperlink{group__Accumulators_ga82b1a263886373f51b3b30c2e5c5d4c3}{accum\-\_\-mode\-\_\-t} \{ {\bfseries A\-C\-C\-U\-M\-\_\-\-M\-O\-D\-E\-\_\-\-S\-E\-Q}, 
+{\bfseries A\-C\-C\-U\-M\-\_\-\-M\-O\-D\-E\-\_\-\-L\-A\-Z\-Y}, 
+{\bfseries A\-C\-C\-U\-M\-\_\-\-M\-O\-D\-E\-\_\-\-R\-E\-C}
+ \}
+\begin{DoxyCompactList}\small\item\em Accumulators' reduction modes. To specify the accumulation strategy an accumulator is backed by. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \hyperlink{group__Accumulators_gae0a9e7d168bc808de67a91b5f23576fc}{accum\-\_\-register} (\hyperlink{structaccum__t}{accum\-\_\-t} $\ast$$\ast$accs, int n)
+\begin{DoxyCompactList}\small\item\em Register a list of accumulators in the current finish scope. \end{DoxyCompactList}\item 
+\hyperlink{structaccum__t}{accum\-\_\-t} $\ast$ \hyperlink{group__Accumulators_gab842e97fbe520feb181f32d0f0512146}{accum\-\_\-create\-\_\-int} (\hyperlink{group__Accumulators_ga3e4cb0c11f9af51019be26ec54dab3d5}{accum\-\_\-op\-\_\-t} op, \hyperlink{group__Accumulators_ga82b1a263886373f51b3b30c2e5c5d4c3}{accum\-\_\-mode\-\_\-t} mode, int init)
+\begin{DoxyCompactList}\small\item\em Allocate and initialize an 'int' accumulator. \end{DoxyCompactList}\item 
+int \hyperlink{group__Accumulators_gad7ab9402426ed9c8c9c6b193c31d4767}{accum\-\_\-get\-\_\-int} (\hyperlink{structaccum__t}{accum\-\_\-t} $\ast$acc)
+\begin{DoxyCompactList}\small\item\em Get the value of an accumulator. \end{DoxyCompactList}\item 
+void \hyperlink{group__Accumulators_ga580ca1c33da2bb58711b18fef57e8328}{accum\-\_\-put\-\_\-int} (\hyperlink{structaccum__t}{accum\-\_\-t} $\ast$acc, int v)
+\begin{DoxyCompactList}\small\item\em Contribute a value to an accumulator. \end{DoxyCompactList}\item 
+\hyperlink{structaccum__t}{accum\-\_\-t} $\ast$ \hyperlink{group__Accumulators_gabe52467178d0de700aa91de37c4cc9d2}{accum\-\_\-create\-\_\-double} (\hyperlink{group__Accumulators_ga3e4cb0c11f9af51019be26ec54dab3d5}{accum\-\_\-op\-\_\-t} op, \hyperlink{group__Accumulators_ga82b1a263886373f51b3b30c2e5c5d4c3}{accum\-\_\-mode\-\_\-t} mode, double init)
+\begin{DoxyCompactList}\small\item\em Allocate and initialize a 'double' accumulator. \end{DoxyCompactList}\item 
+double \hyperlink{group__Accumulators_ga1731e97573091db39a9f395d0128c78f}{accum\-\_\-get\-\_\-double} (\hyperlink{structaccum__t}{accum\-\_\-t} $\ast$acc)
+\begin{DoxyCompactList}\small\item\em Get the value of an accumulator. \end{DoxyCompactList}\item 
+void \hyperlink{group__Accumulators_gab2cd459b98a328e9f2677bb8198fee4e}{accum\-\_\-put\-\_\-double} (\hyperlink{structaccum__t}{accum\-\_\-t} $\ast$acc, double v)
+\begin{DoxyCompactList}\small\item\em Contribute a value to an accumulator. \end{DoxyCompactList}\item 
+void \hyperlink{group__Accumulators_ga0923ad32eebd5c67649b683f2b5136b0}{accum\-\_\-destroy} (\hyperlink{structaccum__t}{accum\-\_\-t} $\ast$acc)
+\begin{DoxyCompactList}\small\item\em Destroy an accumulator. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Accumulator A\-P\-I for reductions. 
+
+\subsection{Function Documentation}
+\hypertarget{group__Accumulators_gabe52467178d0de700aa91de37c4cc9d2}{\index{Accumulators@{Accumulators}!accum\-\_\-create\-\_\-double@{accum\-\_\-create\-\_\-double}}
+\index{accum\-\_\-create\-\_\-double@{accum\-\_\-create\-\_\-double}!Accumulators@{Accumulators}}
+\subsubsection[{accum\-\_\-create\-\_\-double}]{\setlength{\rightskip}{0pt plus 5cm}{\bf accum\-\_\-t}$\ast$ accum\-\_\-create\-\_\-double (
+\begin{DoxyParamCaption}
+\item[{{\bf accum\-\_\-op\-\_\-t}}]{op, }
+\item[{{\bf accum\-\_\-mode\-\_\-t}}]{mode, }
+\item[{double}]{init}
+\end{DoxyParamCaption}
+)}}\label{group__Accumulators_gabe52467178d0de700aa91de37c4cc9d2}
+
+
+Allocate and initialize a 'double' accumulator. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em op} & Operation to apply on reduction \\
+\hline
+\mbox{\tt in}  & {\em mode} & Accumulator backend implementation \\
+\hline
+\mbox{\tt in}  & {\em init} & Initial value of the accumulator \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+A contiguous array of D\-D\-Fs 
+\end{DoxyReturn}
+
+
+Definition at line 853 of file accumulator.\-c.
+
+\hypertarget{group__Accumulators_gab842e97fbe520feb181f32d0f0512146}{\index{Accumulators@{Accumulators}!accum\-\_\-create\-\_\-int@{accum\-\_\-create\-\_\-int}}
+\index{accum\-\_\-create\-\_\-int@{accum\-\_\-create\-\_\-int}!Accumulators@{Accumulators}}
+\subsubsection[{accum\-\_\-create\-\_\-int}]{\setlength{\rightskip}{0pt plus 5cm}{\bf accum\-\_\-t}$\ast$ accum\-\_\-create\-\_\-int (
+\begin{DoxyParamCaption}
+\item[{{\bf accum\-\_\-op\-\_\-t}}]{op, }
+\item[{{\bf accum\-\_\-mode\-\_\-t}}]{mode, }
+\item[{int}]{init}
+\end{DoxyParamCaption}
+)}}\label{group__Accumulators_gab842e97fbe520feb181f32d0f0512146}
+
+
+Allocate and initialize an 'int' accumulator. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em op} & Operation to apply on reduction \\
+\hline
+\mbox{\tt in}  & {\em mode} & Accumulator backend implementation \\
+\hline
+\mbox{\tt in}  & {\em init} & Initial value of the accumulator \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+A contiguous array of D\-D\-Fs 
+\end{DoxyReturn}
+
+
+Definition at line 619 of file accumulator.\-c.
+
+\hypertarget{group__Accumulators_ga0923ad32eebd5c67649b683f2b5136b0}{\index{Accumulators@{Accumulators}!accum\-\_\-destroy@{accum\-\_\-destroy}}
+\index{accum\-\_\-destroy@{accum\-\_\-destroy}!Accumulators@{Accumulators}}
+\subsubsection[{accum\-\_\-destroy}]{\setlength{\rightskip}{0pt plus 5cm}void accum\-\_\-destroy (
+\begin{DoxyParamCaption}
+\item[{{\bf accum\-\_\-t} $\ast$}]{acc}
+\end{DoxyParamCaption}
+)}}\label{group__Accumulators_ga0923ad32eebd5c67649b683f2b5136b0}
+
+
+Destroy an accumulator. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em acc} & The accumulator to destroy \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line 987 of file accumulator.\-c.
+
+\hypertarget{group__Accumulators_ga1731e97573091db39a9f395d0128c78f}{\index{Accumulators@{Accumulators}!accum\-\_\-get\-\_\-double@{accum\-\_\-get\-\_\-double}}
+\index{accum\-\_\-get\-\_\-double@{accum\-\_\-get\-\_\-double}!Accumulators@{Accumulators}}
+\subsubsection[{accum\-\_\-get\-\_\-double}]{\setlength{\rightskip}{0pt plus 5cm}double accum\-\_\-get\-\_\-double (
+\begin{DoxyParamCaption}
+\item[{{\bf accum\-\_\-t} $\ast$}]{acc}
+\end{DoxyParamCaption}
+)}}\label{group__Accumulators_ga1731e97573091db39a9f395d0128c78f}
+
+
+Get the value of an accumulator. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em acc} & The accumulator to get the value from \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Current accumulator's value 
+\end{DoxyReturn}
+
+
+Definition at line 963 of file accumulator.\-c.
+
+\hypertarget{group__Accumulators_gad7ab9402426ed9c8c9c6b193c31d4767}{\index{Accumulators@{Accumulators}!accum\-\_\-get\-\_\-int@{accum\-\_\-get\-\_\-int}}
+\index{accum\-\_\-get\-\_\-int@{accum\-\_\-get\-\_\-int}!Accumulators@{Accumulators}}
+\subsubsection[{accum\-\_\-get\-\_\-int}]{\setlength{\rightskip}{0pt plus 5cm}int accum\-\_\-get\-\_\-int (
+\begin{DoxyParamCaption}
+\item[{{\bf accum\-\_\-t} $\ast$}]{acc}
+\end{DoxyParamCaption}
+)}}\label{group__Accumulators_gad7ab9402426ed9c8c9c6b193c31d4767}
+
+
+Get the value of an accumulator. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em acc} & The accumulator to get the value from \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Current accumulator's value 
+\end{DoxyReturn}
+
+
+Definition at line 933 of file accumulator.\-c.
+
+\hypertarget{group__Accumulators_gab2cd459b98a328e9f2677bb8198fee4e}{\index{Accumulators@{Accumulators}!accum\-\_\-put\-\_\-double@{accum\-\_\-put\-\_\-double}}
+\index{accum\-\_\-put\-\_\-double@{accum\-\_\-put\-\_\-double}!Accumulators@{Accumulators}}
+\subsubsection[{accum\-\_\-put\-\_\-double}]{\setlength{\rightskip}{0pt plus 5cm}void accum\-\_\-put\-\_\-double (
+\begin{DoxyParamCaption}
+\item[{{\bf accum\-\_\-t} $\ast$}]{acc, }
+\item[{double}]{v}
+\end{DoxyParamCaption}
+)}}\label{group__Accumulators_gab2cd459b98a328e9f2677bb8198fee4e}
+
+
+Contribute a value to an accumulator. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em acc} & The accumulator to put a value \\
+\hline
+\mbox{\tt in}  & {\em v} & The value to accumulate \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line 968 of file accumulator.\-c.
+
+\hypertarget{group__Accumulators_ga580ca1c33da2bb58711b18fef57e8328}{\index{Accumulators@{Accumulators}!accum\-\_\-put\-\_\-int@{accum\-\_\-put\-\_\-int}}
+\index{accum\-\_\-put\-\_\-int@{accum\-\_\-put\-\_\-int}!Accumulators@{Accumulators}}
+\subsubsection[{accum\-\_\-put\-\_\-int}]{\setlength{\rightskip}{0pt plus 5cm}void accum\-\_\-put\-\_\-int (
+\begin{DoxyParamCaption}
+\item[{{\bf accum\-\_\-t} $\ast$}]{acc, }
+\item[{int}]{v}
+\end{DoxyParamCaption}
+)}}\label{group__Accumulators_ga580ca1c33da2bb58711b18fef57e8328}
+
+
+Contribute a value to an accumulator. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em acc} & The accumulator to put a value \\
+\hline
+\mbox{\tt in}  & {\em v} & The value to accumulate \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line 938 of file accumulator.\-c.
+
+\hypertarget{group__Accumulators_gae0a9e7d168bc808de67a91b5f23576fc}{\index{Accumulators@{Accumulators}!accum\-\_\-register@{accum\-\_\-register}}
+\index{accum\-\_\-register@{accum\-\_\-register}!Accumulators@{Accumulators}}
+\subsubsection[{accum\-\_\-register}]{\setlength{\rightskip}{0pt plus 5cm}void accum\-\_\-register (
+\begin{DoxyParamCaption}
+\item[{{\bf accum\-\_\-t} $\ast$$\ast$}]{accs, }
+\item[{int}]{n}
+\end{DoxyParamCaption}
+)}}\label{group__Accumulators_gae0a9e7d168bc808de67a91b5f23576fc}
+
+
+Register a list of accumulators in the current finish scope. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em accs} & The accumulator list to register \\
+\hline
+\mbox{\tt in}  & {\em v} & The size of the list Warning/\-Limitation\-: this overwrites currently registered accum \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line 973 of file accumulator.\-c.
+

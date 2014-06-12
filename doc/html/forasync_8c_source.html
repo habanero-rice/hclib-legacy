@@ -23,7 +23,7 @@
  <tr style="height: 56px;">
   <td style="padding-left: 0.5em;">
    <div id="projectname">HClib
-   &#160;<span id="projectnumber">0.2</span>
+   &#160;<span id="projectnumber">0.3</span>
    </div>
    <div id="projectbrief">Documentation for Habanero-C Library API</div>
   </td>
@@ -135,7 +135,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;<span class="preprocessor"></span></div>
 <div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;<span class="keywordtype">void</span> forasync1D_runner(<span class="keywordtype">void</span> * forasync_arg) {</div>
 <div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;    <a class="code" href="structforasync1D__t.html">forasync1D_t</a> * <a class="code" href="group__HClib.html#ga3a0951c09f376bc75ab512828eb208ee" title="Parallel for loop &#39;forasync&#39; (up to 3 dimensions).">forasync</a> = (<a class="code" href="structforasync1D__t.html">forasync1D_t</a> *) forasync_arg;</div>
-<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;    async_t * user = *((async_t **) forasync_arg);</div>
+<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;    <a class="code" href="structasync__t.html" title="An async definition.">async_t</a> * user = *((<a class="code" href="structasync__t.html" title="An async definition.">async_t</a> **) forasync_arg);</div>
 <div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;    <a class="code" href="group__HClib.html#gac1d6e6334c34de2b8f463abf8de88e70" title="Function prototype for a 1-dimension forasync.">forasync1D_Fct_t</a> user_fct_ptr = (<a class="code" href="group__HClib.html#gac1d6e6334c34de2b8f463abf8de88e70" title="Function prototype for a 1-dimension forasync.">forasync1D_Fct_t</a>) user-&gt;fct_ptr;</div>
 <div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;    <span class="keywordtype">void</span> * user_arg = (<span class="keywordtype">void</span> *) user-&gt;arg;</div>
 <div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;    <a class="code" href="structloop__domain__t.html" title="Describe loop domain when spawning a forasync.">loop_domain_t</a> loop0 = forasync-&gt;loop0;</div>
@@ -147,7 +147,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;</div>
 <div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;<span class="keywordtype">void</span> forasync2D_runner(<span class="keywordtype">void</span> * forasync_arg) {</div>
 <div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;    <a class="code" href="structforasync2D__t.html">forasync2D_t</a> * forasync = (<a class="code" href="structforasync2D__t.html">forasync2D_t</a> *) forasync_arg;</div>
-<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;    async_t * user = *((async_t **) forasync_arg);</div>
+<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;    <a class="code" href="structasync__t.html" title="An async definition.">async_t</a> * user = *((<a class="code" href="structasync__t.html" title="An async definition.">async_t</a> **) forasync_arg);</div>
 <div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;    <a class="code" href="group__HClib.html#ga42a1c141adcbaabe1348096598267c7d" title="Function prototype for a 2-dimensions forasync.">forasync2D_Fct_t</a> user_fct_ptr = (<a class="code" href="group__HClib.html#ga42a1c141adcbaabe1348096598267c7d" title="Function prototype for a 2-dimensions forasync.">forasync2D_Fct_t</a>) user-&gt;fct_ptr;</div>
 <div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;    <span class="keywordtype">void</span> * user_arg = (<span class="keywordtype">void</span> *) user-&gt;arg;</div>
 <div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;    <a class="code" href="structloop__domain__t.html" title="Describe loop domain when spawning a forasync.">loop_domain_t</a> loop0 = forasync-&gt;loop0;</div>
@@ -162,7 +162,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;</div>
 <div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;<span class="keywordtype">void</span> forasync3D_runner(<span class="keywordtype">void</span> * forasync_arg) {</div>
 <div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;    <a class="code" href="structforasync3D__t.html">forasync3D_t</a> * forasync = (<a class="code" href="structforasync3D__t.html">forasync3D_t</a> *) forasync_arg;</div>
-<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;    async_t * user = *((async_t **) forasync_arg);</div>
+<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;    <a class="code" href="structasync__t.html" title="An async definition.">async_t</a> * user = *((<a class="code" href="structasync__t.html" title="An async definition.">async_t</a> **) forasync_arg);</div>
 <div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;    <a class="code" href="group__HClib.html#gaafc8178ebe5548c145468f9ceb5cc8bd" title="Function prototype for a 3-dimensions forasync.">forasync3D_Fct_t</a> user_fct_ptr = (<a class="code" href="group__HClib.html#gaafc8178ebe5548c145468f9ceb5cc8bd" title="Function prototype for a 3-dimensions forasync.">forasync3D_Fct_t</a>) user-&gt;fct_ptr;</div>
 <div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;    <span class="keywordtype">void</span> * user_arg = (<span class="keywordtype">void</span> *) user-&gt;arg;</div>
 <div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;    <a class="code" href="structloop__domain__t.html" title="Describe loop domain when spawning a forasync.">loop_domain_t</a> loop0 = forasync-&gt;loop0;</div>
@@ -448,7 +448,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00357"></a><span class="lineno">  357</span>&#160;    <span class="comment">// All the sub-asyncs share async_def</span></div>
 <div class="line"><a name="l00358"></a><span class="lineno">  358</span>&#160;    </div>
 <div class="line"><a name="l00359"></a><span class="lineno">  359</span>&#160;    <span class="comment">// The user loop code to execute</span></div>
-<div class="line"><a name="l00360"></a><span class="lineno">  360</span>&#160;    async_t user_def;</div>
+<div class="line"><a name="l00360"></a><span class="lineno">  360</span>&#160;    <a class="code" href="structasync__t.html" title="An async definition.">async_t</a> user_def;</div>
 <div class="line"><a name="l00361"></a><span class="lineno">  361</span>&#160;    user_def.fct_ptr = user_fct_ptr;</div>
 <div class="line"><a name="l00362"></a><span class="lineno">  362</span>&#160;    user_def.arg = user_arg;</div>
 <div class="line"><a name="l00363"></a><span class="lineno">  363</span>&#160; </div>
@@ -485,7 +485,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Thu Jan 16 2014 08:14:34 for HClib by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Thu Jun 12 2014 12:49:26 for HClib by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.3.1
 </small></address>

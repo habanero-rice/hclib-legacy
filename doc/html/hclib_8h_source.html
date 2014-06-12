@@ -23,7 +23,7 @@
  <tr style="height: 56px;">
   <td style="padding-left: 0.5em;">
    <div id="projectname">HClib
-   &#160;<span id="projectnumber">0.2</span>
+   &#160;<span id="projectnumber">0.3</span>
    </div>
    <div id="projectbrief">Documentation for Habanero-C Library API</div>
   </td>
@@ -126,78 +126,81 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;<span class="preprocessor">#include &quot;accumulator.h&quot;</span></div>
 <div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;<span class="preprocessor">#include &quot;ddf.h&quot;</span></div>
 <div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;</div>
-<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;<span class="keywordtype">void</span> <a class="code" href="group__HClib.html#ga613f855069ec1a9a183f44301e213b8b" title="Initialize the HClib runtime. Implicitly defines a global finish scope.">hclib_init</a>(<span class="keywordtype">int</span> * argc, <span class="keywordtype">char</span> ** argv);</div>
-<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;</div>
-<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;<span class="keywordtype">void</span> <a class="code" href="group__HClib.html#gab70c52aa978066d86d88b006f8875528" title="Finalize execution of the HClib runtime. Ends the global finish scope and waits for all asyncs to ter...">hclib_finalize</a>();</div>
-<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;</div>
-<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;</div>
-<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;<span class="comment">//</span></div>
-<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;<span class="comment">// Default async arguments</span></div>
-<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;<span class="comment">//</span></div>
-<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;</div>
-<div class="line"><a name="l00067"></a><span class="lineno"><a class="code" href="group__HClib.html#ga30194cc5d8d8041b2585a6ccded665e8">   67</a></span>&#160;<span class="preprocessor">#define NO_PROP 0</span></div>
-<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;<span class="preprocessor"></span></div>
-<div class="line"><a name="l00069"></a><span class="lineno"><a class="code" href="group__HClib.html#ga2d0022791143e08a64621257f48d9739">   69</a></span>&#160;<span class="preprocessor">#define NO_ARG NULL</span></div>
-<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;<span class="preprocessor"></span></div>
-<div class="line"><a name="l00071"></a><span class="lineno"><a class="code" href="group__HClib.html#gad96d6ab6270f0f2c1757c24e1c99dd77">   71</a></span>&#160;<span class="preprocessor">#define NO_DATUM NULL</span></div>
-<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;<span class="preprocessor"></span></div>
-<div class="line"><a name="l00073"></a><span class="lineno"><a class="code" href="group__HClib.html#ga9753a1ed016c4e4d40ef7a4215ad9486">   73</a></span>&#160;<span class="preprocessor">#define NO_DDF NULL</span></div>
-<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;<span class="preprocessor"></span></div>
-<div class="line"><a name="l00075"></a><span class="lineno"><a class="code" href="group__HClib.html#ga74e2e6a863d9d6e1990b69cbcf633212">   75</a></span>&#160;<span class="preprocessor">#define NO_PHASER NULL</span></div>
-<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;<span class="preprocessor"></span></div>
-<div class="line"><a name="l00077"></a><span class="lineno"><a class="code" href="group__HClib.html#ga9dd15754e926a2c1e65973b507aeebf5">   77</a></span>&#160;<span class="preprocessor">#define PHASER_TRANSMIT_ALL ((int) 0x1) </span></div>
-<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;<span class="preprocessor"></span></div>
-<div class="line"><a name="l00079"></a><span class="lineno"><a class="code" href="group__HClib.html#ga5cda37917665d138da9fd1af8d8e906d">   79</a></span>&#160;<span class="preprocessor">#define NO_ACCUM NULL</span></div>
-<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;<span class="preprocessor"></span></div>
-<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;</div>
-<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;<span class="comment">//</span></div>
-<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;<span class="comment">// Async definition and API</span></div>
-<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;<span class="comment">//</span></div>
-<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;</div>
-<div class="line"><a name="l00090"></a><span class="lineno"><a class="code" href="group__HClib.html#ga20743540e3494c2c031dffd26bf92915">   90</a></span>&#160;<span class="keyword">typedef</span> void (*<a class="code" href="group__HClib.html#ga20743540e3494c2c031dffd26bf92915" title="Function prototype executable by an async.">asyncFct_t</a>) (<span class="keywordtype">void</span> * arg);</div>
-<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;</div>
-<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;<span class="comment">// forward declaration for phased clause defined in phased.h</span></div>
-<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;<span class="keyword">struct </span>_phased_t;</div>
+<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;<span class="comment">//TODO make this conditional in phased.h</span></div>
+<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;<span class="keyword">struct </span>_phased_t;</div>
+<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;</div>
+<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;<span class="keywordtype">void</span> <a class="code" href="group__HClib.html#ga613f855069ec1a9a183f44301e213b8b" title="Initialize the HClib runtime. Implicitly defines a global finish scope.">hclib_init</a>(<span class="keywordtype">int</span> * argc, <span class="keywordtype">char</span> ** argv);</div>
+<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;</div>
+<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;<span class="keywordtype">void</span> <a class="code" href="group__HClib.html#gab70c52aa978066d86d88b006f8875528" title="Finalize execution of the HClib runtime. Ends the global finish scope and waits for all asyncs to ter...">hclib_finalize</a>();</div>
+<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;</div>
+<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;</div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;<span class="comment">//</span></div>
+<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;<span class="comment">// Default async arguments</span></div>
+<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;<span class="comment">//</span></div>
+<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;</div>
+<div class="line"><a name="l00070"></a><span class="lineno"><a class="code" href="group__HClib.html#ga30194cc5d8d8041b2585a6ccded665e8">   70</a></span>&#160;<span class="preprocessor">#define NO_PROP 0</span></div>
+<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;<span class="preprocessor"></span></div>
+<div class="line"><a name="l00072"></a><span class="lineno"><a class="code" href="group__HClib.html#ga2d0022791143e08a64621257f48d9739">   72</a></span>&#160;<span class="preprocessor">#define NO_ARG NULL</span></div>
+<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;<span class="preprocessor"></span></div>
+<div class="line"><a name="l00074"></a><span class="lineno"><a class="code" href="group__HClib.html#gad96d6ab6270f0f2c1757c24e1c99dd77">   74</a></span>&#160;<span class="preprocessor">#define NO_DATUM NULL</span></div>
+<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;<span class="preprocessor"></span></div>
+<div class="line"><a name="l00076"></a><span class="lineno"><a class="code" href="group__HClib.html#ga9753a1ed016c4e4d40ef7a4215ad9486">   76</a></span>&#160;<span class="preprocessor">#define NO_DDF NULL</span></div>
+<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;<span class="preprocessor"></span></div>
+<div class="line"><a name="l00078"></a><span class="lineno"><a class="code" href="group__HClib.html#ga74e2e6a863d9d6e1990b69cbcf633212">   78</a></span>&#160;<span class="preprocessor">#define NO_PHASER NULL</span></div>
+<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;<span class="preprocessor"></span></div>
+<div class="line"><a name="l00080"></a><span class="lineno"><a class="code" href="group__HClib.html#ga9dd15754e926a2c1e65973b507aeebf5">   80</a></span>&#160;<span class="preprocessor">#define PHASER_TRANSMIT_ALL ((int) 0x1) </span></div>
+<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;<span class="preprocessor"></span></div>
+<div class="line"><a name="l00082"></a><span class="lineno"><a class="code" href="group__HClib.html#ga5cda37917665d138da9fd1af8d8e906d">   82</a></span>&#160;<span class="preprocessor">#define NO_ACCUM NULL</span></div>
+<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;<span class="preprocessor"></span></div>
+<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;</div>
+<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;<span class="comment">//</span></div>
+<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;<span class="comment">// Async definition and API</span></div>
+<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;<span class="comment">//</span></div>
+<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;</div>
+<div class="line"><a name="l00093"></a><span class="lineno"><a class="code" href="group__HClib.html#ga20743540e3494c2c031dffd26bf92915">   93</a></span>&#160;<span class="keyword">typedef</span> void (*<a class="code" href="group__HClib.html#ga20743540e3494c2c031dffd26bf92915" title="Function prototype executable by an async.">asyncFct_t</a>) (<span class="keywordtype">void</span> * arg);</div>
 <div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;</div>
-<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;<span class="keywordtype">void</span> <a class="code" href="group__HClib.html#ga6d98dad2020df9d38726a80255369232" title="Spawn a new task asynchronously.">async</a>(<a class="code" href="group__HClib.html#ga20743540e3494c2c031dffd26bf92915" title="Function prototype executable by an async.">asyncFct_t</a> fct_ptr, <span class="keywordtype">void</span> * arg,</div>
-<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;           <span class="keyword">struct</span> ddf_st ** ddf_list, <span class="keyword">struct</span> _phased_t * phased_clause, <span class="keywordtype">int</span> property);</div>
-<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;</div>
-<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;</div>
-<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;<span class="comment">//</span></div>
-<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;<span class="comment">// Forasync definition and API</span></div>
-<div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160;<span class="comment">//</span></div>
-<div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160;</div>
-<div class="line"><a name="l00112"></a><span class="lineno"><a class="code" href="group__HClib.html#gac5a6aae98ea2921fc0f474327e3b3b27">  112</a></span>&#160;<span class="keyword">typedef</span> <span class="keywordtype">int</span> <a class="code" href="group__HClib.html#gac5a6aae98ea2921fc0f474327e3b3b27" title="forasync mode to control chunking strategy.">forasync_mode_t</a>;</div>
+<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;<span class="comment">// forward declaration for phased clause defined in phased.h</span></div>
+<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;<span class="keyword">struct </span>_phased_t;</div>
+<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;</div>
+<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;<span class="keywordtype">void</span> <a class="code" href="group__HClib.html#ga6d98dad2020df9d38726a80255369232" title="Spawn a new task asynchronously.">async</a>(<a class="code" href="group__HClib.html#ga20743540e3494c2c031dffd26bf92915" title="Function prototype executable by an async.">asyncFct_t</a> fct_ptr, <span class="keywordtype">void</span> * arg,</div>
+<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;           <span class="keyword">struct</span> ddf_st ** ddf_list, <span class="keyword">struct</span> _phased_t * phased_clause, <span class="keywordtype">int</span> property);</div>
+<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;</div>
+<div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160;</div>
+<div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160;<span class="comment">//</span></div>
+<div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160;<span class="comment">// Forasync definition and API</span></div>
+<div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160;<span class="comment">//</span></div>
 <div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160;</div>
-<div class="line"><a name="l00115"></a><span class="lineno"><a class="code" href="group__HClib.html#ga4fc84f9b5d90304e6b0ccd2f89a93a15">  115</a></span>&#160;<span class="preprocessor">#define FORASYNC_MODE_RECURSIVE 1</span></div>
-<div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160;<span class="preprocessor"></span></div>
-<div class="line"><a name="l00117"></a><span class="lineno"><a class="code" href="group__HClib.html#gaeda817ba1de14a7658f7a8f60c908bfd">  117</a></span>&#160;<span class="preprocessor">#define FORASYNC_MODE_FLAT 0</span></div>
-<div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160;<span class="preprocessor"></span></div>
-<div class="line"><a name="l00124"></a><span class="lineno"><a class="code" href="group__HClib.html#gac1d6e6334c34de2b8f463abf8de88e70">  124</a></span>&#160;<span class="keyword">typedef</span> void (*<a class="code" href="group__HClib.html#gac1d6e6334c34de2b8f463abf8de88e70" title="Function prototype for a 1-dimension forasync.">forasync1D_Fct_t</a>) (<span class="keywordtype">void</span> * arg,<span class="keywordtype">int</span> index);</div>
-<div class="line"><a name="l00125"></a><span class="lineno">  125</span>&#160;</div>
-<div class="line"><a name="l00132"></a><span class="lineno"><a class="code" href="group__HClib.html#ga42a1c141adcbaabe1348096598267c7d">  132</a></span>&#160;<span class="keyword">typedef</span> void (*<a class="code" href="group__HClib.html#ga42a1c141adcbaabe1348096598267c7d" title="Function prototype for a 2-dimensions forasync.">forasync2D_Fct_t</a>) (<span class="keywordtype">void</span> * arg,<span class="keywordtype">int</span> index_outer,<span class="keywordtype">int</span> index_inner);</div>
-<div class="line"><a name="l00133"></a><span class="lineno">  133</span>&#160;</div>
-<div class="line"><a name="l00141"></a><span class="lineno"><a class="code" href="group__HClib.html#gaafc8178ebe5548c145468f9ceb5cc8bd">  141</a></span>&#160;<span class="keyword">typedef</span> void (*<a class="code" href="group__HClib.html#gaafc8178ebe5548c145468f9ceb5cc8bd" title="Function prototype for a 3-dimensions forasync.">forasync3D_Fct_t</a>) (<span class="keywordtype">void</span> * arg,<span class="keywordtype">int</span> index_outer,<span class="keywordtype">int</span> index_mid,<span class="keywordtype">int</span> index_inner);</div>
-<div class="line"><a name="l00142"></a><span class="lineno">  142</span>&#160;</div>
-<div class="line"><a name="l00150"></a><span class="lineno"><a class="code" href="structloop__domain__t.html">  150</a></span>&#160;<span class="keyword">typedef</span> <span class="keyword">struct </span>_loop_domain_t {</div>
-<div class="line"><a name="l00151"></a><span class="lineno">  151</span>&#160;    <span class="keywordtype">int</span> low;</div>
-<div class="line"><a name="l00152"></a><span class="lineno">  152</span>&#160;    <span class="keywordtype">int</span> high;</div>
-<div class="line"><a name="l00153"></a><span class="lineno">  153</span>&#160;    <span class="keywordtype">int</span> stride;</div>
-<div class="line"><a name="l00154"></a><span class="lineno">  154</span>&#160;    <span class="keywordtype">int</span> tile;</div>
-<div class="line"><a name="l00155"></a><span class="lineno">  155</span>&#160;} <a class="code" href="structloop__domain__t.html" title="Describe loop domain when spawning a forasync.">loop_domain_t</a>;</div>
-<div class="line"><a name="l00156"></a><span class="lineno">  156</span>&#160;</div>
-<div class="line"><a name="l00173"></a><span class="lineno">  173</span>&#160;<span class="keywordtype">void</span> <a class="code" href="group__HClib.html#ga3a0951c09f376bc75ab512828eb208ee" title="Parallel for loop &#39;forasync&#39; (up to 3 dimensions).">forasync</a>(<span class="keywordtype">void</span>* forasync_fct, <span class="keywordtype">void</span> * argv, <span class="keyword">struct</span> ddf_st ** ddf_list, <span class="keyword">struct</span> _phased_t * phased_clause, </div>
-<div class="line"><a name="l00174"></a><span class="lineno">  174</span>&#160;            <span class="keyword">struct</span> _accumed_t * accumed, <span class="keywordtype">int</span> dim, <a class="code" href="structloop__domain__t.html" title="Describe loop domain when spawning a forasync.">loop_domain_t</a> * domain, <a class="code" href="group__HClib.html#gac5a6aae98ea2921fc0f474327e3b3b27" title="forasync mode to control chunking strategy.">forasync_mode_t</a> mode);</div>
-<div class="line"><a name="l00175"></a><span class="lineno">  175</span>&#160;</div>
-<div class="line"><a name="l00179"></a><span class="lineno">  179</span>&#160;<span class="keywordtype">void</span> <a class="code" href="group__HClib.html#ga3792b13d399b1e03dc86a4339b0c6c10" title="start_finish implementation is decoupled in two functions. The main concern is that the implicit fini...">start_finish</a>();</div>
-<div class="line"><a name="l00180"></a><span class="lineno">  180</span>&#160;</div>
-<div class="line"><a name="l00184"></a><span class="lineno">  184</span>&#160;<span class="keywordtype">void</span> <a class="code" href="group__HClib.html#ga181b944819de60ea47b024531a127bbf" title="ends the current finish scope">end_finish</a>();</div>
-<div class="line"><a name="l00185"></a><span class="lineno">  185</span>&#160;</div>
-<div class="line"><a name="l00190"></a><span class="lineno">  190</span>&#160;<span class="preprocessor">#endif </span><span class="comment">/* HCLIB_H_ */</span><span class="preprocessor"></span></div>
+<div class="line"><a name="l00115"></a><span class="lineno"><a class="code" href="group__HClib.html#gac5a6aae98ea2921fc0f474327e3b3b27">  115</a></span>&#160;<span class="keyword">typedef</span> <span class="keywordtype">int</span> <a class="code" href="group__HClib.html#gac5a6aae98ea2921fc0f474327e3b3b27" title="forasync mode to control chunking strategy.">forasync_mode_t</a>;</div>
+<div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160;</div>
+<div class="line"><a name="l00118"></a><span class="lineno"><a class="code" href="group__HClib.html#ga4fc84f9b5d90304e6b0ccd2f89a93a15">  118</a></span>&#160;<span class="preprocessor">#define FORASYNC_MODE_RECURSIVE 1</span></div>
+<div class="line"><a name="l00119"></a><span class="lineno">  119</span>&#160;<span class="preprocessor"></span></div>
+<div class="line"><a name="l00120"></a><span class="lineno"><a class="code" href="group__HClib.html#gaeda817ba1de14a7658f7a8f60c908bfd">  120</a></span>&#160;<span class="preprocessor">#define FORASYNC_MODE_FLAT 0</span></div>
+<div class="line"><a name="l00121"></a><span class="lineno">  121</span>&#160;<span class="preprocessor"></span></div>
+<div class="line"><a name="l00127"></a><span class="lineno"><a class="code" href="group__HClib.html#gac1d6e6334c34de2b8f463abf8de88e70">  127</a></span>&#160;<span class="keyword">typedef</span> void (*<a class="code" href="group__HClib.html#gac1d6e6334c34de2b8f463abf8de88e70" title="Function prototype for a 1-dimension forasync.">forasync1D_Fct_t</a>) (<span class="keywordtype">void</span> * arg,<span class="keywordtype">int</span> index);</div>
+<div class="line"><a name="l00128"></a><span class="lineno">  128</span>&#160;</div>
+<div class="line"><a name="l00135"></a><span class="lineno"><a class="code" href="group__HClib.html#ga42a1c141adcbaabe1348096598267c7d">  135</a></span>&#160;<span class="keyword">typedef</span> void (*<a class="code" href="group__HClib.html#ga42a1c141adcbaabe1348096598267c7d" title="Function prototype for a 2-dimensions forasync.">forasync2D_Fct_t</a>) (<span class="keywordtype">void</span> * arg,<span class="keywordtype">int</span> index_outer,<span class="keywordtype">int</span> index_inner);</div>
+<div class="line"><a name="l00136"></a><span class="lineno">  136</span>&#160;</div>
+<div class="line"><a name="l00144"></a><span class="lineno"><a class="code" href="group__HClib.html#gaafc8178ebe5548c145468f9ceb5cc8bd">  144</a></span>&#160;<span class="keyword">typedef</span> void (*<a class="code" href="group__HClib.html#gaafc8178ebe5548c145468f9ceb5cc8bd" title="Function prototype for a 3-dimensions forasync.">forasync3D_Fct_t</a>) (<span class="keywordtype">void</span> * arg,<span class="keywordtype">int</span> index_outer,<span class="keywordtype">int</span> index_mid,<span class="keywordtype">int</span> index_inner);</div>
+<div class="line"><a name="l00145"></a><span class="lineno">  145</span>&#160;</div>
+<div class="line"><a name="l00153"></a><span class="lineno"><a class="code" href="structloop__domain__t.html">  153</a></span>&#160;<span class="keyword">typedef</span> <span class="keyword">struct </span>_loop_domain_t {</div>
+<div class="line"><a name="l00154"></a><span class="lineno">  154</span>&#160;    <span class="keywordtype">int</span> low;</div>
+<div class="line"><a name="l00155"></a><span class="lineno">  155</span>&#160;    <span class="keywordtype">int</span> high;</div>
+<div class="line"><a name="l00156"></a><span class="lineno">  156</span>&#160;    <span class="keywordtype">int</span> stride;</div>
+<div class="line"><a name="l00157"></a><span class="lineno">  157</span>&#160;    <span class="keywordtype">int</span> tile;</div>
+<div class="line"><a name="l00158"></a><span class="lineno">  158</span>&#160;} <a class="code" href="structloop__domain__t.html" title="Describe loop domain when spawning a forasync.">loop_domain_t</a>;</div>
+<div class="line"><a name="l00159"></a><span class="lineno">  159</span>&#160;</div>
+<div class="line"><a name="l00176"></a><span class="lineno">  176</span>&#160;<span class="keywordtype">void</span> <a class="code" href="group__HClib.html#ga3a0951c09f376bc75ab512828eb208ee" title="Parallel for loop &#39;forasync&#39; (up to 3 dimensions).">forasync</a>(<span class="keywordtype">void</span>* forasync_fct, <span class="keywordtype">void</span> * argv, <span class="keyword">struct</span> ddf_st ** ddf_list, <span class="keyword">struct</span> _phased_t * phased_clause, </div>
+<div class="line"><a name="l00177"></a><span class="lineno">  177</span>&#160;            <span class="keyword">struct</span> _accumed_t * accumed, <span class="keywordtype">int</span> dim, <a class="code" href="structloop__domain__t.html" title="Describe loop domain when spawning a forasync.">loop_domain_t</a> * domain, <a class="code" href="group__HClib.html#gac5a6aae98ea2921fc0f474327e3b3b27" title="forasync mode to control chunking strategy.">forasync_mode_t</a> mode);</div>
+<div class="line"><a name="l00178"></a><span class="lineno">  178</span>&#160;</div>
+<div class="line"><a name="l00182"></a><span class="lineno">  182</span>&#160;<span class="keywordtype">void</span> <a class="code" href="group__HClib.html#ga3792b13d399b1e03dc86a4339b0c6c10" title="start_finish implementation is decoupled in two functions. The main concern is that the implicit fini...">start_finish</a>();</div>
+<div class="line"><a name="l00183"></a><span class="lineno">  183</span>&#160;</div>
+<div class="line"><a name="l00187"></a><span class="lineno">  187</span>&#160;<span class="keywordtype">void</span> <a class="code" href="group__HClib.html#ga181b944819de60ea47b024531a127bbf" title="ends the current finish scope">end_finish</a>();</div>
+<div class="line"><a name="l00188"></a><span class="lineno">  188</span>&#160;</div>
+<div class="line"><a name="l00193"></a><span class="lineno">  193</span>&#160;<span class="preprocessor">#endif </span><span class="comment">/* HCLIB_H_ */</span><span class="preprocessor"></span></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Thu Jan 16 2014 08:14:34 for HClib by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Thu Jun 12 2014 12:49:26 for HClib by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.3.1
 </small></address>

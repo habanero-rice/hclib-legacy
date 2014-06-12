@@ -1,0 +1,130 @@
+\hypertarget{group__DDF}{\section{Data-\/\-Driven Future}
+\label{group__DDF}\index{Data-\/\-Driven Future@{Data-\/\-Driven Future}}
+}
+
+
+Data-\/\-Driven Future A\-P\-I for data-\/flow like programming.  
+
+
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+struct ddf\-\_\-st $\ast$ \hyperlink{group__DDF_ga1f3ff836187714d3d9bc4b91156e1367}{ddf\-\_\-create} ()
+\begin{DoxyCompactList}\small\item\em Allocate and initialize a D\-D\-F. \end{DoxyCompactList}\item 
+struct ddf\-\_\-st $\ast$$\ast$ \hyperlink{group__DDF_gaf106a3ec992acb7a2826121363bf2bb2}{ddf\-\_\-create\-\_\-n} (size\-\_\-t nb\-\_\-ddfs, int null\-\_\-terminated)
+\begin{DoxyCompactList}\small\item\em Allocate and initialize an array of D\-D\-Fs. \end{DoxyCompactList}\item 
+void \hyperlink{group__DDF_gae31ccd9f09079eceb790ae8be0475424}{ddf\-\_\-free} (struct ddf\-\_\-st $\ast$ddf)
+\begin{DoxyCompactList}\small\item\em Destruct a D\-D\-F. \end{DoxyCompactList}\item 
+void $\ast$ \hyperlink{group__DDF_ga1eb3de562ba809f11f30c776dbd11023}{ddf\-\_\-get} (struct ddf\-\_\-st $\ast$ddf)
+\begin{DoxyCompactList}\small\item\em Get the value of a D\-D\-F. \end{DoxyCompactList}\item 
+void \hyperlink{group__DDF_ga0ba04096262350591d907abc8b1e7ed2}{ddf\-\_\-put} (struct ddf\-\_\-st $\ast$ddf, void $\ast$datum)
+\begin{DoxyCompactList}\small\item\em Put a value in a D\-D\-F. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Data-\/\-Driven Future A\-P\-I for data-\/flow like programming. 
+
+\subsection{Function Documentation}
+\hypertarget{group__DDF_ga1f3ff836187714d3d9bc4b91156e1367}{\index{Data-\/\-Driven Future@{Data-\/\-Driven Future}!ddf\-\_\-create@{ddf\-\_\-create}}
+\index{ddf\-\_\-create@{ddf\-\_\-create}!Data-Driven Future@{Data-\/\-Driven Future}}
+\subsubsection[{ddf\-\_\-create}]{\setlength{\rightskip}{0pt plus 5cm}struct ddf\-\_\-st$\ast$ ddf\-\_\-create (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [read]}}}\label{group__DDF_ga1f3ff836187714d3d9bc4b91156e1367}
+
+
+Allocate and initialize a D\-D\-F. 
+
+\begin{DoxyReturn}{Returns}
+A D\-D\-F.
+\end{DoxyReturn}
+Allocate a D\-D\-F and initializes it. 
+
+Definition at line 73 of file ddf.\-c.
+
+
+
+Referenced by ddf\-\_\-create\-\_\-n().
+
+\hypertarget{group__DDF_gaf106a3ec992acb7a2826121363bf2bb2}{\index{Data-\/\-Driven Future@{Data-\/\-Driven Future}!ddf\-\_\-create\-\_\-n@{ddf\-\_\-create\-\_\-n}}
+\index{ddf\-\_\-create\-\_\-n@{ddf\-\_\-create\-\_\-n}!Data-Driven Future@{Data-\/\-Driven Future}}
+\subsubsection[{ddf\-\_\-create\-\_\-n}]{\setlength{\rightskip}{0pt plus 5cm}struct ddf\-\_\-st$\ast$$\ast$ ddf\-\_\-create\-\_\-n (
+\begin{DoxyParamCaption}
+\item[{size\-\_\-t}]{nb\-\_\-ddfs, }
+\item[{int}]{null\-\_\-terminated}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [read]}}}\label{group__DDF_gaf106a3ec992acb7a2826121363bf2bb2}
+
+
+Allocate and initialize an array of D\-D\-Fs. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em nb\-\_\-ddfs} & Size of the D\-D\-F array \\
+\hline
+\mbox{\tt in}  & {\em null\-\_\-terminated} & If true, create nb\-\_\-ddfs-\/1 and set the last element to N\-U\-L\-L. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+A contiguous array of D\-D\-Fs
+\end{DoxyReturn}
+Allocate 'nb\-\_\-ddfs' D\-D\-Fs in contiguous memory. 
+
+Definition at line 83 of file ddf.\-c.
+
+
+
+References ddf\-\_\-create().
+
+\hypertarget{group__DDF_gae31ccd9f09079eceb790ae8be0475424}{\index{Data-\/\-Driven Future@{Data-\/\-Driven Future}!ddf\-\_\-free@{ddf\-\_\-free}}
+\index{ddf\-\_\-free@{ddf\-\_\-free}!Data-Driven Future@{Data-\/\-Driven Future}}
+\subsubsection[{ddf\-\_\-free}]{\setlength{\rightskip}{0pt plus 5cm}void ddf\-\_\-free (
+\begin{DoxyParamCaption}
+\item[{struct ddf\-\_\-st $\ast$}]{ddf}
+\end{DoxyParamCaption}
+)}}\label{group__DDF_gae31ccd9f09079eceb790ae8be0475424}
+
+
+Destruct a D\-D\-F. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em ddf} & The D\-D\-F to destruct \\
+\hline
+\end{DoxyParams}
+\hypertarget{group__DDF_ga1eb3de562ba809f11f30c776dbd11023}{\index{Data-\/\-Driven Future@{Data-\/\-Driven Future}!ddf\-\_\-get@{ddf\-\_\-get}}
+\index{ddf\-\_\-get@{ddf\-\_\-get}!Data-Driven Future@{Data-\/\-Driven Future}}
+\subsubsection[{ddf\-\_\-get}]{\setlength{\rightskip}{0pt plus 5cm}void$\ast$ ddf\-\_\-get (
+\begin{DoxyParamCaption}
+\item[{struct ddf\-\_\-st $\ast$}]{ddf}
+\end{DoxyParamCaption}
+)}}\label{group__DDF_ga1eb3de562ba809f11f30c776dbd11023}
+
+
+Get the value of a D\-D\-F. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em ddf} & The D\-D\-F to get a value from \\
+\hline
+\end{DoxyParams}
+\hypertarget{group__DDF_ga0ba04096262350591d907abc8b1e7ed2}{\index{Data-\/\-Driven Future@{Data-\/\-Driven Future}!ddf\-\_\-put@{ddf\-\_\-put}}
+\index{ddf\-\_\-put@{ddf\-\_\-put}!Data-Driven Future@{Data-\/\-Driven Future}}
+\subsubsection[{ddf\-\_\-put}]{\setlength{\rightskip}{0pt plus 5cm}void ddf\-\_\-put (
+\begin{DoxyParamCaption}
+\item[{struct ddf\-\_\-st $\ast$}]{ddf, }
+\item[{void $\ast$}]{datum}
+\end{DoxyParamCaption}
+)}}\label{group__DDF_ga0ba04096262350591d907abc8b1e7ed2}
+
+
+Put a value in a D\-D\-F. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em ddf} & The D\-D\-F to get a value from \\
+\hline
+\mbox{\tt in}  & {\em datum} & The datum to be put in the D\-D\-F \\
+\hline
+\end{DoxyParams}

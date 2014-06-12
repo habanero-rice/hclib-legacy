@@ -1,0 +1,240 @@
+\hypertarget{group__HClib}{\section{Finish/\-Async/\-Forasync}
+\label{group__HClib}\index{Finish/\-Async/\-Forasync@{Finish/\-Async/\-Forasync}}
+}
+
+
+Core A\-P\-I, Finish/\-Async/\-Forasync for structured parallelism.  
+
+
+\subsection*{Data Structures}
+\begin{DoxyCompactItemize}
+\item 
+struct \hyperlink{structloop__domain__t}{loop\-\_\-domain\-\_\-t}
+\begin{DoxyCompactList}\small\item\em Describe loop domain when spawning a forasync. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{group__HClib_ga30194cc5d8d8041b2585a6ccded665e8}{\#define \hyperlink{group__HClib_ga30194cc5d8d8041b2585a6ccded665e8}{N\-O\-\_\-\-P\-R\-O\-P}~0}\label{group__HClib_ga30194cc5d8d8041b2585a6ccded665e8}
+
+\begin{DoxyCompactList}\small\item\em No properties defined. \end{DoxyCompactList}\item 
+\hypertarget{group__HClib_ga2d0022791143e08a64621257f48d9739}{\#define \hyperlink{group__HClib_ga2d0022791143e08a64621257f48d9739}{N\-O\-\_\-\-A\-R\-G}~N\-U\-L\-L}\label{group__HClib_ga2d0022791143e08a64621257f48d9739}
+
+\begin{DoxyCompactList}\small\item\em No arguments provided. \end{DoxyCompactList}\item 
+\hypertarget{group__HClib_gad96d6ab6270f0f2c1757c24e1c99dd77}{\#define \hyperlink{group__HClib_gad96d6ab6270f0f2c1757c24e1c99dd77}{N\-O\-\_\-\-D\-A\-T\-U\-M}~N\-U\-L\-L}\label{group__HClib_gad96d6ab6270f0f2c1757c24e1c99dd77}
+
+\begin{DoxyCompactList}\small\item\em To satisfy a D\-D\-F with a 'N\-U\-L\-L' value. \end{DoxyCompactList}\item 
+\hypertarget{group__HClib_ga9753a1ed016c4e4d40ef7a4215ad9486}{\#define \hyperlink{group__HClib_ga9753a1ed016c4e4d40ef7a4215ad9486}{N\-O\-\_\-\-D\-D\-F}~N\-U\-L\-L}\label{group__HClib_ga9753a1ed016c4e4d40ef7a4215ad9486}
+
+\begin{DoxyCompactList}\small\item\em No D\-D\-F argument provided. \end{DoxyCompactList}\item 
+\hypertarget{group__HClib_ga74e2e6a863d9d6e1990b69cbcf633212}{\#define \hyperlink{group__HClib_ga74e2e6a863d9d6e1990b69cbcf633212}{N\-O\-\_\-\-P\-H\-A\-S\-E\-R}~N\-U\-L\-L}\label{group__HClib_ga74e2e6a863d9d6e1990b69cbcf633212}
+
+\begin{DoxyCompactList}\small\item\em No phaser argument provided. \end{DoxyCompactList}\item 
+\hypertarget{group__HClib_ga9dd15754e926a2c1e65973b507aeebf5}{\#define \hyperlink{group__HClib_ga9dd15754e926a2c1e65973b507aeebf5}{P\-H\-A\-S\-E\-R\-\_\-\-T\-R\-A\-N\-S\-M\-I\-T\-\_\-\-A\-L\-L}~((int) 0x1)}\label{group__HClib_ga9dd15754e926a2c1e65973b507aeebf5}
+
+\begin{DoxyCompactList}\small\item\em To indicate an async must register with all phasers. \end{DoxyCompactList}\item 
+\hypertarget{group__HClib_ga5cda37917665d138da9fd1af8d8e906d}{\#define \hyperlink{group__HClib_ga5cda37917665d138da9fd1af8d8e906d}{N\-O\-\_\-\-A\-C\-C\-U\-M}~N\-U\-L\-L}\label{group__HClib_ga5cda37917665d138da9fd1af8d8e906d}
+
+\begin{DoxyCompactList}\small\item\em No accumulator argument provided. \end{DoxyCompactList}\item 
+\hypertarget{group__HClib_ga4fc84f9b5d90304e6b0ccd2f89a93a15}{\#define \hyperlink{group__HClib_ga4fc84f9b5d90304e6b0ccd2f89a93a15}{F\-O\-R\-A\-S\-Y\-N\-C\-\_\-\-M\-O\-D\-E\-\_\-\-R\-E\-C\-U\-R\-S\-I\-V\-E}~1}\label{group__HClib_ga4fc84f9b5d90304e6b0ccd2f89a93a15}
+
+\begin{DoxyCompactList}\small\item\em Forasync mode to recursively chunk the iteration space. \end{DoxyCompactList}\item 
+\hypertarget{group__HClib_gaeda817ba1de14a7658f7a8f60c908bfd}{\#define \hyperlink{group__HClib_gaeda817ba1de14a7658f7a8f60c908bfd}{F\-O\-R\-A\-S\-Y\-N\-C\-\_\-\-M\-O\-D\-E\-\_\-\-F\-L\-A\-T}~0}\label{group__HClib_gaeda817ba1de14a7658f7a8f60c908bfd}
+
+\begin{DoxyCompactList}\small\item\em Forasync mode to perform static chunking of the iteration space. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Typedefs}
+\begin{DoxyCompactItemize}
+\item 
+typedef void($\ast$ \hyperlink{group__HClib_ga20743540e3494c2c031dffd26bf92915}{async\-Fct\-\_\-t} )(void $\ast$arg)
+\begin{DoxyCompactList}\small\item\em Function prototype executable by an async. \end{DoxyCompactList}\item 
+\hypertarget{group__HClib_gac5a6aae98ea2921fc0f474327e3b3b27}{typedef int \hyperlink{group__HClib_gac5a6aae98ea2921fc0f474327e3b3b27}{forasync\-\_\-mode\-\_\-t}}\label{group__HClib_gac5a6aae98ea2921fc0f474327e3b3b27}
+
+\begin{DoxyCompactList}\small\item\em forasync mode to control chunking strategy. \end{DoxyCompactList}\item 
+typedef void($\ast$ \hyperlink{group__HClib_gac1d6e6334c34de2b8f463abf8de88e70}{forasync1\-D\-\_\-\-Fct\-\_\-t} )(void $\ast$arg, int index)
+\begin{DoxyCompactList}\small\item\em Function prototype for a 1-\/dimension forasync. \end{DoxyCompactList}\item 
+typedef void($\ast$ \hyperlink{group__HClib_ga42a1c141adcbaabe1348096598267c7d}{forasync2\-D\-\_\-\-Fct\-\_\-t} )(void $\ast$arg, int index\-\_\-outer, int index\-\_\-inner)
+\begin{DoxyCompactList}\small\item\em Function prototype for a 2-\/dimensions forasync. \end{DoxyCompactList}\item 
+typedef void($\ast$ \hyperlink{group__HClib_gaafc8178ebe5548c145468f9ceb5cc8bd}{forasync3\-D\-\_\-\-Fct\-\_\-t} )(void $\ast$arg, int index\-\_\-outer, int index\-\_\-mid, int index\-\_\-inner)
+\begin{DoxyCompactList}\small\item\em Function prototype for a 3-\/dimensions forasync. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{group__HClib_ga613f855069ec1a9a183f44301e213b8b}{void \hyperlink{group__HClib_ga613f855069ec1a9a183f44301e213b8b}{hclib\-\_\-init} (int $\ast$argc, char $\ast$$\ast$argv)}\label{group__HClib_ga613f855069ec1a9a183f44301e213b8b}
+
+\begin{DoxyCompactList}\small\item\em Initialize the H\-Clib runtime. Implicitly defines a global finish scope. \end{DoxyCompactList}\item 
+\hypertarget{group__HClib_gab70c52aa978066d86d88b006f8875528}{void \hyperlink{group__HClib_gab70c52aa978066d86d88b006f8875528}{hclib\-\_\-finalize} ()}\label{group__HClib_gab70c52aa978066d86d88b006f8875528}
+
+\begin{DoxyCompactList}\small\item\em Finalize execution of the H\-Clib runtime. Ends the global finish scope and waits for all asyncs to terminate. \end{DoxyCompactList}\item 
+void \hyperlink{group__HClib_ga6d98dad2020df9d38726a80255369232}{async} (\hyperlink{group__HClib_ga20743540e3494c2c031dffd26bf92915}{async\-Fct\-\_\-t} fct\-\_\-ptr, void $\ast$arg, struct ddf\-\_\-st $\ast$$\ast$ddf\-\_\-list, struct \-\_\-phased\-\_\-t $\ast$phased\-\_\-clause, int property)
+\begin{DoxyCompactList}\small\item\em Spawn a new task asynchronously. \end{DoxyCompactList}\item 
+void \hyperlink{group__HClib_ga3a0951c09f376bc75ab512828eb208ee}{forasync} (void $\ast$forasync\-\_\-fct, void $\ast$argv, struct ddf\-\_\-st $\ast$$\ast$ddf\-\_\-list, struct \-\_\-phased\-\_\-t $\ast$phased\-\_\-clause, struct \-\_\-accumed\-\_\-t $\ast$accumed, int dim, \hyperlink{structloop__domain__t}{loop\-\_\-domain\-\_\-t} $\ast$domain, \hyperlink{group__HClib_gac5a6aae98ea2921fc0f474327e3b3b27}{forasync\-\_\-mode\-\_\-t} mode)
+\begin{DoxyCompactList}\small\item\em Parallel for loop 'forasync' (up to 3 dimensions). \end{DoxyCompactList}\item 
+\hypertarget{group__HClib_ga3792b13d399b1e03dc86a4339b0c6c10}{void \hyperlink{group__HClib_ga3792b13d399b1e03dc86a4339b0c6c10}{start\-\_\-finish} ()}\label{group__HClib_ga3792b13d399b1e03dc86a4339b0c6c10}
+
+\begin{DoxyCompactList}\small\item\em starts a new finish scope \end{DoxyCompactList}\item 
+\hypertarget{group__HClib_ga181b944819de60ea47b024531a127bbf}{void \hyperlink{group__HClib_ga181b944819de60ea47b024531a127bbf}{end\-\_\-finish} ()}\label{group__HClib_ga181b944819de60ea47b024531a127bbf}
+
+\begin{DoxyCompactList}\small\item\em ends the current finish scope \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Core A\-P\-I, Finish/\-Async/\-Forasync for structured parallelism. 
+
+\subsection{Typedef Documentation}
+\hypertarget{group__HClib_ga20743540e3494c2c031dffd26bf92915}{\index{Finish/\-Async/\-Forasync@{Finish/\-Async/\-Forasync}!async\-Fct\-\_\-t@{async\-Fct\-\_\-t}}
+\index{async\-Fct\-\_\-t@{async\-Fct\-\_\-t}!Finish/Async/Forasync@{Finish/\-Async/\-Forasync}}
+\subsubsection[{async\-Fct\-\_\-t}]{\setlength{\rightskip}{0pt plus 5cm}typedef void($\ast$ async\-Fct\-\_\-t)(void $\ast$arg)}}\label{group__HClib_ga20743540e3494c2c031dffd26bf92915}
+
+
+Function prototype executable by an async. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em arg} & Arguments to the function \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line 93 of file hclib.\-h.
+
+\hypertarget{group__HClib_gac1d6e6334c34de2b8f463abf8de88e70}{\index{Finish/\-Async/\-Forasync@{Finish/\-Async/\-Forasync}!forasync1\-D\-\_\-\-Fct\-\_\-t@{forasync1\-D\-\_\-\-Fct\-\_\-t}}
+\index{forasync1\-D\-\_\-\-Fct\-\_\-t@{forasync1\-D\-\_\-\-Fct\-\_\-t}!Finish/Async/Forasync@{Finish/\-Async/\-Forasync}}
+\subsubsection[{forasync1\-D\-\_\-\-Fct\-\_\-t}]{\setlength{\rightskip}{0pt plus 5cm}typedef void($\ast$ forasync1\-D\-\_\-\-Fct\-\_\-t)(void $\ast$arg, int index)}}\label{group__HClib_gac1d6e6334c34de2b8f463abf8de88e70}
+
+
+Function prototype for a 1-\/dimension forasync. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em arg} & Argument to the loop iteration \\
+\hline
+\mbox{\tt in}  & {\em index} & Current iteration index \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line 127 of file hclib.\-h.
+
+\hypertarget{group__HClib_ga42a1c141adcbaabe1348096598267c7d}{\index{Finish/\-Async/\-Forasync@{Finish/\-Async/\-Forasync}!forasync2\-D\-\_\-\-Fct\-\_\-t@{forasync2\-D\-\_\-\-Fct\-\_\-t}}
+\index{forasync2\-D\-\_\-\-Fct\-\_\-t@{forasync2\-D\-\_\-\-Fct\-\_\-t}!Finish/Async/Forasync@{Finish/\-Async/\-Forasync}}
+\subsubsection[{forasync2\-D\-\_\-\-Fct\-\_\-t}]{\setlength{\rightskip}{0pt plus 5cm}typedef void($\ast$ forasync2\-D\-\_\-\-Fct\-\_\-t)(void $\ast$arg, int index\-\_\-outer, int index\-\_\-inner)}}\label{group__HClib_ga42a1c141adcbaabe1348096598267c7d}
+
+
+Function prototype for a 2-\/dimensions forasync. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em arg} & Argument to the loop iteration \\
+\hline
+\mbox{\tt in}  & {\em index\-\_\-outer} & Current outer iteration index \\
+\hline
+\mbox{\tt in}  & {\em index\-\_\-inner} & Current inner iteration index \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line 135 of file hclib.\-h.
+
+\hypertarget{group__HClib_gaafc8178ebe5548c145468f9ceb5cc8bd}{\index{Finish/\-Async/\-Forasync@{Finish/\-Async/\-Forasync}!forasync3\-D\-\_\-\-Fct\-\_\-t@{forasync3\-D\-\_\-\-Fct\-\_\-t}}
+\index{forasync3\-D\-\_\-\-Fct\-\_\-t@{forasync3\-D\-\_\-\-Fct\-\_\-t}!Finish/Async/Forasync@{Finish/\-Async/\-Forasync}}
+\subsubsection[{forasync3\-D\-\_\-\-Fct\-\_\-t}]{\setlength{\rightskip}{0pt plus 5cm}typedef void($\ast$ forasync3\-D\-\_\-\-Fct\-\_\-t)(void $\ast$arg, int index\-\_\-outer, int index\-\_\-mid, int index\-\_\-inner)}}\label{group__HClib_gaafc8178ebe5548c145468f9ceb5cc8bd}
+
+
+Function prototype for a 3-\/dimensions forasync. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em arg} & Argument to the loop iteration \\
+\hline
+\mbox{\tt in}  & {\em index\-\_\-outer} & Current outer iteration index \\
+\hline
+\mbox{\tt in}  & {\em index\-\_\-mid} & Current intermediate iteration index \\
+\hline
+\mbox{\tt in}  & {\em index\-\_\-inner} & Current inner iteration index \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line 144 of file hclib.\-h.
+
+
+
+\subsection{Function Documentation}
+\hypertarget{group__HClib_ga6d98dad2020df9d38726a80255369232}{\index{Finish/\-Async/\-Forasync@{Finish/\-Async/\-Forasync}!async@{async}}
+\index{async@{async}!Finish/Async/Forasync@{Finish/\-Async/\-Forasync}}
+\subsubsection[{async}]{\setlength{\rightskip}{0pt plus 5cm}void async (
+\begin{DoxyParamCaption}
+\item[{{\bf async\-Fct\-\_\-t}}]{fct\-\_\-ptr, }
+\item[{void $\ast$}]{arg, }
+\item[{struct ddf\-\_\-st $\ast$$\ast$}]{ddf\-\_\-list, }
+\item[{struct \-\_\-phased\-\_\-t $\ast$}]{phased\-\_\-clause, }
+\item[{int}]{property}
+\end{DoxyParamCaption}
+)}}\label{group__HClib_ga6d98dad2020df9d38726a80255369232}
+
+
+Spawn a new task asynchronously. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em fct\-\_\-ptr} & The function to execute \\
+\hline
+\mbox{\tt in}  & {\em arg} & Argument to the async \\
+\hline
+\mbox{\tt in}  & {\em ddf\-\_\-list} & The list of D\-D\-Fs the async depends on \\
+\hline
+\mbox{\tt in}  & {\em phased\-\_\-clause} & Phased clause to specify which phasers the async registers on \\
+\hline
+\mbox{\tt in}  & {\em property} & Flag to pass information to the runtime \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line 136 of file hclib.\-c.
+
+
+
+Referenced by end\-\_\-finish().
+
+\hypertarget{group__HClib_ga3a0951c09f376bc75ab512828eb208ee}{\index{Finish/\-Async/\-Forasync@{Finish/\-Async/\-Forasync}!forasync@{forasync}}
+\index{forasync@{forasync}!Finish/Async/Forasync@{Finish/\-Async/\-Forasync}}
+\subsubsection[{forasync}]{\setlength{\rightskip}{0pt plus 5cm}void forasync (
+\begin{DoxyParamCaption}
+\item[{void $\ast$}]{forasync\-\_\-fct, }
+\item[{void $\ast$}]{argv, }
+\item[{struct ddf\-\_\-st $\ast$$\ast$}]{ddf\-\_\-list, }
+\item[{struct \-\_\-phased\-\_\-t $\ast$}]{phased\-\_\-clause, }
+\item[{struct \-\_\-accumed\-\_\-t $\ast$}]{accumed, }
+\item[{int}]{dim, }
+\item[{{\bf loop\-\_\-domain\-\_\-t} $\ast$}]{domain, }
+\item[{{\bf forasync\-\_\-mode\-\_\-t}}]{mode}
+\end{DoxyParamCaption}
+)}}\label{group__HClib_ga3a0951c09f376bc75ab512828eb208ee}
+
+
+Parallel for loop 'forasync' (up to 3 dimensions). 
+
+Execute iterations of a loop in parallel. The loop domain allows to specify bounds as well as tiling information. Tiling of size one, is equivalent to spawning each individual iteration as an async.
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em forasync\-\_\-fct} & The function pointer to execute. \\
+\hline
+\mbox{\tt in}  & {\em argv} & Argument to the function \\
+\hline
+\mbox{\tt in}  & {\em ddf\-\_\-list} & D\-D\-Fs dependences \\
+\hline
+\mbox{\tt in}  & {\em phased\-\_\-clause} & Phasers registration \\
+\hline
+\mbox{\tt in}  & {\em accumed} & Accumulators registration \\
+\hline
+\mbox{\tt in}  & {\em dim} & Dimension of the loop \\
+\hline
+\mbox{\tt in}  & {\em domain} & Loop domains to iterate over (array of size 'dim'). \\
+\hline
+\mbox{\tt in}  & {\em mode} & Forasync mode to control chunking strategy (flat chunking or recursive). \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line 390 of file forasync.\-c.
+
