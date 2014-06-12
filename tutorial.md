@@ -91,10 +91,11 @@ A DDT typically reads its input from a set of DDFs and is executed only when all
 ```C
 int main(int argc, char ** argv) {
     hclib_init(&argc, argv);
-    struct ddf_st * ddf = ddf_create();
-    async(&hello, NO_ARG, &ddf, NO_PHASER, NO_PROP);
+    // Create a NULL-terminated list of DDFs
+    struct ddf_st ** ddf_list = ddf_create_n(1 /*size*/, 1 /*is null-terminated*/);
+    async(&hello, NO_ARG, ddf_list, NO_PHASER, NO_PROP);
     // async is not scheduled until a 'put' has occurred on ddf
-    ddf_put(ddf, NO_DATUM);
+    ddf_put(ddf_list[0], NO_DATUM);
     // The async now have all its DDFs satisfied 
     // and is eligible for scheduling
     hclib_finalize();
@@ -161,7 +162,8 @@ void consumer(void * args) {
 
 int main(int argc, char ** argv) {
     hclib_init(&argc, argv);
-    struct ddf_st * ddf = ddf_create();
+    struct ddf_st ** ddf_list = ddf_create_n(1 /*size*/, 1 /*is null-terminated*/);
+    struct ddf_st * ddf = ddf_list[0];
 
     // Create a DDT depending on ddf
     // Pass the ddf has an argument too for consumption
