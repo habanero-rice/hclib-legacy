@@ -1,0 +1,6 @@
+source:       .
+destination:  ./_site
+include:      ['/_includes']
+markdown: kramdown
+kramdown:
+  input: GFM

@@ -17,7 +17,6 @@ Next sections describes HClib constructs in more details:
 * [Data-Driven Future](#ddf)
 * [Accumulators](#accum)
 * [Phasers](#phaser)
-fin
 
 # Getting Started
 
@@ -102,9 +101,7 @@ int main(int argc, char ** argv) {
 }
 ```
 
-## Passing data to an async 
-
-TODO: proper wording for fully-strict
+## Passing data to an async
 
 To access data located at a certain memory address, the access must be both legal and safe. We define a memory address access to be legal if the memory pointed to is properly allocated either on stack or on the heap. We define a memory access to be safe if accessing the pointed memory is free of data races.
 
@@ -117,6 +114,7 @@ It is always legal for an async to use the address of a heap-allocated variable 
 Additionally, a finish scope guarantees that memory addresses of all local variables that are visible in the lexical scope of the end_finish can be used by all asyncs transitively belonging to that scope.
 
 Example: valid sharing of a stack variable
+
 ```C
 int f() {
     int var = 12;
@@ -128,7 +126,9 @@ int f() {
     end_finish(); 
 }
 ```
+
 Example: incorrect sharing of a stack variable
+
 ```C
 int f() {
     int var = 12;
@@ -137,12 +137,14 @@ int f() {
     // returned, thus reclaiming the stack-allocated memory for 'var'.
 }
 ```
+
 ### Safe use of memory addresses
 
 It is the responsibility of the programmer to ensure accesses to a memory location are properly coordinated. The finish and DDF constructs can help with such coordination. A finish can be used to ensure asyncs have executed to completion; i.e. they are done reading or writing to memory location they had access to. DDFs can be used to coordinate accesses, most notably in a producer-consumer style.
 
 
 Example: Producer-Consumer with DDFs
+
 ```C
 // Put on a DDF, transmitting data
 void producer(void * args) {
@@ -183,10 +185,20 @@ Accumulators allow for parallel, concurrent, safe reductions. An accumulator typ
 The `accum_create` API allows to instantiate and parameterize accumulators.
 The type is specified by calling the relevant `accum_create` API implementation. HClib provides a default implementation for C primitive types (`accum_create_int`, `accum_create_double`, etc...). Parameters of the `accum_create` API allows to specify the accumulator's reduction kind, reduction strategy and the initial value of the reduction.
 
-HClib provides a some (work in progress) accumulation operations:
+HClib supports the following accumulation operations:
 
   * PLUS
   * MAX
+  * PLUS
+  * PROD
+  * MIN
+  * MAX
+  * LAND
+  * BAND
+  * LOR
+  * BOR
+  * LXOR
+  * BXOR
 
 ```C
 //Accumulators example
