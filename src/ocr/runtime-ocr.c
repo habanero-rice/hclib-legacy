@@ -257,11 +257,11 @@ void rt_help_finish(finish_t * finish) {
 }
 
 int rt_get_nb_workers() {
-    return nbWorkers();
+    return ocrNbWorkers();
 }
 
 int rt_get_worker_id() {
-    int wid = currentWorkerId();
+    int wid = ocrCurrentWorkerId();
     return wid;
 }
 
