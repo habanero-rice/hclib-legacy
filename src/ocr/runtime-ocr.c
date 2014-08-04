@@ -40,6 +40,9 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "runtime-callback.h"
 #include "rt-ddf.h"
 
+#include "hc_sysdep.h"
+#include "hashtable.h"
+
 #ifdef HAVE_PHASER
 #include "phaser-api.h"
 #endif
@@ -57,9 +60,14 @@ static async_task_t * root_async_task = NULL;
 // guid template for async-edt
 static ocrGuid_t asyncTemplateGuid;
 
+
+// To map worker guids to standard ids [0:nbWorkers]
+static hashtable_t * guidWidMap = NULL;
+static volatile long wid_index = 1;
+
 typedef struct ocr_finish_t_ {
   finish_t finish;
-  volatile ocrGuid_t done_event;
+  volatile short done;
 } ocr_finish_t;
 
 // Fwd declaration
@@ -68,6 +76,9 @@ ocrGuid_t asyncEdt(u32 paramc, u64* paramv, u32 depc, ocrEdtDep_t depv[]);
 #ifdef HAVE_PHASER
 phaser_context_t * get_phaser_context_from_els();
 #endif
+
+// fwd declaration
+int rt_get_nb_workers();
 
 void runtime_init(int * argc, char ** argv) {
     ocrConfig_t ocrConfig;
@@ -78,6 +89,7 @@ void runtime_init(int * argc, char ** argv) {
     // setup phaser library
     phaser_lib_setup(get_phaser_context_from_els);
     #endif
+    guidWidMap = newHashtable(rt_get_nb_workers());
 }
 
 void runtime_finalize() {
@@ -85,6 +97,7 @@ void runtime_finalize() {
     // At this point it's safe to call ocrFinish and turn the ocr runtime off.
     ocrShutdown();
     ocrFinalize();
+    destructHashtable(guidWidMap);
 }
 
 typedef struct {
@@ -220,39 +233,29 @@ void rt_schedule_async(async_task_t * async_task) {
 finish_t * rt_allocate_finish() {
     ocr_finish_t * ocr_finish = (ocr_finish_t *) malloc(sizeof(ocr_finish_t));
     assert(ocr_finish && "malloc failed");
-    ocr_finish->done_event = NULL_GUID;
+    ocr_finish->done = 0;
     return (finish_t *) ocr_finish;
 }
 
 void rt_deallocate_finish(finish_t * finish) {
-    ocr_finish_t * ocr_finish = (ocr_finish_t *) finish;
-    if (ocr_finish->done_event != NULL_GUID) {
-        //TODO handle ocrWait bug
-        //ocrEventDestroy(ocr_finish->done_event);
-    }
-    free(ocr_finish);
+    free(finish);
 }
 
 void rt_finish_reached_zero(finish_t * finish) {
     ocr_finish_t * ocr_finish = (ocr_finish_t *) finish;
-    if (ocr_finish->done_event != NULL_GUID) {
-        ocrEventSatisfy(ocr_finish->done_event, NULL_GUID);
-    }
+    ocr_finish->done = 1;
 }
 
 void rt_help_finish(finish_t * finish) {
-    ocr_finish_t * ocr_finish = (ocr_finish_t *) finish;
-
-    // The event is only required to be able to use ocrWait
-    u8 retCode = ocrEventCreate((ocrGuid_t *) &(ocr_finish->done_event), OCR_EVENT_STICKY_T, false);
-    assert(!retCode);
-
     // Here we're racing with other asyncs checking out of the same finish scope
     rtcb_check_out_finish(finish);
 
-    // OCR will try to make progress by executing other EDTs until
-    // the event is satisfied (i.e. finish-scope completed)
-    ocrWait(ocr_finish->done_event);
+    ocr_finish_t * ocr_finish = (ocr_finish_t *) finish;
+    // If finish scope hasn't terminated, OCR will try to make progress 
+    // by executing another EDT. The loop is exited when the finish-scope has completed.
+    while(!ocr_finish->done) {
+        ocrInformLegacyCodeBlocking();
+    }
     assert(finish->counter == 0);
 }
 
@@ -260,8 +263,20 @@ int rt_get_nb_workers() {
     return ocrNbWorkers();
 }
 
+// Maintains mapping between worker guids and worker ids
+static int find_guid_wid(ocrGuid_t guid) {
+    long wid = (long) hashtableConcGet(guidWidMap, (void *) guid);
+    if (wid == 0) {
+        // Need to insert a new pair
+        wid = hc_atomic32_inc(&wid_index);
+        hashtableConcPut(guidWidMap, (void *) guid, (void *) wid);
+    }
+    // -1 so that we're zero based
+    return (((int)wid) - 1);
+}
+
 int rt_get_worker_id() {
-    int wid = ocrCurrentWorkerId();
-    return wid;
+    ocrGuid_t guid = ocrCurrentWorkerGuid();
+    return find_guid_wid(guid);
 }
 

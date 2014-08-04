@@ -49,7 +49,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  * @brief Checking in a finish
  */
 void check_in_finish(finish_t * finish) {
-    hc_atomic_inc(&(finish->counter));
+    hc_atomic32_inc(&(finish->counter));
 }
 
 /**
@@ -57,7 +57,7 @@ void check_in_finish(finish_t * finish) {
  */
 
 void check_out_finish(finish_t * finish) {
-    if (hc_atomic_dec(&(finish->counter))) {
+    if (hc_atomic32_dec(&(finish->counter))) {
         // If counter reached zero notify runtime
         rt_finish_reached_zero(finish);
     }
