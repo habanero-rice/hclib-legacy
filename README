@@ -31,3 +31,4 @@ Linking against OCR and HCLIB is then done easily:
 
     gcc -g ${HCLIB_LDFLAGS} ${HCLIB_CFLAGS} your_program.c
 
+
