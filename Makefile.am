@@ -12,7 +12,7 @@ AUX_DIST = \
 library_includedir=$(includedir)
 
 if CPP11
-library_include_HEADERS = inc/hclib.h inc/ddf.h inc/phased.h inc/accumulator.h src/inc/runtime-hclib.h src/inc/runtime-support.h
+library_include_HEADERS = inc/hclib.h inc/ddf.h inc/phased.h inc/accumulator.h src/inc/runtime-hclib.h src/inc/runtime-support.h src/inc/rt-hclib-def.h
 else
 library_include_HEADERS = inc/hclib.h inc/ddf.h inc/phased.h inc/accumulator.h
 endif
