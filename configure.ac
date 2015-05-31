@@ -20,9 +20,9 @@ AC_PROG_CC
 AC_PROG_LIBTOOL
 AC_LANG(C)
 
-AC_ARG_WITH([ocr], [AS_HELP_STRING([--with-ocr], [defines the root directory of an ocr installation.])], [OCR_ROOT=$withval], [])
-OCR_CPPFLAGS="-I$OCR_ROOT/include"
-OCR_LDFLAGS="-L$OCR_ROOT/lib"
+AC_ARG_WITH([ocr], [AS_HELP_STRING([--with-ocr], [defines the root directory of an ocr installation.])], [OCR_INSTALL=$withval], [])
+OCR_CPPFLAGS="-I$OCR_INSTALL/include"
+OCR_LDFLAGS="-L$OCR_INSTALL/lib"
 OCR_LIBS="-locr"
 
 CPPFLAGS_BACKUP=$CPPFLAGS

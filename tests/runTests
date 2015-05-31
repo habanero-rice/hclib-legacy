@@ -48,8 +48,8 @@ while [[ $# -gt 0 ]]; do
     fi
 done
 
-if [ -z "${OCR_ROOT}" ]; then
-    echo "OCR_ROOT is not set, aborting..."
+if [ -z "${OCR_INSTALL}" ]; then
+    echo "OCR_INSTALL is not set, aborting..."
     exit 1
 fi
 
@@ -71,7 +71,7 @@ LIB_DIR="${HCLIB_ROOT}/lib"
 
 export INCLUDES="-I${INC_DIR}"
 export CFLAGS=" -Wall -g -Werror "
-export LDFLAGS="-L${LIB_DIR} -L${OCR_ROOT}/lib -lhclib -locr -lm"
+export LDFLAGS="-L${LIB_DIR} -L${OCR_INSTALL}/lib -lhclib -locr -lm"
 export HCLIB_TESTS_BIN_OUTPUT=
 
 if [ -z "${PHASERLIB_ROOT}" ]; then

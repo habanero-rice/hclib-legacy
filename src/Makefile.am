@@ -4,7 +4,8 @@ SUBDIRS =
 INCLUDES_DIR = -I$(top_srcdir)/inc -I$(top_srcdir)/src/inc
 
 # cflags: important to define that otherwise we inherit default values too
-CFLAGS = $(PHASER_CFLAGS) -Werror -Wall -g -O3
+# NOTE: Disabled -Werror because OCR uses #warning to warn about extension API
+CFLAGS = $(PHASER_CFLAGS) -Wall -g -O3
 LDFLAGS = $(PHASER_LDFLAGS)
 
 # build the hclib library

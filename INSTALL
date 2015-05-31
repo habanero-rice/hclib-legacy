@@ -26,8 +26,8 @@ By default, OCR is installed in the current folder, under `ocr-install/`
 
 3.  Setup your environment:
 
-    export OCR_ROOT=${PWD}/ocr-install
-    export LD_LIBRARY_PATH=${OCR_ROOT}/lib:${LD_LIBRARY_PATH}
+    export OCR_INSTALL=${PWD}/ocr-install
+    export LD_LIBRARY_PATH=${OCR_INSTALL}/lib:${LD_LIBRARY_PATH}
 
 # HCLIB Install Instructions
 
@@ -55,8 +55,8 @@ Defining the `HCLIB_ROOT` environment variable and updating the `LD_LIBRARY_PATH
 is optional but comes handy when writing compiler command lines.
 
     export HCLIB_ROOT=$PWD/hclib-install
-    export LD_LIBRARY_PATH=${OCR_ROOT}/lib:${HCLIB_ROOT}/lib:${LD_LIBRARY_PATH}
-    export OCR_CONFIG=${OCR_ROOT}/config/default.cfg
+    export LD_LIBRARY_PATH=${OCR_INSTALL}/lib:${HCLIB_ROOT}/lib:${LD_LIBRARY_PATH}
+    export OCR_CONFIG=${OCR_INSTALL}/config/default.cfg
 
 Note: OCR_CONFIG points to the OCR configuration file from which you can set the number of OCR workers.
 

@@ -36,9 +36,9 @@ if [ -z "$NPROC" ]; then
     NPROC=1
 fi
 
-if [ -z "$OCR_ROOT" ]; then
+if [ -z "$OCR_INSTALL" ]; then
     echo "error: HCLIB requires Open Community Runtime (OCR)"
-    echo " => Set the environment variable OCR_ROOT to point to an OCR install"
+    echo " => Set the environment variable OCR_INSTALL to point to an OCR install"
     exit 1;
 fi
 
@@ -70,7 +70,7 @@ fi
 
 cd ${COMPTREE}
 
-HCLIB_CONFIGURE_FLAGS="${HCLIB_CONFIGURE_FLAGS} --with-ocr=${OCR_ROOT}"
+HCLIB_CONFIGURE_FLAGS="${HCLIB_CONFIGURE_FLAGS} --with-ocr=${OCR_INSTALL}"
 
 if [ -n "${PHASERLIB_ROOT}" ]; then
     HCLIB_CONFIGURE_FLAGS+=" --with-phaser=${PHASERLIB_ROOT} "

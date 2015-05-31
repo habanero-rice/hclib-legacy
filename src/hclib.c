@@ -118,7 +118,7 @@ void end_finish() {
         // Notify the runtime we are waiting for them
         // Note: there's a race on counter. help_finish may
         //       start and realize the finish scope is done.
-         help_finish(current_finish);
+        help_finish(current_finish);
     }
     //TODO careful with that, async has not been restored
     // Notify this finish listeners, accumulators may be registered on this
