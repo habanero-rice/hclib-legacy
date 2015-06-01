@@ -12,7 +12,9 @@ WARNING: HCLIB will NOT work if OCR is not specifically built for HCLIB support.
 
 # OCR Install Instructions
 
-HClib is a library layer built on top of a supporting runtime. The reference HClib implementation is built on top of the Open Community Runtime (OCR) that must be installed separately.
+HClib is a library layer built on top of a supporting runtime. 
+The reference HClib implementation is built on top of the 
+Open Community Runtime (OCR) that must be installed separately.
 
 1.  Clone the HCLIB repository:
 
@@ -126,8 +128,7 @@ You're done ! Check the [tutorial](tutorial.html) for an overview of HClib examp
 HClib can optionally link with a `phaserLib` installation to enable utilization
 of the phaser construct in HClib source files.
 
-1.  Set the `PHASERLIB_ROOT` environment variable to point to the path for an installation 
-of `phaserLib`
+1.  Set the `PHASERLIB_ROOT` environment variable to point to the path for an installation  of `phaserLib`
 
 ```    
     export PHASERLIB_ROOT=/path/to/phaserLib/install
