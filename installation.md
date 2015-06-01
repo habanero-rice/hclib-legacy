@@ -20,7 +20,7 @@ HClib is a library layer built on top of a supporting runtime. The reference HCl
     git clone https://github.com/habanero-rice/hclib.git
 ```
 
-    The folder where hclib is cloned is now referred to as `HCLIB_SRC_ROOT`
+The folder where hclib is cloned is now referred to as `HCLIB_SRC_ROOT`
 
 ```
     export HCLIB_SRC_ROOT=${PWD}/hclib.git
@@ -32,7 +32,7 @@ HClib is a library layer built on top of a supporting runtime. The reference HCl
     git clone https://xstack.exascale-tech.com/git/public/xstack.git
 ```
 
-    The folder where xstack is cloned is now referred to as `XSTACK_SRC_ROOT`
+The folder where xstack is cloned is now referred to as `XSTACK_SRC_ROOT`
 
 ```
     export XSTACK_SRC_ROOT=${PWD}/xstack.git
@@ -90,7 +90,7 @@ to recompile the library when updating code.
     git clone https://github.com/habanero-rice/hclib.git
 ```
 
-    The folder where hclib is cloned is now referred to as `HCLIB_SRC_ROOT`
+The folder where hclib is cloned is now referred to as `HCLIB_SRC_ROOT`
 
 ```
     export HCLIB_SRC_ROOT=${PWD}/hclib.git
@@ -103,7 +103,7 @@ to recompile the library when updating code.
     ./install.sh
 ```
 
-    By default, HCLIB is installed under `${HCLIB_SRC_ROOT}/hclib-install/`
+By default, HCLIB is installed under `${HCLIB_SRC_ROOT}/hclib-install/`
 
 3.  Setup your environment:
 Defining the `HCLIB_ROOT` environment variable and updating the `LD_LIBRARY_PATH`
