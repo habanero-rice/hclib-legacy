@@ -53,6 +53,7 @@ HClib is a library layer built on top of a supporting runtime. The reference HCl
 ````
         ${HCLIB_SRC_ROOT}/scripts/ocr/build-ocr.sh ${OCR_SRC_ROOT}
 ````
+
     By default, OCR is installed under '${OCR_SRC_ROOT}/install/x86'
 
 5.  Update your environment for OCR:
@@ -90,10 +91,11 @@ to recompile the library when updating code.
         cd ${HCLIB_SRC_ROOT}
         ./install.sh
 ````
-    By default, HCLIB is installed under `${HCLIB_SRC_ROOT}/hclib-install/`
+
+    By default, HCLIB is installed under '${HCLIB_SRC_ROOT}/hclib-install/'
 
 3.  Setup your environment:
-Defining the `HCLIB_ROOT` environment variable and updating the `LD_LIBRARY_PATH` 
+Defining the 'HCLIB_ROOT' environment variable and updating the 'LD_LIBRARY_PATH'
 is optional but comes handy when writing compiler command lines.
 ````
     export HCLIB_ROOT=$PWD/hclib-install
