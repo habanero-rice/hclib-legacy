@@ -27,14 +27,13 @@ HClib is a library layer built on top of a supporting runtime. The reference HCl
 ````
         git clone https://xstack.exascale-tech.com/git/public/xstack.git
 ````
+
     The folder where xstack is cloned is now referred to as 'XSTACK_SRC_ROOT'
 ````
         export XSTACK_SRC_ROOT=${PWD}/xstack.git
 ````
 
-3.  Define OCR_SRC_ROOT
-
-    Define the 'OCR_SRC_ROOT' environment variable to point to the 'ocr/' folder:
+3.  Define the 'OCR_SRC_ROOT' environment variable to point to the 'ocr/' folder
 ````
         export OCR_SRC_ROOT=${XSTACK_SRC_ROOT}/ocr
 ````
@@ -49,7 +48,7 @@ HClib is a library layer built on top of a supporting runtime. The reference HCl
     3) Runtime extension enabled
 
     The HCLIB distribution provides a helper build script 'build-ocr.sh' 
-    located under "${HCLIB_SRC_ROOT}/scripts/". The script does some chechs 
+    located under '${HCLIB_SRC_ROOT}/scripts/'. The script does some checks 
     and properly setup OCR for HCLIB support.
 ````
         ${HCLIB_SRC_ROOT}/scripts/ocr/build-ocr.sh ${OCR_SRC_ROOT}
@@ -80,6 +79,7 @@ to recompile the library when updating code.
 ````
         git clone https://github.com/habanero-rice/hclib.git
 ````
+
     The folder where hclib is cloned is now referred to as 'HCLIB_SRC_ROOT'
 ````
         export HCLIB_SRC_ROOT=${PWD}/hclib.git
@@ -93,14 +93,16 @@ to recompile the library when updating code.
     By default, HCLIB is installed under `${HCLIB_SRC_ROOT}/hclib-install/`
 
 3.  Setup your environment:
-
 Defining the `HCLIB_ROOT` environment variable and updating the `LD_LIBRARY_PATH` 
 is optional but comes handy when writing compiler command lines.
 ````
     export HCLIB_ROOT=$PWD/hclib-install
+
     export LD_LIBRARY_PATH=${HCLIB_ROOT}/lib:${LD_LIBRARY_PATH}
+
     export OCR_CONFIG=${OCR_INSTALL}/config/default.cfg
 ````
+
 Note: OCR_CONFIG points to the OCR configuration file from which you can set the number of OCR workers.
 
 You're done ! Check the [tutorial](tutorial.html) for an overview of HClib examples.
@@ -111,7 +113,8 @@ HClib can optionally link with a 'phaserLib' installation to enable utilization
 of the phaser construct in HClib source files.
 
 1.  Set the PHASERLIB_ROOT environment variable to point to the path for an installation 
-of 'phaserLib'. 
+of 'phaserLib'
+
 ````    
         export PHASERLIB_ROOT=/path/to/phaserLib/install
 ````
@@ -121,6 +124,7 @@ HClib link with the phaserLib library.
 ````
     ./install.sh
 ````
+
 If you're not relying on the install script, you need to invoke configure with 
 the '--with-phaser=/path/to/phaserLib/install' option to specify the location of
 a 'phaserLib' installation.
