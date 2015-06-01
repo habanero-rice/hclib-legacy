@@ -48,16 +48,16 @@ The folder where xstack is cloned is now referred to as `XSTACK_SRC_ROOT`
 
 4) Build OCR with support for HCLIB
 
-    WARNING: HCLIB will NOT work if OCR is not specifically built for HCLIB support !
+WARNING: HCLIB will NOT work if OCR is not specifically built for HCLIB support !
 
-    HCLIB requires the following OCR setup:
-    1. OCR ELS must be set to 1
-    2. Legacy extension enabled
-    3. Runtime extension enabled
+HCLIB requires the following OCR setup:
+1. OCR ELS must be set to 1
+2. Legacy extension enabled
+3. Runtime extension enabled
 
-    The HCLIB distribution provides a helper build script `build-ocr.sh`
-    located under `${HCLIB_SRC_ROOT}/scripts/`. The script does some checks 
-    and properly setup OCR for HCLIB support.
+The HCLIB distribution provides a helper build script `build-ocr.sh`
+located under `${HCLIB_SRC_ROOT}/scripts/`. The script does some checks 
+and properly setup OCR for HCLIB support.
 
 ```
     ${HCLIB_SRC_ROOT}/scripts/ocr/build-ocr.sh ${OCR_SRC_ROOT}
@@ -65,7 +65,7 @@ The folder where xstack is cloned is now referred to as `XSTACK_SRC_ROOT`
 
 By default, OCR is installed under `${OCR_SRC_ROOT}/install/x86`
 
-5) Update your environment for OCR:
+5) Update your environment for OCR
 
 ```
     export OCR_INSTALL=${OCR_SRC_ROOT}/install/x86
@@ -107,7 +107,8 @@ The folder where hclib is cloned is now referred to as `HCLIB_SRC_ROOT`
 
 By default, HCLIB is installed under `${HCLIB_SRC_ROOT}/hclib-install/`
 
-3) Setup your environment:
+3) Setup your environment
+
 Defining the `HCLIB_ROOT` environment variable and updating the `LD_LIBRARY_PATH`
 is optional but comes handy when writing compiler command lines.
 
