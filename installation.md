@@ -22,6 +22,7 @@ HClib is a library layer built on top of a supporting runtime. The reference HCl
 ````
         export HCLIB_SRC_ROOT=${PWD}/hclib.git
 ````
+
 2.  Clone the OCR repository
 ````
         git clone https://xstack.exascale-tech.com/git/public/xstack.git
@@ -30,12 +31,14 @@ HClib is a library layer built on top of a supporting runtime. The reference HCl
 ````
         export XSTACK_SRC_ROOT=${PWD}/xstack.git
 ````
+
 3.  Define OCR_SRC_ROOT
 
     Define the 'OCR_SRC_ROOT' environment variable to point to the 'ocr/' folder:
 ````
         export OCR_SRC_ROOT=${XSTACK_SRC_ROOT}/ocr
 ````
+
 4.  Build OCR with support for HCLIB
 
     WARNING: HCLIB will NOT work if OCR is not specifically built for HCLIB support !
@@ -81,6 +84,7 @@ to recompile the library when updating code.
 ````
         export HCLIB_SRC_ROOT=${PWD}/hclib.git
 ````
+
 2.  Build HCLIB
 ````    
         cd ${HCLIB_SRC_ROOT}
@@ -111,10 +115,11 @@ of 'phaserLib'.
 ````    
         export PHASERLIB_ROOT=/path/to/phaserLib/install
 ````
+
 2.  Invoking HClib's install script with PHASERLIB_ROOT defined automatically makes 
 HClib link with the phaserLib library.
 ````
-        ./install.sh
+    ./install.sh
 ````
 If you're not relying on the install script, you need to invoke configure with 
 the '--with-phaser=/path/to/phaserLib/install' option to specify the location of
