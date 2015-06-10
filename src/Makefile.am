@@ -15,10 +15,12 @@ lib_LTLIBRARIES = libhclib.la
 noinst_LTLIBRARIES =
 libhclib_la_LIBADD =
 
+include crt/Makefile.inc
 include ocr/Makefile.inc
 
 # build hclib
 libhclib_la_SOURCES = runtime-hclib.c runtime-callback.c hclib.c ddf.c forasync.c accumulator.c
+
 libhclib_la_CFLAGS= $(CFLAGS) $(INCLUDES_DIR)
 
 MAINTAINERCLEANFILES = Makefile.in

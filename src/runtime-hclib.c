@@ -1,37 +1,15 @@
-/* Copyright (c) 2013, Rice University
-
-Redistribution and use in source and binary forms, with or without
-modification, are permitted provided that the following conditions are
-met:
-
-1.  Redistributions of source code must retain the above copyright
-     notice, this list of conditions and the following disclaimer.
-2.  Redistributions in binary form must reproduce the above
-     copyright notice, this list of conditions and the following
-     disclaimer in the documentation and/or other materials provided
-     with the distribution.
-3.  Neither the name of Rice University
-     nor the names of its contributors may be used to endorse or
-     promote products derived from this software without specific
-     prior written permission.
-
-THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
-"AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
-LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
-A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
-OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
-SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
-LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
-DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
-THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
-(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
-OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-
+/*
+ * This file is subject to the license agreement located in the file LICENSE
+ * and cannot be distributed without it. This notice cannot be
+ * removed or modified.
+ *
+ * contact: https://github.com/vcave
  */
 
 /**
  * @file This file contains the HCLIB runtime implementation.
  */
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <assert.h>
@@ -43,6 +21,9 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #ifdef HAVE_PHASER
 #include "phased.h"
 #endif
+
+// Utils
+#include "options.h"
 
 
 /**
@@ -89,6 +70,21 @@ void async_drop_phasers(async_task_t * async_task) {
     }
 #endif
 }
+
+/**
+ * @brief Set the currently executing async
+ */
+void set_current_async(async_task_t * async_task) {
+    rt_set_current_async(async_task);
+}
+
+/**
+ * @brief Returns the currently executing async
+ */
+async_task_t * get_current_async() {
+    return rt_get_current_async();
+}
+
 
 /**
  * @brief Async task allocator. Depending on the nature of the async
@@ -188,20 +184,33 @@ static int is_eligible_to_schedule(async_task_t * async_task) {
     }
 }
 
+/**
+ * @brief Get the number of workers available to the underlying runtime 
+ */
 int get_nb_workers() {
     return rt_get_nb_workers();
 }
 
-int get_worker_id_hc() {
+/**
+ * @brief Get identifier of currently executing worker
+ */
+int get_worker_id() {
     return rt_get_worker_id();
 }
 
+
+/**
+ * @brief Try scheduling an async that may not be ready for execution
+ */
 void try_schedule_async(async_task_t * async_task) {
     if (is_eligible_to_schedule(async_task)) {
         rt_schedule_async(async_task);
     }
 }
 
+/**
+ * @brief Schedule an async that is known for being ready to execute
+ */
 void schedule_async(async_task_t * async_task, finish_t * finish_scope, int property) {
     // Set the async finish scope to be the currently executing async's one.
     async_task->current_finish = finish_scope;
@@ -235,6 +244,11 @@ void schedule_async(async_task_t * async_task, finish_t * finish_scope, int prop
     //       have been executed yet. Careful when adding code here.
 }
 
+
+/**
+ * @brief notifies the runtime end_finish is logically
+ * blocked, waiting for children to finish.
+ */
 void help_finish(finish_t * finish) {
     rt_help_finish(finish);
 }

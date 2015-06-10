@@ -1,0 +1,62 @@
+
+HCLIB is a library layer built on top of existing runtimes. This distribution
+contains an implementation of HCLIB built on top the Custom RunTime (crt).
+
+# Requirements
+
+# HCLIB Install Instructions
+
+HCLIB relies on autotools as a build system. You can either invoke `configure`
+and `make` directly if familiar with, or use the provided installation script.
+Note that the installation script runs the whole tool chain and is overkill
+to recompile the library when updating code.
+
+
+## Installation with OCR backend
+
+0.  Make sure OCR is specifically built and installed for HCLIB support
+
+1.  Clone the HCLIB repository (if not done during OCR installation)
+
+        git clone https://github.com/habanero-rice/hclib.git
+
+    The folder where hclib is cloned is now referred to as 'HCLIB_SRC_ROOT'
+
+        export HCLIB_SRC_ROOT=${PWD}/hclib.git
+
+2.  Build HCLIB with 'crt'
+
+        cd ${HCLIB_SRC_ROOT}
+        ./install.sh -rt crt
+
+    By default, HCLIB is installed under `${HCLIB_SRC_ROOT}/hclib-install/`
+
+3.  Setup your environment:
+
+Defining the `HCLIB_ROOT` environment variable and updating the `LD_LIBRARY_PATH`
+is optional but comes handy when writing compiler command lines.
+
+    export HCLIB_ROOT=$PWD/hclib-install
+    export LD_LIBRARY_PATH=${HCLIB_ROOT}/lib:${LD_LIBRARY_PATH}
+
+You're done ! Check the `README` file for more information on using HCLIB
+
+
+## Installation with additional phaser support
+
+HClib can optionally link with a 'phaserLib' installation to enable utilization
+of the phaser construct in HClib source files.
+
+1.  Set the PHASERLIB_ROOT environment variable to point to the path for an installation
+of 'phaserLib'.
+
+        export PHASERLIB_ROOT=/path/to/phaserLib/install
+
+2.  Invoking HClib's install script with PHASERLIB_ROOT defined automatically makes
+HClib link with the phaserLib library.
+
+        ./install.sh -rt crt
+
+If you're not relying on the install script, you need to invoke configure with
+the '--with-phaser=/path/to/phaserLib/install' option to specify the location of
+a 'phaserLib' installation.

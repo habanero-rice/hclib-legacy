@@ -1,3 +1,5 @@
+if OCR_ENABLED
+
 RUNTIME_OCR_SRC=ocr
 
 noinst_LTLIBRARIES += libruntime_ocr.la
@@ -10,6 +12,7 @@ libruntime_ocr_la_SOURCES =      \
 $(RUNTIME_OCR_SRC)/hashtable.c   \
 $(RUNTIME_OCR_SRC)/runtime-ocr.c
 
-
 libruntime_ocr_la_CFLAGS = $(CFLAGS) $(INCLUDES_DIR) $(RT_OCR_CFLAGS)
 libruntime_ocr_la_LDFLAGS = $(RT_OCR_LDFLAGS)
+
+endif

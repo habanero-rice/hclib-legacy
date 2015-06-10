@@ -51,6 +51,10 @@ checkDefine "${DEF_EXT_LEGACY}" "${OCR_BUILD_CFGFILE}"
 DEF_EXT_RTITF="#define ENABLE_EXTENSION_RTITF"
 checkDefine "${DEF_EXT_RTITF}" "${OCR_BUILD_CFGFILE}"
 
+# Check for blocking calls support
+DEF_EXT_BLOCKING="#define ENABLE_SCHEDULER_BLOCKING_SUPPORT"
+checkDefine "${DEF_EXT_BLOCKING}" "${OCR_BUILD_CFGFILE}"
+
 #
 # Build OCR x86
 #

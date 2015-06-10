@@ -1,7 +1,6 @@
 
-
-HCLIB is a library layer built on top of existing runtimes. This distribution 
-contains an implementation of HCLIB built on top of the Open Community Runtime 
+HCLIB is a library layer built on top of existing runtimes. This distribution
+contains an implementation of HCLIB built on top of the Open Community Runtime
 that must be installed separetely.
 
 # Requirements
@@ -43,9 +42,10 @@ WARNING: HCLIB will NOT work if OCR is not specifically built for HCLIB support.
     1) OCR ELS must be set to 1
     2) Legacy extension enabled
     3) Runtime extension enabled
+    4) Blocking call support enabled
 
-    The HCLIB distribution provides a helper build script 'build-ocr.sh' 
-    located under "${HCLIB_SRC_ROOT}/scripts/". The script does some chechs 
+    The HCLIB distribution provides a helper build script 'build-ocr.sh'
+    located under "${HCLIB_SRC_ROOT}/scripts/". The script does some checks
     and properly setup OCR for HCLIB support.
 
         ${HCLIB_SRC_ROOT}/scripts/ocr/build-ocr.sh ${OCR_SRC_ROOT}
@@ -62,9 +62,9 @@ WARNING: HCLIB will NOT work if OCR is not specifically built for HCLIB support.
 
 # HCLIB Install Instructions
 
-HCLIB relies on autotools as a build system. You can either invoke `configure` 
-and `make` directly if familiar with, or use the provided installation script. 
-Note that the installation script runs the whole tool chain and is overkill 
+HCLIB relies on autotools as a build system. You can either invoke `configure`
+and `make` directly if familiar with, or use the provided installation script.
+Note that the installation script runs the whole tool chain and is overkill
 to recompile the library when updating code.
 
 
@@ -81,15 +81,15 @@ to recompile the library when updating code.
         export HCLIB_SRC_ROOT=${PWD}/hclib.git
 
 2.  Build HCLIB
-    
+
         cd ${HCLIB_SRC_ROOT}
-        ./install.sh
+        ./install.sh -rt ocr
 
     By default, HCLIB is installed under `${HCLIB_SRC_ROOT}/hclib-install/`
 
 3.  Setup your environment:
 
-Defining the `HCLIB_ROOT` environment variable and updating the `LD_LIBRARY_PATH` 
+Defining the `HCLIB_ROOT` environment variable and updating the `LD_LIBRARY_PATH`
 is optional but comes handy when writing compiler command lines.
 
     export HCLIB_ROOT=$PWD/hclib-install
@@ -106,16 +106,16 @@ You're done ! Check the `README` file for more information on using HCLIB
 HClib can optionally link with a 'phaserLib' installation to enable utilization
 of the phaser construct in HClib source files.
 
-1.  Set the PHASERLIB_ROOT environment variable to point to the path for an installation 
-of 'phaserLib'. 
-    
+1.  Set the PHASERLIB_ROOT environment variable to point to the path for an installation
+of 'phaserLib'.
+
         export PHASERLIB_ROOT=/path/to/phaserLib/install
 
-2.  Invoking HClib's install script with PHASERLIB_ROOT defined automatically makes 
+2.  Invoking HClib's install script with PHASERLIB_ROOT defined automatically makes
 HClib link with the phaserLib library.
-     
-        ./install.sh
 
-If you're not relying on the install script, you need to invoke configure with 
+        ./install.sh -rt ocr
+
+If you're not relying on the install script, you need to invoke configure with
 the '--with-phaser=/path/to/phaserLib/install' option to specify the location of
 a 'phaserLib' installation.

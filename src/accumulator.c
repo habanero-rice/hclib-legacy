@@ -1,32 +1,9 @@
-/* Copyright (c) 2013, Rice University
-
-Redistribution and use in source and binary forms, with or without
-modification, are permitted provided that the following conditions are
-met:
-
-1.  Redistributions of source code must retain the above copyright
-     notice, this list of conditions and the following disclaimer.
-2.  Redistributions in binary form must reproduce the above
-     copyright notice, this list of conditions and the following
-     disclaimer in the documentation and/or other materials provided
-     with the distribution.
-3.  Neither the name of Rice University
-     nor the names of its contributors may be used to endorse or
-     promote products derived from this software without specific
-     prior written permission.
-
-THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
-"AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
-LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
-A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
-OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
-SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
-LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
-DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
-THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
-(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
-OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-
+/*
+ * This file is subject to the license agreement located in the file LICENSE
+ * and cannot be distributed without it. This notice cannot be
+ * removed or modified.
+ *
+ * contact: https://github.com/vcave
  */
 
 #include "rt-accumulator.h"
@@ -306,7 +283,7 @@ void accum_open_short_lazy(accum_short_t * accum, short init) {
 }
 
 void accum_put_short_lazy(accum_short_t * accum, short v) {
-    int wid = get_worker_id_hc();
+    int wid = get_worker_id();
     accum_short_lazy_t * accum_lazy = (accum_short_lazy_t *) accum;
     return accum->op(&(accum_lazy->localAccums[wid]), accum_lazy->localAccums[wid], v);
 }
@@ -359,7 +336,7 @@ void accum_open_int_lazy(accum_int_t * accum, int init) {
 }
 
 void accum_put_int_lazy(accum_int_t * accum, int v) {
-    int wid = get_worker_id_hc();
+    int wid = get_worker_id();
     accum_int_lazy_t * accum_lazy = (accum_int_lazy_t *) accum;
     return accum->op(&(accum_lazy->localAccums[wid]), accum_lazy->localAccums[wid], v);
 }
@@ -412,7 +389,7 @@ void accum_open_long_lazy(accum_long_t * accum, long init) {
 }
 
 void accum_put_long_lazy(accum_long_t * accum, long v) {
-    int wid = get_worker_id_hc();
+    int wid = get_worker_id();
     accum_long_lazy_t * accum_lazy = (accum_long_lazy_t *) accum;
     return accum->op(&(accum_lazy->localAccums[wid]), accum_lazy->localAccums[wid], v);
 }
@@ -465,7 +442,7 @@ void accum_open_float_lazy(accum_float_t * accum, float init) {
 }
 
 void accum_put_float_lazy(accum_float_t * accum, float v) {
-    int wid = get_worker_id_hc();
+    int wid = get_worker_id();
     accum_float_lazy_t * accum_lazy = (accum_float_lazy_t *) accum;
     return accum->op(&(accum_lazy->localAccums[wid]), accum_lazy->localAccums[wid], v);
 }
@@ -518,7 +495,7 @@ void accum_open_double_lazy(accum_double_t * accum, double init) {
 }
 
 void accum_put_double_lazy(accum_double_t * accum, double v) {
-    int wid = get_worker_id_hc();
+    int wid = get_worker_id();
     accum_double_lazy_t * accum_lazy = (accum_double_lazy_t *) accum;
     return accum->op(&(accum_lazy->localAccums[wid]), accum_lazy->localAccums[wid], v);
 }

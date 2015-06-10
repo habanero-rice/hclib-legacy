@@ -1,33 +1,11 @@
-/* Copyright (c) 2013, Rice University
-
-Redistribution and use in source and binary forms, with or without
-modification, are permitted provided that the following conditions are
-met:
-
-1.  Redistributions of source code must retain the above copyright
-     notice, this list of conditions and the following disclaimer.
-2.  Redistributions in binary form must reproduce the above
-     copyright notice, this list of conditions and the following
-     disclaimer in the documentation and/or other materials provided
-     with the distribution.
-3.  Neither the name of Rice University
-     nor the names of its contributors may be used to endorse or
-     promote products derived from this software without specific
-     prior written permission.
-
-THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
-"AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
-LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
-A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
-OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
-SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
-LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
-DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
-THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
-(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
-OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-
+/*
+ * This file is subject to the license agreement located in the file LICENSE
+ * and cannot be distributed without it. This notice cannot be
+ * removed or modified.
+ *
+ * contact: https://github.com/vcave
  */
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <assert.h>
@@ -122,7 +100,7 @@ static async_task_t * deguidify_async(ocrGuid_t guid) {
 /*
  * @brief Retrieve the async task currently executed from the ELS
  */
-async_task_t * get_current_async() {
+async_task_t * rt_get_current_async() {
     ocrGuid_t edtGuid = currentEdtUserGet();
     //If currentEDT is NULL_GUID
     if (edtGuid == NULL_GUID) {
@@ -133,7 +111,7 @@ async_task_t * get_current_async() {
     return deguidify_async(guid);
 }
 
-void set_current_async(async_task_t * async_task) {
+void rt_set_current_async(async_task_t * async_task) {
     ocrGuid_t edtGuid = currentEdtUserGet();
     if (edtGuid == NULL_GUID) {
         root_async_task = async_task;
@@ -185,15 +163,15 @@ ddt_t * rt_async_task_to_ddt(async_task_t * async_task) {
 }
 
 async_task_t * rt_allocate_ddt(struct ddf_st ** ddf_list) {
-    ocr_ddt_t * dd_task = (ocr_ddt_t *) calloc(1, sizeof(ocr_ddt_t));
+    ocr_ddt_t * dd_task = (ocr_ddt_t *) malloc(sizeof(ocr_ddt_t));
     ddt_init((ddt_t *)&(dd_task->ddt), ddf_list);
-    assert(dd_task && "calloc failed");
+    assert(dd_task && "malloc failed");
     return (async_task_t *) dd_task;
 }
 
 async_task_t * rt_allocate_async_task() {
-    async_task_t * async_task = (async_task_t *) calloc(1, sizeof(async_task_t));
-    assert(async_task && "calloc failed");
+    async_task_t * async_task = (async_task_t *) malloc(sizeof(async_task_t));
+    assert(async_task && "malloc failed");
     return async_task;
 }
 
@@ -202,23 +180,20 @@ void rt_deallocate_async_task(async_task_t * async_task) {
 }
 
 forasync1D_task_t * rt_allocate_forasync1D_task() {
-    //TODO malloc or calloc ?
-    forasync1D_task_t * forasync_task = (forasync1D_task_t *) calloc(1, sizeof(forasync1D_task_t));
-    assert(forasync_task && "calloc failed");
+    forasync1D_task_t * forasync_task = (forasync1D_task_t *) malloc(sizeof(forasync1D_task_t));
+    assert(forasync_task && "malloc failed");
     return forasync_task;
 }
 
 forasync2D_task_t * rt_allocate_forasync2D_task() {
-    //TODO malloc or calloc ?
-    forasync2D_task_t * forasync_task = (forasync2D_task_t *) calloc(1, sizeof(forasync2D_task_t));
-    assert(forasync_task && "calloc failed");
+    forasync2D_task_t * forasync_task = (forasync2D_task_t *) malloc(sizeof(forasync2D_task_t));
+    assert(forasync_task && "malloc failed");
     return forasync_task;
 }
 
 forasync3D_task_t * rt_allocate_forasync3D_task() {
-    //TODO malloc or calloc ?
-    forasync3D_task_t * forasync_task = (forasync3D_task_t *) calloc(1, sizeof(forasync3D_task_t));
-    assert(forasync_task && "calloc failed");
+    forasync3D_task_t * forasync_task = (forasync3D_task_t *) malloc(sizeof(forasync3D_task_t));
+    assert(forasync_task && "malloc failed");
     return forasync_task;
 }
 
