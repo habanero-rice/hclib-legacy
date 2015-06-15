@@ -12,11 +12,9 @@ Note that the installation script runs the whole tool chain and is overkill
 to recompile the library when updating code.
 
 
-## Installation with OCR backend
+## Installation with Custom RunTime backend
 
-0.  Make sure OCR is specifically built and installed for HCLIB support
-
-1.  Clone the HCLIB repository (if not done during OCR installation)
+1.  Clone the HCLIB repository
 
         git clone https://github.com/habanero-rice/hclib.git
 
