@@ -6,7 +6,7 @@ function checkDefine() {
     RES1=`grep "$NAME" ${FILE}`
     RES2=`echo "$RES1" | grep -e "//"`
     # Very very basic check
-    if [[ -n "$RES2" ]]; then
+    if [ -z "$RES1" -o -n "$RES2" ]; then
         NAME=`echo ${NAME} | cut -d' ' -f2-2`
         echo "error ${NAME} is not defined in ${FILE}"
         exit 1
