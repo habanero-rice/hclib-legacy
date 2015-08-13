@@ -23,7 +23,7 @@
 #define DDF_SATISFIED NULL
 
 // Default value of a DDF datum
-#define UNINITIALIZED_DDF_DATA_PTR NULL
+#define UNINITIALIZED_DDF_DATA_PTR ((void *) -1)
 
 // For waiting frontier (last element of the list)
 #define UNINITIALIZED_DDF_WAITLIST_PTR ((struct ddt_st *) -1)
@@ -49,7 +49,7 @@ void ddt_init(ddt_t * ddt, ddf_t ** ddf_list) {
  */
 ddf_t * ddf_create() {
     ddf_t * ddf = (ddf_t *) malloc(sizeof(ddf_t));
-    ddf->datum = NULL;
+    ddf->datum = UNINITIALIZED_DDF_DATA_PTR;
     ddf->headDDTWaitList = UNINITIALIZED_DDF_WAITLIST_PTR;
     return ddf;
 }
@@ -142,11 +142,10 @@ void * ddf_get(ddf_t * ddf) {
  * DDF's frontier to try to advance DDTs that were waiting on this DDF.
  */
 void ddf_put(ddf_t * ddf, void * datum) {
-    assert(datum != UNINITIALIZED_DDF_DATA_PTR && EMPTY_DATUM_ERROR_MSG);
-    assert(ddf != NULL && "error: can't DDF is a pointer to NULL");
+    assert(ddf != NULL && "error: DDF is NULL");
     //TODO Limitation: not enough to guarantee single assignment
     if (DEBUG_DDF) { printf("ddf: put datum %p\n", ddf->datum); }
-    assert(ddf->datum == NULL && "error: violated single assignment property for DDFs");
+    assert(ddf->datum == UNINITIALIZED_DDF_DATA_PTR && "error: violated single assignment property for DDFs");
 
     volatile ddt_t * headDDTWaitList = NULL;
     ddf->datum = datum;
