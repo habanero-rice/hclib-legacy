@@ -11,7 +11,7 @@ AUX_DIST = \
 
 library_includedir=$(includedir)
 
-library_include_HEADERS = inc/hclib.h inc/ddf.h inc/phased.h inc/accumulator.h
+library_include_HEADERS = inc/hclib.h inc/ddf.h inc/phased.h inc/accumulator.h inc/hclib-rtii.h
 
 MAINTAINERCLEANFILES = Makefile.in \
 	aclocal.m4 \
