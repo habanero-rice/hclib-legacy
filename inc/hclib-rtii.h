@@ -29,8 +29,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  */
 
-#ifndef HCLIB_H_
-#define HCLIB_H_
+#ifndef HCLIB_RTII_H_
+#define HCLIB_RTII_H_
 
 /**
  * @file Interface to HCLIB runtime information
@@ -58,4 +58,4 @@ int get_worker_id();
  * @}
  */
 
-#endif /* HCLIB_H_ */
+#endif /* HCLIB_RTII_H_ */
